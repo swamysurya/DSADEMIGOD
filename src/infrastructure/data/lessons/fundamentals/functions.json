@@ -1,0 +1,56 @@
+{
+  "id": "functions",
+  "title": "Functions & Call Stack",
+  "subjectId": "fundamentals",
+  "nextLessonId": null,
+  "prevLessonId": "data-types",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Functions represent reusable blocks of code that perform specific tasks. Understanding what happens when a function is executed is the key to mastering recursion and debugging call paths."
+    },
+    {
+      "type": "heading",
+      "id": "stack-frames",
+      "level": 2,
+      "text": "Understanding Stack Frames"
+    },
+    {
+      "type": "paragraph",
+      "text": "Each time a function is called, the compiler pushes a new 'stack frame' onto the execution call stack. This frame contains local variables, parameters, and the return address. When the function returns, its frame is popped off the stack, and execution resumes at the calling location."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Warning: Recursion without a base case will continuously push frames onto the stack until there is no memory left, resulting in a 'Stack Overflow' crash."
+    },
+    {
+      "type": "heading",
+      "id": "call-stack-demo",
+      "level": 2,
+      "text": "Call Stack Trace"
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "code": "function add(a, b) {\n  return a + b;\n}\n\nfunction calculateAverage(x, y) {\n  let sum = add(x, y); // pushes add() onto the stack\n  return sum / 2;      // pops add(), returns average\n}\n\ncalculateAverage(10, 20); // pushes calculateAverage()"
+    },
+    {
+      "type": "heading",
+      "id": "functions-mcq",
+      "level": 2,
+      "text": "Quick Check"
+    },
+    {
+      "type": "mcq",
+      "question": "What happens to local variables when a function returns?",
+      "options": [
+        "They are preserved on the Heap.",
+        "They are cleared as their Stack frame is popped.",
+        "They are garbage collected after a brief delay.",
+        "They become global variables."
+      ],
+      "correctAnswerIndex": 1
+    }
+  ]
+}

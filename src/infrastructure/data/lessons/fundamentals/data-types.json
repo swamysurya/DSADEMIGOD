@@ -1,0 +1,60 @@
+{
+  "id": "data-types",
+  "title": "Data Types & Memory",
+  "subjectId": "fundamentals",
+  "nextLessonId": "functions",
+  "prevLessonId": "variables",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Every value in a computer program has a type. Understanding how different types are represented in memory is crucial for writing memory-efficient applications."
+    },
+    {
+      "type": "heading",
+      "id": "primitive-data-types",
+      "level": 2,
+      "text": "Primitive Data Types"
+    },
+    {
+      "type": "paragraph",
+      "text": "Primitive types represent simple values stored directly in the executing program's stack frame. Examples include integers, booleans, and characters. Because they have a fixed memory footprint, allocation and access are extremely fast."
+    },
+    {
+      "type": "heading",
+      "id": "stack-vs-heap",
+      "level": 2,
+      "text": "Memory Allocation: Stack vs Heap"
+    },
+    {
+      "type": "paragraph",
+      "text": "The Stack is used for static memory allocation and thread execution. It operates in a last-in, first-out (LIFO) pattern. The Heap is used for dynamic memory allocation where variables can be resized or persist across functions."
+    },
+    {
+      "type": "code",
+      "language": "javascript",
+      "code": "// Stored on stack:\nlet age = 25;\n\n// Stored on heap (reference on stack):\nlet userProfile = {\n  username: 'coder',\n  skills: ['data structures', 'algorithms']\n};"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Warning: Accessing values on the heap is slower than the stack because pointers must be dereferenced, and garbage collection must eventually clean up the memory."
+    },
+    {
+      "type": "heading",
+      "id": "datatype-mcq",
+      "level": 2,
+      "text": "Self-Assessment"
+    },
+    {
+      "type": "mcq",
+      "question": "Which memory region is managed automatically in a LIFO order during program execution?",
+      "options": [
+        "The Heap",
+        "The Stack",
+        "The Disk Cache",
+        "The Virtual Memory Registry"
+      ],
+      "correctAnswerIndex": 1
+    }
+  ]
+}

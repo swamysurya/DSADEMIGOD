@@ -1,0 +1,76 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 44 26% 96%; /* #FAF8F2 warm paper */
+    --foreground: 0 0% 17%; /* #2B2B2B soft black */
+    --card: 44 26% 98%; /* Slightly lighter paper */
+    --card-foreground: 0 0% 17%;
+    --popover: 44 26% 98%;
+    --popover-foreground: 0 0% 17%;
+    --primary: 0 0% 17%; /* Soft black */
+    --primary-foreground: 44 26% 96%;
+    --secondary: 44 12% 90%; /* Warm grey */
+    --secondary-foreground: 0 0% 33%; /* #555555 secondary text */
+    --muted: 44 12% 93%;
+    --muted-foreground: 0 0% 33%;
+    --accent: 44 92% 80%; /* Textbook yellow highlight by default */
+    --accent-foreground: 0 0% 17%;
+    --border: 40 11% 83%; /* #DDD7CC warm border */
+    --input: 40 11% 83%;
+    --ring: 0 0% 17%;
+    --radius: 4px; /* Minimal roundness for a structured book feel */
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+  
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: 'Crimson Pro', Georgia, serif;
+    font-size: 17px; /* Comfortably readable font size for book reading */
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Merriweather', Georgia, serif;
+    color: hsl(var(--foreground));
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+/* Custom scrollbars matching warm paper design */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border: 2px solid hsl(var(--background));
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--secondary-foreground) / 0.4);
+}
+
+/* Selection highlight resembling textbook highlighter */
+::selection {
+  background-color: hsl(44 92% 80%); /* Warm yellow highlighter */
+  color: hsl(var(--foreground));
+}

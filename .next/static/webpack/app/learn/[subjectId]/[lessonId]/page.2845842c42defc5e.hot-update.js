@@ -1,0 +1,22 @@
+"use strict";
+/*
+ * ATTENTION: An "eval-source-map" devtool has been used.
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file with attached SourceMaps in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+self["webpackHotUpdate_N_E"]("app/learn/[subjectId]/[lessonId]/page",{
+
+/***/ "(app-pages-browser)/./src/infrastructure/data/lessons/fundamentals/intro-to-programming.json":
+/*!********************************************************************************!*\
+  !*** ./src/infrastructure/data/lessons/fundamentals/intro-to-programming.json ***!
+  \********************************************************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
+module.exports = /*#__PURE__*/JSON.parse('{"id":"intro-to-programming","title":"Introduction to Programming","subjectId":"fundamentals","nextLessonId":"variables","prevLessonId":null,"content":[{"type":"paragraph","text":"Welcome to your first step in learning Data Structures and Algorithms. Programming is the craft of writing instructions that a computer can execute to solve problems, manipulate data, and perform operations."},{"type":"heading","id":"what-is-programming","level":2,"text":"What is a Computer Program?"},{"type":"paragraph","text":"At the lowest level, computer processors only understand binary code (0s and 1s), known as machine code. High-level languages like C++ allow us to write human-readable code that is subsequently translated into binary by a specialized software tool called a Compiler."},{"type":"heading","id":"why-cpp","level":2,"text":"Why Learn C++?"},{"type":"paragraph","text":"C++ is a highly popular, statically typed, compiled programming language. It is renowned for its speed, close-to-hardware memory access, and granular control. Most modern operating systems, web browsers, database systems, and game engines are written in C++ because of its extreme efficiency."},{"type":"callout","style":"tip","text":"Tip: Learning DSA in C++ forces you to manage memory and pointers explicitly. This builds a deeper mechanical sympathy for how computers actually run algorithms."},{"type":"heading","id":"preview-cpp","level":2,"text":"A First Look at C++ Code"},{"type":"paragraph","text":"Here is a simple C++ program. It prints a message and returns a status code of 0, indicating success."},{"type":"code","language":"cpp","code":"#include <iostream>\\n\\nint main() {\\n    std::cout << \\"Welcome to C++!\\\\n\\";\\n    return 0;\\n}"},{"type":"heading","id":"review-intro","level":2,"text":"Review Exercise"},{"type":"mcq","question":"What is the primary role of a compiler in C++?","options":["To execute the code line-by-line during runtime.","To translate human-readable source code into machine-executable binary.","To display the output window on the screen.","To format the text layout of the editor."],"correctAnswerIndex":1}]}');
+
+/***/ })
+
+});

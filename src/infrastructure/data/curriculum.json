@@ -1,0 +1,141 @@
+[
+  {
+    "id": "fundamentals",
+    "title": "Fundamentals (C++)",
+    "chapters": [
+      {
+        "id": "module-1",
+        "title": "Module 1 — Getting Started",
+        "lessons": [
+          { "id": "intro-to-programming", "title": "Introduction to Programming", "estimatedTime": "5 mins" },
+          { "id": "installing-ide", "title": "Installing Compiler & IDE", "estimatedTime": "10 mins" },
+          { "id": "first-program", "title": "Writing Your First Program", "estimatedTime": "10 mins" },
+          { "id": "input-output", "title": "Input & Output", "estimatedTime": "8 mins" },
+          { "id": "comments", "title": "Comments", "estimatedTime": "3 mins" },
+          { "id": "variables", "title": "Variables", "estimatedTime": "10 mins" },
+          { "id": "data-types", "title": "Data Types", "estimatedTime": "12 mins" },
+          { "id": "operators", "title": "Operators", "estimatedTime": "8 mins" },
+          { "id": "expressions", "title": "Expressions", "estimatedTime": "5 mins" }
+        ]
+      },
+      {
+        "id": "module-2",
+        "title": "Module 2 — Control Flow",
+        "lessons": [
+          { "id": "if", "title": "if", "estimatedTime": "5 mins" },
+          { "id": "if-else", "title": "if else", "estimatedTime": "8 mins" },
+          { "id": "nested-if", "title": "Nested if", "estimatedTime": "10 mins" },
+          { "id": "switch", "title": "Switch", "estimatedTime": "8 mins" },
+          { "id": "loops", "title": "Loops", "estimatedTime": "15 mins" },
+          { "id": "break", "title": "Break", "estimatedTime": "5 mins" },
+          { "id": "continue", "title": "Continue", "estimatedTime": "5 mins" },
+          { "id": "goto", "title": "goto (Introduction)", "estimatedTime": "6 mins" }
+        ]
+      },
+      {
+        "id": "module-3",
+        "title": "Module-3 — Functions",
+        "lessons": [
+          { "id": "functions", "title": "Functions", "estimatedTime": "15 mins" },
+          { "id": "parameters", "title": "Parameters", "estimatedTime": "10 mins" },
+          { "id": "return-types", "title": "Return Types", "estimatedTime": "8 mins" },
+          { "id": "function-overloading", "title": "Function Overloading", "estimatedTime": "12 mins" },
+          { "id": "inline-functions", "title": "Inline Functions", "estimatedTime": "6 mins" },
+          { "id": "default-arguments", "title": "Default Arguments", "estimatedTime": "5 mins" },
+          { "id": "recursion-basics", "title": "Recursion Basics", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-4",
+        "title": "Module 4 — Arrays & Strings",
+        "lessons": [
+          { "id": "arrays", "title": "Arrays", "estimatedTime": "12 mins" },
+          { "id": "multidimensional-arrays", "title": "Multidimensional Arrays", "estimatedTime": "15 mins" },
+          { "id": "character-arrays", "title": "Character Arrays", "estimatedTime": "10 mins" },
+          { "id": "strings", "title": "Strings", "estimatedTime": "12 mins" },
+          { "id": "string-library", "title": "String Library", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-5",
+        "title": "Module 5 — Pointers",
+        "lessons": [
+          { "id": "memory", "title": "Memory", "estimatedTime": "8 mins" },
+          { "id": "address-operator", "title": "Address Operator", "estimatedTime": "6 mins" },
+          { "id": "pointers", "title": "Pointers", "estimatedTime": "15 mins" },
+          { "id": "pointer-arithmetic", "title": "Pointer Arithmetic", "estimatedTime": "12 mins" },
+          { "id": "double-pointers", "title": "Double Pointers", "estimatedTime": "10 mins" },
+          { "id": "function-pointers", "title": "Function Pointers", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-6",
+        "title": "Module 6 — Dynamic Memory",
+        "lessons": [
+          { "id": "stack-heap", "title": "Stack vs Heap", "estimatedTime": "12 mins" },
+          { "id": "new", "title": "new", "estimatedTime": "8 mins" },
+          { "id": "delete", "title": "delete", "estimatedTime": "8 mins" },
+          { "id": "memory-leaks", "title": "Memory Leaks", "estimatedTime": "10 mins" }
+        ]
+      },
+      {
+        "id": "module-7",
+        "title": "Module 7 — OOP",
+        "lessons": [
+          { "id": "classes", "title": "Classes", "estimatedTime": "12 mins" },
+          { "id": "objects", "title": "Objects", "estimatedTime": "10 mins" },
+          { "id": "constructors", "title": "Constructors", "estimatedTime": "15 mins" },
+          { "id": "destructor", "title": "Destructor", "estimatedTime": "8 mins" },
+          { "id": "encapsulation", "title": "Encapsulation", "estimatedTime": "8 mins" },
+          { "id": "inheritance", "title": "Inheritance", "estimatedTime": "15 mins" },
+          { "id": "polymorphism", "title": "Polymorphism", "estimatedTime": "15 mins" },
+          { "id": "abstraction", "title": "Abstraction", "estimatedTime": "10 mins" },
+          { "id": "virtual-functions", "title": "Virtual Functions", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-8",
+        "title": "Module 8 — Templates",
+        "lessons": [
+          { "id": "function-templates", "title": "Function Templates", "estimatedTime": "10 mins" },
+          { "id": "class-templates", "title": "Class Templates", "estimatedTime": "12 mins" }
+        ]
+      },
+      {
+        "id": "module-9",
+        "title": "Module 9 — Exception Handling",
+        "lessons": [
+          { "id": "exception-handling", "title": "Exception Handling", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-10",
+        "title": "Module 10 — File Handling",
+        "lessons": [
+          { "id": "file-handling", "title": "File Handling", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "module-11",
+        "title": "Module 11 — STL",
+        "lessons": [
+          { "id": "vector", "title": "vector", "estimatedTime": "12 mins" },
+          { "id": "pair", "title": "pair", "estimatedTime": "6 mins" },
+          { "id": "deque", "title": "deque", "estimatedTime": "8 mins" },
+          { "id": "list", "title": "list", "estimatedTime": "10 mins" },
+          { "id": "stack-stl", "title": "stack", "estimatedTime": "8 mins" },
+          { "id": "queue-stl", "title": "queue", "estimatedTime": "8 mins" },
+          { "id": "priority-queue", "title": "priority_queue", "estimatedTime": "12 mins" },
+          { "id": "set", "title": "set", "estimatedTime": "12 mins" },
+          { "id": "multiset", "title": "multiset", "estimatedTime": "10 mins" },
+          { "id": "unordered-set", "title": "unordered_set", "estimatedTime": "12 mins" },
+          { "id": "map", "title": "map", "estimatedTime": "15 mins" },
+          { "id": "unordered-map", "title": "unordered_map", "estimatedTime": "15 mins" },
+          { "id": "algorithms", "title": "algorithms", "estimatedTime": "20 mins" },
+          { "id": "iterators", "title": "iterators", "estimatedTime": "10 mins" },
+          { "id": "lambda-expressions", "title": "lambda expressions", "estimatedTime": "12 mins" }
+        ]
+      }
+    ]
+  }
+]
