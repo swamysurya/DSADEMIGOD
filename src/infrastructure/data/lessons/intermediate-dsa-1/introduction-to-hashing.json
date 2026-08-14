@@ -1,0 +1,220 @@
+{
+  "id": "introduction-to-hashing",
+  "title": "Introduction to Hashing",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "collision-resolution-techniques",
+  "prevLessonId": "flatten-a-linked-list",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the world of efficient search. Before we jump into hashing, let's look back at what we already know. We know how arrays store elements one after another in memory, allowing us to read values instantly if we know their index. In this lesson, we will see how to search for elements when we don't know their index, and how we can make this search incredibly fast. Let's start by looking at this search challenge in detail."
+    },
+    {
+      "type": "heading",
+      "id": "the-search-problem",
+      "level": 2,
+      "text": "1. The Search Problem"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine we want to search for the target value `42` in an array. Let's look at how our traditional search techniques perform, and why they cannot check if the element exists in a constant amount of time."
+    },
+    {
+      "type": "drawing",
+      "id": "search-comparison-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Since traditional linear and binary search pointers cannot find elements in constant time, is there an easier way? Yes! What if we use the element values directly as the index positions?"
+    },
+    {
+      "type": "heading",
+      "id": "solution-direct-address",
+      "level": 2,
+      "text": "2. An Easy Solution: Direct Address Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "To achieve **O(1)** search, let's start with a simple idea: **Why not store each number directly in the index position equal to its value?**"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **How We Store**: If we want to store the number `5`, we put it at index `5` of our array. If we want to store `12`, we put it at index `12`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **What It Is**: This setup is called a **Direct Address Table**."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **How We Search**: To check if `12` exists, we just look at `array[12]`. If it is there, we found it in one step!"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Time**: This is a perfect **O(1)** constant time lookup."
+    },
+    {
+      "type": "drawing",
+      "id": "direct-address-table-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "wasted-memory",
+      "level": 3,
+      "text": "The Catch: Disadvantages of Direct Addressing"
+    },
+    {
+      "type": "paragraph",
+      "text": "While this works, it has a major drawback: **massive memory waste**."
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you want to store only three keys: `5`, `12`, and `10,000,000` (ten million). To store `10,000,000`, you must allocate an array of size `10,000,001`! This array will be almost entirely empty. We are wasting a huge amount of memory just to store three tiny numbers. To solve this memory waste while keeping our instant lookups, we need a way to compress our keys. This is where Hashing comes into play."
+    },
+    {
+      "type": "heading",
+      "id": "hashing-concept",
+      "level": 2,
+      "text": "3. What is Hashing?"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solve this memory waste, we use **Hashing**. Hashing is a technique to map a huge range of keys into a much smaller, manageable array. Let's define the three key terms in simple English:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Key Space**: The set of all possible keys we might want to store (like all possible student ID numbers)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Hash Table**: A small array of a fixed size where we actually store our keys."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Mapping Rule**: A simple mathematical rule or formula that translates our large keys into smaller indices. (We will see later that this rule is called a **Hash Function**)."
+    },
+    {
+      "type": "drawing",
+      "id": "why-hashing-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "In the above example, the value `12` is stored at index `2` because `12 % 10` is `2` and also `93 % 10` is `3`. Now let's explore how we design this mapping rule mathematically using division remainders."
+    },
+    {
+      "type": "heading",
+      "id": "the-hash-rule",
+      "level": 2,
+      "text": "4. Designing the Mapping Rule: The Modulo Rule"
+    },
+    {
+      "type": "paragraph",
+      "text": "How do we fit huge numbers into a small array of size 10? We use a remainder calculation called the **Modulo Rule**."
+    },
+    {
+      "type": "paragraph",
+      "text": "For any input key, our rule calculates: `Index = Key % 10`. This maps all numbers (no matter how big!) to a slot between `0` and `9`, requiring only 10 slots of memory!"
+    },
+    {
+      "type": "paragraph",
+      "text": "In computer programming, this mapping rule is called a **Hash Function**."
+    },
+    {
+      "type": "drawing",
+      "id": "hashing-mapping-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "This modulo mapping rule works perfectly for these keys. But what happens when two different keys calculate the exact same slot? Let's check out this problem."
+    },
+    {
+      "type": "heading",
+      "id": "collision-concept",
+      "level": 2,
+      "text": "5. What is a Collision?"
+    },
+    {
+      "type": "paragraph",
+      "text": "What happens if we now want to insert key `35`?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's apply our hash function: `35 % 10 = 5`."
+    },
+    {
+      "type": "paragraph",
+      "text": "But index `5` is already occupied by key `25` (since `25 % 10 = 5`)! Both `25` and `35` want to sit in the same box. This situation is called a **Collision**."
+    },
+    {
+      "type": "paragraph",
+      "text": "A **Collision** occurs when two or more different keys map to the exact same index in the hash table. Because we are mapping a large number of potential keys into a small table, collisions are guaranteed to happen sooner or later."
+    },
+    {
+      "type": "drawing",
+      "id": "collision-concept-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Since overwriting a slot would delete our existing keys, we must find a way to store colliding elements safely. In the next section, we will see what comes next in our learning path."
+    },
+    {
+      "type": "heading",
+      "id": "next-step-transition",
+      "level": 2,
+      "text": "6. What Comes Next?"
+    },
+    {
+      "type": "paragraph",
+      "text": "If we simply overwrite slot `5` with `35`, we will lose `25` forever! We need a clean, structured way to store multiple keys at the same index without losing data. In our next lesson, we will explore **Collision Resolution Techniques** to solve this exact problem!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "7. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the worst-case time complexity of finding an element using Linear Search on an array of size N?",
+      "options": [
+        "O(1)",
+        "O(log N)",
+        "O(N)",
+        "O(N log N)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "Why is a Direct Address Table not practical for storing sparse keys like 5, 23, and 100,000?",
+      "options": [
+        "It takes O(N) to look up any value.",
+        "It allocates a massive array and wastes huge amounts of memory.",
+        "It is unable to store numbers greater than 100.",
+        "It requires a sorting step before search."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Given a hash table of size 10 and the hash function H(x) = x % 10, which of the following keys will collide with key 12?",
+      "options": [
+        "2",
+        "22",
+        "32",
+        "All of the above"
+      ],
+      "correctAnswerIndex": 3
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "8. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Traditional linear search (**O(N)**) and binary search (**O(log N)**) don't achieve constant-time lookup. Storing values at their own index (Direct Addressing) gives **O(1)** search but wastes memory. Hashing maps keys into a smaller table using a hash function, like modulo division. When multiple keys map to the same index, a collision occurs. Next up: how to resolve these collisions!"
+    }
+  ]
+}

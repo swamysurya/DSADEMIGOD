@@ -26,53 +26,95 @@ export default function SubjectLayout({
 }: SubjectLayoutProps) {
   const [chaptersOpen, setChaptersOpen] = useState(false);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+  const [leftSidebarCollapsed, setLeftSidebarCollapsed] = useState(false);
+  const [rightSidebarCollapsed, setRightSidebarCollapsed] = useState(false);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col font-serif">
+    <div className="min-h-screen bg-background flex flex-col font-serif h-screen overflow-hidden">
       {/* Sticky Top Navigation */}
       <TopNavigation subjectTitle={curriculum.title} />
 
-      {/* Sub-Header bar visible ONLY on tablet & mobile */}
-      <div className="lg:hidden h-10 px-4 border-b border-border/80 bg-card/60 backdrop-blur-xs flex items-center justify-between select-none">
+      {/* Sub-Header bar visible on all devices */}
+      <div className="h-10 px-4 border-b border-border/80 bg-card flex items-center justify-between select-none shrink-0">
         <button
-          onClick={() => setChaptersOpen(true)}
-          className="flex items-center gap-1.5 text-[10px] font-bold text-secondary-foreground hover:text-foreground uppercase tracking-widest outline-none focus-visible:ring-1 focus-visible:ring-foreground"
+          onClick={() => {
+            setChaptersOpen(true);
+            setLeftSidebarCollapsed((prev) => !prev);
+          }}
+          className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest outline-none focus-visible:ring-1 focus-visible:ring-foreground transition-colors hover:text-foreground ${
+            leftSidebarCollapsed ? "text-muted-foreground/60" : "text-foreground"
+          }`}
         >
           <Menu className="h-4 w-4" />
           <span>Chapters</span>
+          <span className="hidden lg:inline text-[9px] text-muted-foreground/50 font-mono font-normal">
+            [{leftSidebarCollapsed ? "Show" : "Hide"}]
+          </span>
         </button>
 
         <button
-          onClick={() => setRightSidebarOpen(true)}
-          className="flex items-center gap-1.5 text-[10px] font-bold text-secondary-foreground hover:text-foreground uppercase tracking-widest outline-none focus-visible:ring-1 focus-visible:ring-foreground"
+          onClick={() => {
+            setRightSidebarOpen(true);
+            setRightSidebarCollapsed((prev) => !prev);
+          }}
+          className={`flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest outline-none focus-visible:ring-1 focus-visible:ring-foreground transition-colors hover:text-foreground ${
+            rightSidebarCollapsed ? "text-muted-foreground/60" : "text-foreground"
+          }`}
         >
+          <span className="hidden xl:inline text-[9px] text-muted-foreground/50 font-mono font-normal">
+            [{rightSidebarCollapsed ? "Show" : "Hide"}]
+          </span>
           <span>Page Index</span>
           <List className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Main Core Body */}
-      <div className="flex-1 flex relative">
-        {/* Left Sidebar (Chapters Navigation) */}
-        <ChapterSidebar
-          curriculum={curriculum}
-          activeLessonId={activeLessonId}
-          subjectId={subjectId}
-          isOpen={chaptersOpen}
-          onClose={() => setChaptersOpen(false)}
-        />
+      {/* Main Core Body (unified book container) */}
+      <div className="flex-1 w-full max-w-[1800px] mx-auto px-5 md:px-6 lg:py-6 lg:px-7 overflow-hidden relative flex flex-col justify-center">
+        <div className="w-full h-full book-layout-grid border-x md:border border-border/80 bg-card overflow-hidden grid md:rounded-lg">
+          {/* Inject style for dynamic responsive grid cols */}
+          <style dangerouslySetInnerHTML={{ __html: `
+            @media (min-width: 1280px) {
+              .book-layout-grid {
+                grid-template-columns: ${leftSidebarCollapsed ? "0px" : "260px"} 1fr ${rightSidebarCollapsed ? "0px" : "280px"};
+              }
+            }
+            @media (min-width: 1024px) and (max-width: 1279px) {
+              .book-layout-grid {
+                grid-template-columns: ${leftSidebarCollapsed ? "0px" : "260px"} 1fr 0px;
+              }
+            }
+            @media (max-width: 1023px) {
+              .book-layout-grid {
+                grid-template-columns: 1fr;
+              }
+            }
+          ` }} />
 
-        {/* Center: Main Reading Area */}
-        <main className="flex-1 min-w-0 bg-background overflow-y-auto">
-          {children}
-        </main>
+          {/* Left Sidebar (Chapters Navigation) */}
+          <ChapterSidebar
+            curriculum={curriculum}
+            activeLessonId={activeLessonId}
+            subjectId={subjectId}
+            isOpen={chaptersOpen}
+            onClose={() => setChaptersOpen(false)}
+            isCollapsed={leftSidebarCollapsed}
+          />
 
-        {/* Right Sidebar (Table of Contents + Notes) */}
-        {/* Permanent on XL Desktop screens */}
-        <aside className="hidden xl:block w-64 shrink-0 border-l border-border/80 sticky top-14 h-[calc(100vh-3.5rem)] bg-background overflow-y-auto p-6 space-y-8">
-          <TableOfContents headings={headings} />
-          <NotesPanel />
-        </aside>
+          {/* Center: Main Reading Area (Unified Paper Page) */}
+          <main className="h-full overflow-y-auto min-w-0 bg-card lg:col-start-2">
+            {children}
+          </main>
+
+          {/* Right Sidebar (Table of Contents + Notes) */}
+          {/* Permanent on XL Desktop screens, unless collapsed */}
+          {!rightSidebarCollapsed && (
+            <aside className="hidden xl:block xl:col-start-3 w-full h-full border-l border-border/80 bg-card overflow-y-auto p-5 space-y-6">
+              <TableOfContents headings={headings} />
+              <NotesPanel lessonId={activeLessonId} />
+            </aside>
+          )}
+        </div>
 
         {/* Dynamic sliding drawer on Mobile & Tablet for Right Sidebar */}
         <div
@@ -103,7 +145,7 @@ export default function SubjectLayout({
               </button>
             </div>
             <TableOfContents headings={headings} />
-            <NotesPanel />
+            <NotesPanel lessonId={activeLessonId} />
           </div>
         </div>
       </div>

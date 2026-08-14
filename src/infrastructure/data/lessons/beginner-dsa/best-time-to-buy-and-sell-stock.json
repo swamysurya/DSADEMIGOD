@@ -1,0 +1,204 @@
+{
+  "id": "best-time-to-buy-and-sell-stock",
+  "title": "Best Time to Buy and Sell Stock",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "best-time-to-buy-and-sell-stock-ii",
+  "prevLessonId": "rotate-array",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we are going to learn how to solve a classic array optimization problem: **Best Time to Buy and Sell Stock (LeetCode 121)**. This problem teaches us how to trace values using running parameters instead of brute-force checking. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "You are given an array `prices` where `prices[i]` represents the price of a stock on the $i^{th}$ day."
+    },
+    {
+      "type": "paragraph",
+      "text": "You are allowed to perform **only one transaction**: buy one stock on a day, and sell it later on a different day. Return the **maximum profit** you can achieve. If no profit is possible, return `0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Example 1**: `prices = [7, 1, 5, 3, 6, 4]`. If you buy on Day 2 (price = 1) and sell on Day 5 (price = 6), your profit is $6 - 1 = 5$. This is the maximum possible profit."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Example 2**: `prices = [7, 6, 4, 3, 1]`. The prices continually decrease, so you can never make a profit. Output is `0`."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Trading algorithms, budget allocation checkers, and resource scheduling pipelines all require optimizing differences between parameters in a specific sequence (e.g. buying before selling). Finding these bounds quickly is crucial."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition: Prefix Minimum Pattern"
+    },
+    {
+      "type": "paragraph",
+      "text": "The profit from selling on any day is: $\\text{Profit} = \\text{Selling Price} - \\text{Buying Price}$."
+    },
+    {
+      "type": "paragraph",
+      "text": "For any given day, if we decide to sell, we want to have bought at the **lowest possible price prior to that day**. So, as we traverse the array, we can simply remember the **minimum price seen so far**."
+    },
+    {
+      "type": "heading",
+      "id": "real-world-analogy",
+      "level": 2,
+      "text": "4. Real-World Analogy: The Bargain Hunter"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine walking through a shopping street. You want to buy a collectible item and sell it to a shop later down the street. As you walk, you keep track of the cheapest store price you have seen so far. At each new store, you check if selling it there gives you a higher profit than your previous best deal!"
+    },
+    {
+      "type": "heading",
+      "id": "concept-explanation",
+      "level": 2,
+      "text": "5. Concept Explanation: Running Minimum"
+    },
+    {
+      "type": "paragraph",
+      "text": "At each index `i`, we answer two simple questions:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. **Cheapest Buy Price**: Is today's price cheaper than the minimum price seen so far? If yes, update `minSoFar`."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. **Potential Profit**: If I sell today, how much profit do I make? (which is `prices[i] - minSoFar`). If this profit is greater than our record `maxProfit`, update it!"
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "6. Visual Drawing: Prefix Minimum Sweep"
+    },
+    {
+      "type": "drawing",
+      "id": "stock-profit-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Buy & Sell Stock Profit Sweep]"
+    },
+    {
+      "type": "heading",
+      "id": "code-example",
+      "level": 2,
+      "text": "7. Code Examples"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 1: Brute Force (Double Loop)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Solution {\npublic:\n    int maxProfit(vector<int>& prices) {\n        int n = prices.size();\n        int maxProfit = 0;\n        for (int i = 0; i < n; i++) {\n            for (int j = i + 1; j < n; j++) {\n                int profit = prices[j] - prices[i];\n                if (profit > maxProfit) {\n                    maxProfit = profit;\n                }\n            }\n        }\n        return maxProfit;\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 2: Running Minimum (Optimal)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n#include <algorithm>\n\nclass Solution {\npublic:\n    int maxProfit(std::vector<int>& prices) {\n        int n = prices.size();\n        if (n == 0) return 0;\n\n        int minSoFar = prices[0];\n        int maxProfit = 0;\n\n        for (int i = 1; i < n; i++) {\n            // Update cheapest price seen so far\n            minSoFar = std::min(minSoFar, prices[i]);\n            \n            // Compute profit if selling today and update maximum\n            maxProfit = std::max(maxProfit, prices[i] - minSoFar);\n        }\n        return maxProfit;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "8. Dry Run Trace Table"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Input prices: [7, 1, 5, 3, 6, 4]\n\nDay | Price | minSoFar | Current Profit | maxProfit | Action Taken\n────┼───────┼──────────┼────────────────┼───────────┼───────────────────────────────\n1   |   7   |    7     |       0        |     0     | Initialize minSoFar=7, max=0\n2   |   1   |    1     |       0        |     0     | minSoFar updated to 1\n3   |   5   |    1     |       4        |     4     | profit 4 > 0, maxProfit=4\n4   |   3   |    1     |       2        |     4     | profit 2 < 4, no change\n5   |   6   |    1     |       5        |     5     | profit 5 > 4, maxProfit=5\n6   |   4   |    1     |       3        |     5     | profit 3 < 5, no change"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "9. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: **$O(N)$** because we iterate through the prices array exactly once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: **$O(1)$** as we only store two helper integer variables (`minSoFar`, `maxProfit`)."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "10. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Buying After Selling: Do not look at minimum prices that occur *after* the current index. The loop naturally avoids this because minSoFar is only updated using indices <= i."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Negative Profits: If stock prices only decrease (e.g. [7, 6, 5]), the max profit must remain 0, never negative. Initialize maxProfit to 0."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "11. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the maximum profit achievable from prices: [3, 8, 1, 5]?",
+      "options": [
+        "5 (Buy 3, Sell 8)",
+        "4 (Buy 1, Sell 5)",
+        "5 (Buy 1, Sell 5, but buy index is after sell index)",
+        "6"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of the optimal Prefix Minimum stock solution?",
+      "options": [
+        "O(N^2)",
+        "O(N log N)",
+        "O(N)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "12. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We solved LeetCode 121 optimally in O(N) time and O(1) space using the Prefix Minimum pattern by tracking the lowest buying price. Outstanding job completing this lesson!"
+    }
+  ]
+}

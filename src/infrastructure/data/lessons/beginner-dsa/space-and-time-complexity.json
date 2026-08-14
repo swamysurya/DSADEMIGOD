@@ -1,0 +1,327 @@
+{
+  "id": "space-and-time-complexity",
+  "title": "Space and Time Complexity Analysis",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "asymptotic-notations",
+  "prevLessonId": "introduction-to-algorithms",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "In our last lesson, we learned that an algorithm is a step-by-step recipe to solve a problem. Today, we will build on that knowledge to answer a key question: how do we measure if our recipe is fast or slow? We will study **Space Complexity** (memory use) and **Time Complexity** (running speed)."
+    },
+    {
+      "type": "heading",
+      "id": "space-complexity-title",
+      "level": 2,
+      "text": "1. What is Space Complexity?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Space complexity is simply a measure of how much extra memory (RAM) our algorithm needs as the size of the problem increases."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Analogy:\nThink of variables in programming as cardboard storage boxes. Space complexity answers: 'As the input gets bigger, how many extra boxes do we need to create to get the job done?'"
+    },
+    {
+      "type": "paragraph",
+      "text": "We divide the boxes we use into two categories:\n· **Fixed Boxes:** Boxes that we always need, no matter what. For example, a single variable to store a loop index or a total sum.\n· **Variable Boxes:** Extra boxes that depend on our input size. For example, if we create a copy of a list of size N, we will need N extra boxes. If N is 10, we need 10 boxes. If N is a million, we need a million boxes!"
+    },
+    {
+      "type": "heading",
+      "id": "auxiliary-space",
+      "level": 2,
+      "text": "2. Extra Memory (Auxiliary Space)"
+    },
+    {
+      "type": "paragraph",
+      "text": "In programming interviews, you will often hear the term **Auxiliary Space**. This just means the *extra* memory your recipe uses, not counting the starting input itself. \nFor example, if you are given a list of N numbers, and you calculate the sum using just one extra box to hold the total, your extra space is constant (it does not grow with N)."
+    },
+    {
+      "type": "heading",
+      "id": "time-complexity-title",
+      "level": 2,
+      "text": "3. What is Time Complexity?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Time complexity measures how the number of steps our algorithm takes grows as the size of the problem increases."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Remember:\nWe do not measure time in seconds! A phone might take 5 seconds to run a code, while a fast computer takes 0.1 seconds. Instead, we measure time by counting the number of steps (operations) the computer performs."
+    },
+    {
+      "type": "heading",
+      "id": "summation-simulation",
+      "level": 2,
+      "text": "4. Code Simulation: Summing a List"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to step through a simple summation code. Notice how we look at each element in the list one-by-one to add it to our total:"
+    },
+    {
+      "type": "simulation",
+      "id": "array-summation-simulation",
+      "simulationData": {
+        "code": "int arr[4] = {10, 20, 30, 40};\nint n = 4;\nint sum = 0;\n\nfor (int i = 0; i < n; i++) {\n    sum += arr[i];\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "[Step 1 of 11]: We declare our input array `arr` with 4 elements.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "[Step 2 of 11]: We define our array size `n = 4`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "[Step 3 of 11]: We initialize `sum = 0` to accumulate values.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "0", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 4 of 11]: Loop starts. We initialize `i = 0` (first element). Since `i (0) < n (4)` is true, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "0", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 5 of 11]: We add the current array element `arr[0]` (10) to `sum`. `sum` becomes 10.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 6 of 11]: We increment `i++` to 1. Since `i (1) < n (4)` is true, we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 7 of 11]: We add `arr[1]` (20) to `sum`. `sum` becomes 30.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "30", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 8 of 11]: We increment `i++` to 2. Since `i (2) < n (4)` is true, we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "30", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 9 of 11]: We add `arr[2]` (30) to `sum`. `sum` becomes 60.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "60", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 10 of 11]: We increment `i++` to 3. Since `i (3) < n (4)` is true, we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "60", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 11 of 11]: We add `arr[3]` (40) to `sum`. `sum` becomes 100. Loop finishes in the next condition check because `i` increments to 4 and `4 < 4` is false.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "10", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "20", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "30", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "40", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "sum", "type": "int", "value": "100", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "growth-intuition",
+      "level": 2,
+      "text": "5. Understanding Growth"
+    },
+    {
+      "type": "paragraph",
+      "text": "In the summation code, we looked at each element in the array exactly once.\n· If the array has **4 elements**, we take **4 steps**.\n· If the array has **100 elements**, we take **100 steps**.\n· If the array has **N elements**, we take **N steps**."
+    },
+    {
+      "type": "paragraph",
+      "text": "The number of steps grows directly as the size of the array increases. This is called a **linear growth** rate."
+    },
+    {
+      "type": "heading",
+      "id": "best-worst-average",
+      "level": 2,
+      "text": "6. Best Case, Worst Case, and Average Case"
+    },
+    {
+      "type": "paragraph",
+      "text": "The number of steps an algorithm takes can change depending on how the input is arranged. To understand this, let's look at a simple real-world scenario:\n**Searching for a student's name in a roster list by looking at them one-by-one from the beginning.**"
+    },
+    {
+      "type": "syntax_explanation",
+      "items": [
+        {
+          "syntax": "Best Case",
+          "explanation": "The target name is the very first name on the list! We find it on our first try. This takes only 1 step."
+        },
+        {
+          "syntax": "Worst Case",
+          "explanation": "The target name is at the very end of the list, or not on the list at all. We have to check every single name on the roster. This takes N steps."
+        },
+        {
+          "syntax": "Average Case",
+          "explanation": "The target name is somewhere in the middle of the list. We check about half of the names. This takes about N/2 steps."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Steps, Not Seconds: We evaluate time complexity by counting execution steps.\n· Auxiliary is Extra: Auxiliary space refers only to the extra memory boxes we create, not the input size itself.\n· Worst Case focus: We focus mostly on the worst-case scenario because it gives us a guaranteed upper limit on execution time."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "If you write an algorithm that processes a list of N numbers, and you only create one variable box named 'total' to hold the sum, what is the Auxiliary Space complexity?",
+      "options": [
+        "It grows with N",
+        "It stays constant (does not grow with N)",
+        "It takes N squared space",
+        "It takes no space at all"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why do we count steps instead of measuring seconds to calculate time complexity?",
+      "options": [
+        "Seconds are too hard to count on a clock.",
+        "A program's execution time in seconds depends heavily on the computer hardware.",
+        "The computer compiler ignores seconds.",
+        "A program always takes the same number of seconds."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If you are searching for a name in a list of 100 students one-by-one, what is the number of checks you perform in the worst case?",
+      "options": [
+        "1 check",
+        "50 checks",
+        "100 checks",
+        "101 checks"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We measure algorithms using space and time complexity. Space complexity looks at how memory requirements grow, focusing on auxiliary (extra) memory. Time complexity counts the number of execution steps, analyzing best, worst, and average-case inputs. In the next lesson, we will introduce a standard way to write down these growth rates, called Asymptotic Notations!"
+    }
+  ]
+}

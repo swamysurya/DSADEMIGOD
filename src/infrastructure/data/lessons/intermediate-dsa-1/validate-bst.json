@@ -1,0 +1,86 @@
+{
+  "id": "validate-bst",
+  "title": "Validate BST",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "predecessor-successor-bst",
+  "prevLessonId": "kth-smallest-bst",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn how to **Validate a BST**. Given a binary tree, how do we write a program to check if it is a valid Binary Search Tree? This sounds easy, but it has a common trap that we must avoid. Let's see!"
+    },
+    {
+      "type": "heading",
+      "id": "validation-trap",
+      "level": 2,
+      "text": "1. The Common Mistake"
+    },
+    {
+      "type": "paragraph",
+      "text": "A beginner might think: 'I just need to check if each node is larger than its left child, and smaller than its right child.'\nBut wait, look at this tree:\n`   20`\n`  /  \\`\n` 10  30`\n`    /`\n`   5`\nHere, `5` is smaller than its parent `30` (correct), but it sits in the right subtree of the root `20`. That is illegal! `5` is smaller than `20`, so it cannot be on the right side of `20`."
+    },
+    {
+      "type": "heading",
+      "id": "validation-strategy",
+      "level": 2,
+      "text": "2. The Correct Strategy: Range Bounds"
+    },
+    {
+      "type": "paragraph",
+      "text": "To validate properly, we must carry down a range of allowed values `[minAllowed, maxAllowed]` recursively:\n· When going left, the maximum allowed value becomes the parent node's value.\n· When going right, the minimum allowed value becomes the parent node's value.\nEvery node value must fall strictly within its range!"
+    },
+    {
+      "type": "heading",
+      "id": "validate-bst-code",
+      "level": 2,
+      "text": "3. C++ Validation Code"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ solution using long boundaries to prevent integer overflow issues:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <climits>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nbool isValidBSTHelper(Node* root, long minVal, long maxVal) {\n    if (root == nullptr) return true; // Empty tree is valid\n\n    // Check if current node violates the range bounds\n    if (root->data <= minVal || root->data >= maxVal) {\n        return false;\n    }\n\n    // Recurse left (updating max constraint) and right (updating min constraint)\n    return isValidBSTHelper(root->left, minVal, root->data) &&\n           isValidBSTHelper(root->right, root->data, maxVal);\n}\n\nbool isValidBST(Node* root) {\n    return isValidBSTHelper(root, LONG_MIN, LONG_MAX);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Why does checkNodeData > leftChildData && checkNodeData < rightChildData fail to validate a BST?",
+      "options": [
+        "It doesn't check if the nodes have values.",
+        "It only checks local parent-child relations, ignoring constraints from higher ancestors.",
+        "It is too slow.",
+        "It fails for negative values only."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "When recursing into the left child of node X, what boundary changes?",
+      "options": [
+        "The minimum allowed value becomes X.",
+        "The maximum allowed value becomes X.",
+        "Both boundaries remain unchanged.",
+        "Both boundaries become X."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Validating a BST requires carrying down `[min, max]` boundaries recursively to ensure all ancestor constraints are satisfied. In our next lesson, we will find the inorder predecessor and successor!"
+    }
+  ]
+}

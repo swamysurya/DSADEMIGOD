@@ -1,0 +1,80 @@
+{
+  "id": "kth-smallest-bst",
+  "title": "Kth Smallest Element in BST",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "validate-bst",
+  "prevLessonId": "insertion-deletion-bst",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn how to find the **Kth Smallest Element** in a Binary Search Tree. By exploiting the properties of a BST, we can solve this problem in linear time with a very elegant solution. Let's see how!"
+    },
+    {
+      "type": "heading",
+      "id": "kth-smallest-concept",
+      "level": 2,
+      "text": "1. The Inorder Property"
+    },
+    {
+      "type": "paragraph",
+      "text": "Do you remember the properties of **Inorder Traversal** (Left → Root → Right)? When we perform Inorder traversal on a Binary Search Tree, it visits the elements in **strictly sorted ascending order**!"
+    },
+    {
+      "type": "paragraph",
+      "text": "This observation makes our task very straightforward: to find the Kth smallest element, we perform Inorder traversal and count the elements we visit. The Kth element we process is our answer!"
+    },
+    {
+      "type": "heading",
+      "id": "kth-smallest-code",
+      "level": 2,
+      "text": "2. C++ Recursive Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ code to find the Kth smallest element in $O(H + K)$ time, where $H$ is the height of the tree:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nvoid inorderKth(Node* root, int& k, int& result) {\n    if (root == nullptr || k <= 0) return;\n\n    // Traverse Left subtree\n    inorderKth(root->left, k, result);\n\n    // Decrement counter and check if we found it\n    k--;\n    if (k == 0) {\n        result = root->data;\n        return;\n    }\n\n    // Traverse Right subtree\n    inorderKth(root->right, k, result);\n}\n\nint kthSmallest(Node* root, int k) {\n    int result = -1;\n    inorderKth(root, k, result);\n    return result;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 3,
+      "text": "3. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the result of performing Inorder traversal on a BST?",
+      "options": [
+        "Elements are listed in random order.",
+        "Elements are listed in sorted ascending order.",
+        "Elements are listed in sorted descending order.",
+        "Only leaf nodes are listed."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of the inorder traversal search for the Kth smallest element?",
+      "options": [
+        "O(N^2)",
+        "O(N)",
+        "O(2^N)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "4. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Inorder traversal visits BST elements in sorted order. We can find the Kth smallest element by keeping a counter and stopping when the counter hits K. In our next lesson, we will see how to validate if a binary tree is a valid BST!"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "diameter-of-binary-tree",
+  "title": "Diameter of a Binary Tree",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "maximum-path-sum",
+  "prevLessonId": "height-of-binary-tree",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn about the **Diameter** of a Binary Tree. The diameter is the length of the longest path between any two nodes in the tree. This path may or may not pass through the root node. Let's see how to find it!"
+    },
+    {
+      "type": "heading",
+      "id": "diameter-concept",
+      "level": 2,
+      "text": "1. What is the Diameter?"
+    },
+    {
+      "type": "paragraph",
+      "text": "The diameter of a tree is the longest path between any two leaf nodes. For any node, the longest path passing through that node is the sum of the heights of its left and right subtrees:\n**Path passing through node = (Left Height + 1) + (Right Height + 1)** (if height of empty subtree is -1)."
+    },
+    {
+      "type": "paragraph",
+      "text": "Thus, the diameter of the tree is the maximum path sum found at any node in the tree!"
+    },
+    {
+      "type": "heading",
+      "id": "diameter-code",
+      "level": 2,
+      "text": "2. C++ Optimal Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solve this in $O(N)$ time, we calculate height and diameter in the same recursive sweep, updating a global maximum variable:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <algorithm>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\n// Returns the height of the node, and updates 'diameter'\nint calculateHeightAndDiameter(Node* root, int& diameter) {\n    if (root == nullptr) return -1;\n\n    int lh = calculateHeightAndDiameter(root->left, diameter);\n    int rh = calculateHeightAndDiameter(root->right, diameter);\n\n    // Longest path through current node is (lh + 1) + (rh + 1)\n    diameter = std::max(diameter, lh + rh + 2);\n\n    return 1 + std::max(lh, rh);\n}\n\nint getDiameter(Node* root) {\n    int diameter = 0;\n    calculateHeightAndDiameter(root, diameter);\n    return diameter;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "3. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Does the longest path representing the diameter always have to pass through the root node of the tree?",
+      "options": [
+        "Yes, always.",
+        "No, it can be entirely in the left or right subtree.",
+        "Only if the tree is balanced.",
+        "Only if the tree has negative values."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of the optimal diameter calculation algorithm?",
+      "options": [
+        "O(N^2)",
+        "O(log N)",
+        "O(N)",
+        "O(N log N)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "4. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: The diameter of a tree is the longest distance between any two nodes. We compute it recursively in $O(N)$ time by updating a running maximum of $(\\text{leftHeight} + \\text{rightHeight} + 2)$ during our height calculations. Next, we will learn how to find the maximum path sum in a binary tree!"
+    }
+  ]
+}

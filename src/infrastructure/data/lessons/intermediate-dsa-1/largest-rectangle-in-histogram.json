@@ -1,0 +1,132 @@
+{
+  "id": "largest-rectangle-in-histogram",
+  "title": "Lesson 10: Largest Rectangle in Histogram",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "intro-to-tree",
+  "prevLessonId": "asteroid-collision",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the final lesson of the Stacks module. Today, we will solve a classic hard-level problem: **Largest Rectangle in Histogram**. We will use our knowledge of monotonic stacks to solve it in linear time. Let's do it!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Given an array of integers `heights` representing the histogram's bar heights where the width of each bar is `1`, find the area of the largest rectangle in the histogram."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "This problem is critical for image processing (finding largest bright rectangular regions), database query optimization (resolving range scans), and computational geometry."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition & Strategy"
+    },
+    {
+      "type": "paragraph",
+      "text": "For each bar `i` with height `h`, the maximum rectangle using this bar as the height is bounded by:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· The first bar to its left that is strictly smaller than `h`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· The first bar to its right that is strictly smaller than `h`."
+    },
+    {
+      "type": "paragraph",
+      "text": "If we know these boundaries, the width of the rectangle is `right - left - 1`, and the area is `height * width`."
+    },
+    {
+      "type": "paragraph",
+      "text": "We can sweep indices using a **Monotonic Increasing Stack** (storing indices). When we see a smaller bar than the top of the stack, it acts as the right boundary for the top element, which we pop and evaluate."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "4. Visual Drawing: Max Rectangular Area"
+    },
+    {
+      "type": "drawing",
+      "id": "histogram-stack-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "5. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n#include <stack>\n#include <algorithm>\n\nclass Solution {\npublic:\n    int largestRectangleArea(std::vector<int>& heights) {\n        int n = heights.size();\n        std::stack<int> s;\n        int maxArea = 0;\n        \n        for (int i = 0; i <= n; i++) {\n            int h = (i == n) ? 0 : heights[i];\n            while (!s.empty() && heights[s.top()] > h) {\n                int height = heights[s.top()];\n                s.pop();\n                int width = s.empty() ? i : i - s.top() - 1;\n                maxArea = std::max(maxArea, height * width);\n            }\n            s.push(i);\n        }\n        return maxArea;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "6. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(N)$ since each index is pushed and popped at most once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ for the boundary stack."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "7. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the maximum area in a histogram of heights: [2, 1, 5, 6, 2, 3]?",
+      "options": [
+        "10 (width 2, height 5)",
+        "12 (width 6, height 2)",
+        "8 (width 4, height 2)",
+        "15"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "Why do we append a virtual height of 0 at index n in the loop?",
+      "options": [
+        "To clear the elements in the array.",
+        "To force-pop and evaluate all remaining indices in the stack at the end.",
+        "To handle negative values.",
+        "None of the above."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "8. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We solved Largest Rectangle in Histogram in O(N) time using a Monotonic Stack to locate left and right smaller boundaries. Congratulations, you have finished all lessons in the Stacks module!"
+    }
+  ]
+}

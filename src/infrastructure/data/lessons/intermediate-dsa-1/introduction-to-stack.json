@@ -1,0 +1,127 @@
+{
+  "id": "introduction-to-stack",
+  "title": "Lesson 1: Introduction to Stack",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "stack-implementation-using-array",
+  "prevLessonId": "flatten-a-linked-list",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the Stacks module. Today, we are going to learn about a fundamental data structure: the **Stack**. Don't worry, it's a very simple and natural concept. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-stack",
+      "level": 2,
+      "text": "1. What is a Stack?"
+    },
+    {
+      "type": "paragraph",
+      "text": "A **Stack** is a linear data structure that stores elements in a specific order known as **LIFO** (Last In, First Out). This means that the last element added to the stack is the first one to be removed."
+    },
+    {
+      "type": "paragraph",
+      "text": "In simple English, LIFO means that the last item you place into the stack is the first one you must take out. You can think of it like a stack of plates on a table—you add plates to the top, and you can only take plates off the top."
+    },
+    {
+      "type": "heading",
+      "id": "stack-operations",
+      "level": 2,
+      "text": "2. Core Stack Operations"
+    },
+    {
+      "type": "paragraph",
+      "text": "Every stack provides these essential operations to manage its data:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Push**: Inserts a new element onto the stack. The new element is always added at the top."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pop**: Removes an element from the top of the stack. Elements are popped in the reverse order of their insertion."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Top or Peek**: Accesses the topmost element of the stack without removing it."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **IsEmpty**: Checks whether the stack is empty (contains no elements)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **IsFull**: Checks whether the stack is full. This is relevant for stacks that have a fixed maximum size."
+    },
+    {
+      "type": "heading",
+      "id": "types-of-stack",
+      "level": 2,
+      "text": "3. Types of Stack"
+    },
+    {
+      "type": "paragraph",
+      "text": "Based on how we manage their size, stacks are categorized into two main types:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Fixed-Size Stack**: Has a predefined maximum capacity. Once this capacity is reached, no more elements can be added (pushing onto a full stack causes a **Stack Overflow** condition). Memory is allocated for the maximum number of elements in advance."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Dynamic-Size Stack**: Does not have a predefined capacity. It grows and shrinks dynamically as elements are pushed and popped, limited only by the available computer memory. This provides great flexibility."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "4. Visual Drawing: LIFO Concept"
+    },
+    {
+      "type": "drawing",
+      "id": "stack-plates-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Stack Visualizer]"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What happens when you try to push an element onto a fixed-size stack that has reached its maximum capacity?",
+      "options": [
+        "Stack Underflow",
+        "Stack Overflow",
+        "The stack size doubles automatically",
+        "The bottom element is deleted"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which type of stack allocates memory dynamically as elements are added and is limited only by the system's available memory?",
+      "options": [
+        "Fixed-Size Stack",
+        "Dynamic-Size Stack",
+        "Static Array Stack",
+        "None of the above"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "In this lesson, we introduced the Stack, its LIFO principle, key operations (Push, Pop, Peek, IsEmpty, IsFull), and the difference between Fixed-Size and Dynamic-Size stacks. In the next lesson, we will implement a fixed-size stack using an array!"
+    }
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "id": "predecessor-successor-bst",
+  "title": "Predecessor & Successor in BST",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "merge-two-bsts",
+  "prevLessonId": "validate-bst",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will study **Inorder Predecessor** and **Inorder Successor** in a BST. Given a key, how do we find the node that comes immediately before it, and the node that comes immediately after it in the sorted order? Let's find out!"
+    },
+    {
+      "type": "heading",
+      "id": "pred-succ-concept",
+      "level": 2,
+      "text": "1. What are Predecessor and Successor?"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Inorder Predecessor**: The largest element smaller than the given key.\n· **Inorder Successor**: The smallest element larger than the given key."
+    },
+    {
+      "type": "heading",
+      "id": "searching-rules",
+      "level": 2,
+      "text": "2. How to Search Efficiently"
+    },
+    {
+      "type": "paragraph",
+      "text": "To find the successor of a key:\n1. If we find a node value larger than key, this node *could* be our successor. We keep track of it, and then search left to see if there is a smaller valid option.\n2. If we find a node value smaller than or equal to key, we search right (no candidates here).\nWe do the reverse to find the predecessor!"
+    },
+    {
+      "type": "heading",
+      "id": "pred-succ-code",
+      "level": 2,
+      "text": "3. C++ Code Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ code to find predecessor and successor in $O(H)$ height time:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nvoid findPredecessorSuccessor(Node* root, int key, Node*& pre, Node*& succ) {\n    if (root == nullptr) return;\n\n    // If key is present at root\n    if (root->data == key) {\n        // Predecessor is the rightmost node of left subtree\n        if (root->left != nullptr) {\n            Node* temp = root->left;\n            while (temp->right != nullptr) temp = temp->right;\n            pre = temp;\n        }\n        // Successor is the leftmost node of right subtree\n        if (root->right != nullptr) {\n            Node* temp = root->right;\n            while (temp->left != nullptr) temp = temp->left;\n            succ = temp;\n        }\n        return;\n    }\n\n    // If key is smaller than root's key, go to left subtree\n    if (key < root->data) {\n        succ = root; // root is a candidate for successor\n        findPredecessorSuccessor(root->left, key, pre, succ);\n    } else {\n        pre = root;  // root is a candidate for predecessor\n        findPredecessorSuccessor(root->right, key, pre, succ);\n    }\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the Inorder Successor of a node if its right subtree is not null?",
+      "options": [
+        "The rightmost node of its left subtree.",
+        "The leftmost node of its right subtree.",
+        "Its parent node.",
+        "Its right child node."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If key is larger than root's value, where must we search for its successor?",
+      "options": [
+        "In the left subtree.",
+        "In the right subtree.",
+        "At the leaf node.",
+        "We stop searching."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Inorder predecessor is the largest element smaller than the key, and successor is the smallest element larger than the key. We can trace them in $O(H)$ height time by walking down the BST. In our final lesson of this module, we will learn how to merge two BSTs!"
+    }
+  ]
+}

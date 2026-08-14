@@ -1,60 +1,206 @@
 {
   "id": "data-types",
-  "title": "Data Types & Memory",
+  "title": "Data Types",
   "subjectId": "fundamentals",
-  "nextLessonId": "functions",
+  "nextLessonId": "namespaces",
   "prevLessonId": "variables",
   "content": [
     {
       "type": "paragraph",
-      "text": "Every value in a computer program has a type. Understanding how different types are represented in memory is crucial for writing memory-efficient applications."
+      "text": "Just as a kitchen has different boxes for cookies, milk, and tea bags, a computer needs different kinds of boxes for whole numbers, decimals, letters, and true/false values. These categories of boxes are called Data Types."
     },
     {
       "type": "heading",
-      "id": "primitive-data-types",
+      "id": "why-datatypes",
       "level": 2,
-      "text": "Primitive Data Types"
+      "text": "1. Why do we need Data Types?"
     },
     {
       "type": "paragraph",
-      "text": "Primitive types represent simple values stored directly in the executing program's stack frame. Examples include integers, booleans, and characters. Because they have a fixed memory footprint, allocation and access are extremely fast."
+      "text": "Computers are finite machines. They need to know how much physical memory (how many bytes) to reserve in RAM for each variable. For instance, a small true/false flag requires much less memory than a giant decimal number. Data types keep memory usage efficient."
     },
     {
       "type": "heading",
-      "id": "stack-vs-heap",
+      "id": "analogy-datatypes",
       "level": 2,
-      "text": "Memory Allocation: Stack vs Heap"
+      "text": "2. The Analogy: Packaging Containers"
     },
     {
       "type": "paragraph",
-      "text": "The Stack is used for static memory allocation and thread execution. It operates in a last-in, first-out (LIFO) pattern. The Heap is used for dynamic memory allocation where variables can be resized or persist across functions."
+      "text": "Think of buying items online. A single earring is shipped in a tiny bubble envelope. A television is shipped in a huge cardboard box. If you shipped a tiny earring in a giant TV box, it would be a huge waste of packaging! In C++, data types ensure we packages variables in containers that fit their sizes."
+    },
+    {
+      "type": "heading",
+      "id": "concept-datatypes",
+      "level": 2,
+      "text": "3. The Five Core Data Types"
+    },
+    {
+      "type": "paragraph",
+      "text": "C++ has five basic data types you will use constantly:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· int (Integer): Stores whole numbers without decimals. Typically uses 4 bytes of memory. Example: 45, -500."
+    },
+    {
+      "type": "paragraph",
+      "text": "· float (Floating Point): Stores decimal numbers. Uses 4 bytes. Example: 3.14f. Note: You must add an 'f' at the end of the number."
+    },
+    {
+      "type": "paragraph",
+      "text": "· double (Double Precision Decimal): Like float, but holds twice as many digits of precision. Uses 8 bytes. This is the default decimal type."
+    },
+    {
+      "type": "paragraph",
+      "text": "· char (Character): Stores a single character inside single quotes. Uses 1 byte. Example: 'A', '$'."
+    },
+    {
+      "type": "paragraph",
+      "text": "· bool (Boolean): Stores true or false. Uses 1 byte. (0 represents false, and 1 represents true)."
+    },
+    {
+      "type": "heading",
+      "id": "precision-concept",
+      "level": 2,
+      "text": "4. Float vs. Double: What is Precision?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Precision is how many digits after the decimal point a variable can remember accurately before it rounds off. A float holds up to 7 decimal digits. A double holds up to 15 decimal digits. Use double when precision is critical, like in math or currency calculations."
+    },
+    {
+      "type": "heading",
+      "id": "visual-datatypes",
+      "level": 2,
+      "text": "5. Visual Drawing: Data Types Sizes in RAM"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a comparison of how much memory space these types occupy in RAM:"
     },
     {
       "type": "code",
-      "language": "javascript",
-      "code": "// Stored on stack:\nlet age = 25;\n\n// Stored on heap (reference on stack):\nlet userProfile = {\n  username: 'coder',\n  skills: ['data structures', 'algorithms']\n};"
+      "language": "text",
+      "code": "char   [ 1 Byte ]   ← Tiny envelope (Single character)\nbool   [ 1 Byte ]   ← Tiny envelope (True/False)\n\nint    [ 4 Bytes ]  ← Medium package (Whole numbers)\nfloat  [ 4 Bytes ]  ← Medium package (Decimals up to 7 digits)\n\ndouble [ 8 Bytes ]  ← Large crate   (Decimals up to 15 digits)"
+    },
+    {
+      "type": "heading",
+      "id": "code-example-datatypes",
+      "level": 2,
+      "text": "6. Code Example"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us write code to print these data types to the screen:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nint main() {\n    int players = 4;\n    float score = 98.5f;       // 'f' tells C++ it's a float\n    double pi = 3.1415926535; // Default is double\n    char grade = 'A';          // Single quotes for single char\n    bool isGameOver = false;\n    \n    std::cout << \"Players: \" << players << std::endl;\n    std::cout << \"Score: \" << score << std::endl;\n    std::cout << \"Pi: \" << pi << std::endl;\n    std::cout << \"Grade: \" << grade << std::endl;\n    std::cout << \"Game Over: \" << isGameOver << std::endl; // Prints 0\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "visualizer-placeholder",
+      "level": 2,
+      "text": "7. Try it Out"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Memory Box size slider. Slide to see how different data types fill memory space allocations in byte scales]"
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "8. Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Suffix: Always append 'f' to a float value (like 3.5f). Without 'f', C++ compiles it as a double.\n· Single Quotes: Always wrap char types in single quotes ('A'). Double quotes are reserved for strings."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "9. Common Mistakes"
     },
     {
       "type": "callout",
       "style": "warning",
-      "text": "Warning: Accessing values on the heap is slower than the stack because pointers must be dereferenced, and garbage collection must eventually clean up the memory."
+      "text": "· String Quotes on Char: Declaring 'char grade = \"A\";' (double quotes). This will fail to compile!\n· Boolean value prints: Expecting C++ to print 'true' or 'false'. C++ outputs 1 for true and 0 for false in stdout by default."
     },
     {
       "type": "heading",
-      "id": "datatype-mcq",
+      "id": "practice-questions",
       "level": 2,
-      "text": "Self-Assessment"
+      "text": "10. Practice Questions"
     },
     {
       "type": "mcq",
-      "question": "Which memory region is managed automatically in a LIFO order during program execution?",
+      "question": "Which C++ data type should you use to store a single symbol like '$'?",
       "options": [
-        "The Heap",
-        "The Stack",
-        "The Disk Cache",
-        "The Virtual Memory Registry"
+        "int",
+        "char",
+        "double",
+        "bool"
       ],
       "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "How much RAM memory space does a double occupy compared to a float?",
+      "options": [
+        "A double occupies 1 byte, while a float occupies 4 bytes.",
+        "A double occupies 8 bytes, while a float occupies 4 bytes.",
+        "They occupy the exact same 4 bytes of memory.",
+        "A double occupies 16 bytes, while a float occupies 8 bytes."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why must you append the 'f' suffix to float literals (e.g., 3.14f)?",
+      "options": [
+        "To tell the compiler it is a functional statement.",
+        "To prevent the compiler from treating the number as a double-precision float.",
+        "To speed up binary execution times.",
+        "To print the value to the screen automatically."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What value will C++ print by default when outputting a boolean variable that is set to false?",
+      "options": [
+        "false",
+        "0",
+        "1",
+        "null"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following represents a valid initialization of a character variable?",
+      "options": [
+        "char key = \"K\";",
+        "char key = 'K';",
+        "char key = K;",
+        "char key = 9.8f;"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "11. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Data types define container sizes. Int holds whole numbers, char holds symbols, bool holds flags, and float/double hold decimals. Now let us explore how we read user keyboard input!"
     }
   ]
 }

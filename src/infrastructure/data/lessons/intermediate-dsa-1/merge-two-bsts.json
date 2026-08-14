@@ -1,0 +1,86 @@
+{
+  "id": "merge-two-bsts",
+  "title": "Merge Two BSTs",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-avl-trees",
+  "prevLessonId": "predecessor-successor-bst",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the final lesson of the Trees & BST module. Today, we will solve an advanced and interesting problem: **Merge Two BSTs**. Given two Binary Search Trees, how do we merge them into a single, height-balanced BST? We'll combine our knowledge of traversals, merging, and tree building to solve this. Let's do it!"
+    },
+    {
+      "type": "heading",
+      "id": "merge-strategy",
+      "level": 2,
+      "text": "1. The 3-Step Strategy"
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of inserting elements from one tree into another one by one (which would be slow and might make the tree unbalanced), we use a highly optimized 3-step strategy:\n1. **Flatten to Sorted Lists**: Perform Inorder traversal on both BSTs to extract their elements into two separate sorted arrays. (Time: $O(N_1 + N_2)$).\n2. **Merge Sorted Lists**: Combine these two sorted arrays into one single sorted array using the two-pointer merge algorithm from Merge Sort. (Time: $O(N_1 + N_2)$).\n3. **Build Balanced BST**: Convert the final sorted array into a height-balanced BST by recursively picking the middle element as the root node. (Time: $O(N_1 + N_2)$)."
+    },
+    {
+      "type": "heading",
+      "id": "merge-code",
+      "level": 2,
+      "text": "2. C++ Solution"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ implementation, demonstrating the 3 steps working together:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <vector>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\n// Step 1: Inorder traversal to fill sorted array\nvoid storeInorder(Node* root, std::vector<int>& arr) {\n    if (root == nullptr) return;\n    storeInorder(root->left, arr);\n    arr.push_back(root->data);\n    storeInorder(root->right, arr);\n}\n\n// Step 2: Merge two sorted arrays\nstd::vector<int> mergeArrays(const std::vector<int>& a, const std::vector<int>& b) {\n    std::vector<int> merged;\n    int i = 0, j = 0;\n    while (i < a.size() && j < b.size()) {\n        if (a[i] < b[j]) {\n            merged.push_back(a[i++]);\n        } else {\n            merged.push_back(b[j++]);\n        }\n    }\n    while (i < a.size()) merged.push_back(a[i++]);\n    while (j < b.size()) merged.push_back(b[j++]);\n    return merged;\n}\n\n// Step 3: Build balanced BST from sorted array\nNode* buildBalancedBST(const std::vector<int>& arr, int start, int end) {\n    if (start > end) return nullptr;\n\n    int mid = start + (end - start) / 2;\n    Node* root = new Node(arr[mid]);\n\n    root->left = buildBalancedBST(arr, start, mid - 1);\n    root->right = buildBalancedBST(arr, mid + 1, end);\n\n    return root;\n}\n\n// Combined function\nNode* mergeBSTs(Node* root1, Node* root2) {\n    std::vector<int> arr1, arr2;\n    storeInorder(root1, arr1);\n    storeInorder(root2, arr2);\n\n    std::vector<int> merged = mergeArrays(arr1, arr2);\n    return buildBalancedBST(merged, 0, merged.size() - 1);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "3. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: **$O(N_1 + N_2)$** where $N_1$ and $N_2$ are the number of nodes in tree 1 and tree 2. Every node is visited a constant number of times.\n· **Space Complexity**: **$O(N_1 + N_2)$** auxiliary space to store the flattened node values in arrays."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the overall time complexity of merging two BSTs using the Inorder flattening, two-pointer merging, and balance-building algorithm?",
+      "options": [
+        "O(N1 * N2)",
+        "O(N1 + N2)",
+        "O(log(N1 + N2))",
+        "O((N1 + N2) log(N1 + N2))"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is pick-the-middle-element logic used when building a balanced BST from a sorted array?",
+      "options": [
+        "To ensure all elements are even numbers.",
+        "It splits the elements evenly, ensuring the height of left and right subtrees remains balanced.",
+        "To discard half of the elements.",
+        "It is required by the compiler."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: We merge two BSTs efficiently in $O(N_1 + N_2)$ time by converting them to sorted lists, merging them, and rebuilding a balanced BST from the middle outward. Congratulations on completing the Trees & BST module! Next up: AVL Trees!"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, Book } from "lucide-react";
 import Link from "next/link";
@@ -14,17 +14,24 @@ import PreviousNextNavigation from "@/presentation/components/learn/PreviousNext
 import { SubjectCurriculum } from "@/domain/models/subject";
 import { Lesson } from "@/domain/models/lesson";
 
-// Local static registry of lesson pages
-const lessonsRegistry: Record<string, any> = {
-  "fundamentals/intro-to-programming": require("@/infrastructure/data/lessons/fundamentals/intro-to-programming.json"),
-  "fundamentals/variables": require("@/infrastructure/data/lessons/fundamentals/variables.json"),
-  "fundamentals/data-types": require("@/infrastructure/data/lessons/fundamentals/data-types.json"),
-  "fundamentals/functions": require("@/infrastructure/data/lessons/fundamentals/functions.json"),
-};
+import { lessonsRegistry } from "@/infrastructure/data/lessonsRegistry";
+import roadmapData from "@/infrastructure/data/roadmap.json";
+import { LearningLevel } from "@/domain/models/roadmap";
+import ComingSoonLevel from "@/presentation/components/learn/ComingSoonLevel";
+import ComingSoonLesson from "@/presentation/components/learn/ComingSoonLesson";
 
 export default function LessonPage() {
   const params = useParams();
   const router = useRouter();
+
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      fetch("/api/copy")
+        .then((res) => res.json())
+        .then((data) => console.log("Assets copy result:", data))
+        .catch((err) => console.error("Assets copy error:", err));
+    }
+  }, []);
 
   const subjectId = (params?.subjectId as string) || "";
   const lessonId = (params?.lessonId as string) || "";
@@ -46,7 +53,50 @@ export default function LessonPage() {
     return lesson.content.filter((block) => block.type === "heading");
   }, [lesson]);
 
-  if (!curriculum || !lesson) {
+  if (!lesson || !curriculum) {
+    // 1. Check if the lesson is listed in the curriculum syllabus
+    const lessonMetadata = curriculum?.chapters
+      .flatMap((ch) => ch.lessons)
+      .find((l) => l.id === lessonId);
+
+    if (lessonMetadata && curriculum) {
+      return (
+        <SubjectLayout
+          curriculum={curriculum}
+          activeLessonId={lessonId}
+          subjectId={subjectId}
+          headings={[]}
+        >
+          <ComingSoonLesson 
+            lessonTitle={lessonMetadata.title} 
+            estimatedTime={lessonMetadata.estimatedTime}
+          />
+        </SubjectLayout>
+      );
+    }
+
+    // 2. Fallback to Level Coming Soon page
+    const level = (roadmapData as LearningLevel[]).find((l) => l.id === subjectId) || null;
+    
+    if (level) {
+      if (curriculum) {
+        // Render inside SubjectLayout so the user has the chapters sidebar and navigation
+        return (
+          <SubjectLayout
+            curriculum={curriculum}
+            activeLessonId={lessonId}
+            subjectId={subjectId}
+            headings={[]}
+          >
+            <ComingSoonLevel level={level} curriculum={curriculum} />
+          </SubjectLayout>
+        );
+      } else {
+        // Render simple standalone page if curriculum doesn't exist
+        return <ComingSoonLevel level={level} curriculum={null} />;
+      }
+    }
+
     return (
       <div className="min-h-screen flex items-center justify-center bg-background p-6 select-none font-serif">
         <div className="text-center space-y-4 max-w-sm">

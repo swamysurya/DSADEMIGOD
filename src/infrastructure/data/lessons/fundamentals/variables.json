@@ -1,65 +1,281 @@
 {
   "id": "variables",
-  "title": "Variables & Scoping",
+  "title": "Variables",
   "subjectId": "fundamentals",
   "nextLessonId": "data-types",
-  "prevLessonId": "intro-to-programming",
+  "prevLessonId": "comments",
   "content": [
     {
       "type": "paragraph",
-      "text": "In programming, a variable is a named storage location in memory that holds a value. However, a variable is not accessible everywhere. Its accessibility is governed by scoping rules."
+      "text": "When we calculate numbers in our head, we hold numbers in our mind's temporary memory. Computers do this using Variables. Think of a variable as a labeled storage box in the computer's memory (RAM)."
     },
     {
       "type": "heading",
-      "id": "understanding-scopes",
+      "id": "why-variables",
       "level": 2,
-      "text": "Understanding Scope Levels"
+      "text": "1. Why do we need Variables?"
     },
     {
       "type": "paragraph",
-      "text": "Scope defines the region of a program where a variable can be referenced. In modern languages, we typically distinguish between two main categories: Global Scope and Local Scope."
-    },
-    {
-      "type": "callout",
-      "style": "tip",
-      "text": "Tip: Always declare variables in the narrowest scope possible. This minimizes side-effects and makes it easier for compiler engines to clean up memory."
+      "text": "Without variables, a computer cannot save the state of anything. It cannot remember a player's high score, calculate the tax on a shopping cart, or count how many times a user clicked a button. We need variables to act as memory spaces that hold values while our code runs."
     },
     {
       "type": "heading",
-      "id": "block-vs-function",
+      "id": "analogy-variables",
       "level": 2,
-      "text": "Block Scope vs Function Scope"
+      "text": "2. The Analogy: Labeled Kitchen Jars"
     },
     {
       "type": "paragraph",
-      "text": "Function scope limits accessibility to the boundaries of the containing function. Block scope limits accessibility to any block enclosed by curly braces, such as loops or conditional blocks."
+      "text": "Imagine your kitchen has a shelf of identical jars. If you don't label them, you might accidentally put salt in your coffee instead of sugar! So, you slap labels on the jars: 'Sugar', 'Salt', 'Flour'. When you need sugar, you find the jar labeled 'Sugar' and read or replace what's inside. In C++, the jar is the memory box, the label is the variable name, and the contents are the data value!"
+    },
+    {
+      "type": "heading",
+      "id": "concept-variables",
+      "level": 2,
+      "text": "3. Declaring and Naming Variables"
+    },
+    {
+      "type": "paragraph",
+      "text": "In C++, before you can use a variable, you must tell the compiler what type of data it holds. This is called variable declaration. The syntax is: 'type name;'. For example, 'int age;' tells the computer to create an integer box named 'age'."
+    },
+    {
+      "type": "paragraph",
+      "text": "To keep the compiler happy, follow these variable naming rules:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Characters: Names can contain letters, numbers, and underscores (_)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Starting Character: A name must start with a letter or an underscore. It CANNOT start with a number (e.g., '3player' is invalid!)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Reserved words: You cannot name variables after system keywords (like 'int' or 'return')."
+    },
+    {
+      "type": "heading",
+      "id": "visual-variables",
+      "level": 2,
+      "text": "4. Visual Drawing: Variable in Memory"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a blackboard sketch of what a declared and initialized variable looks like in your computer's RAM:"
     },
     {
       "type": "code",
-      "language": "javascript",
-      "code": "function scopeDemo() {\n  var functionScoped = 'accessible anywhere in function';\n  if (true) {\n    let blockScoped = 'only accessible inside this block';\n    console.log(blockScoped);\n  }\n  // console.log(blockScoped); // ReferenceError!\n  console.log(functionScoped);\n}"
+      "language": "text",
+      "code": "Variable Name (Label)  ──>  [ score ]\n                              │\n                              ▼\nMemory Box (Data Value) ──>  [  100  ]\n                              │\n                              ▼\nMemory Address (RAM Location) [ 0x7ffd ]"
+    },
+    {
+      "type": "heading",
+      "id": "visualizer-placeholder",
+      "level": 2,
+      "text": "5. Code Example"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us see how we declare variables and put data inside them (initialization):"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nint main() {\n    int health;      // 1. Declaration (Creates the box)\n    health = 100;    // 2. Initialization (Puts value inside)\n    \n    int level = 1;   // Declares & initializes in one step\n    \n    std::cout << \"Health: \" << health << std::endl;\n    std::cout << \"Level: \" << level << std::endl;\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "visualizer-placeholder-2",
+      "level": 2,
+      "text": "6. Try it Out"
+    },
+    {
+      "type": "simulation",
+      "id": "variables-simulation",
+      "simulationData": {
+        "code": "int a = 10;\nint b = 20;\nint c = a + b;\nstd::cout << c;",
+        "language": "cpp",
+        "visualizer": "variables",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "A new variable named 'a' of type 'int' (integer) is declared.\n\nThe computer allocates 4 bytes of memory (RAM) and tags it with the label 'a'. Then, the value 10 is placed inside that memory box.",
+            "variables": [
+              {
+                "name": "a",
+                "type": "int",
+                "value": "10",
+                "address": "0x7FFE42C0"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "The next line executes. A new variable named 'b' of type 'int' is declared.\n\nThe computer reserves another 4 bytes of memory, labels it 'b', and stores the value 20 in it. Variable 'a' remains untouched in its own slot.",
+            "variables": [
+              {
+                "name": "a",
+                "type": "int",
+                "value": "10",
+                "address": "0x7FFE42C0"
+              },
+              {
+                "name": "b",
+                "type": "int",
+                "value": "20",
+                "address": "0x7FFE42C4"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "The computer calculates 'a + b' by retrieving the value in box 'a' (10) and box 'b' (20). They are added together to make 30.\n\nA new variable 'c' is created in memory, and this sum (30) is stored in it.",
+            "variables": [
+              {
+                "name": "a",
+                "type": "int",
+                "value": "10",
+                "address": "0x7FFE42C0"
+              },
+              {
+                "name": "b",
+                "type": "int",
+                "value": "20",
+                "address": "0x7FFE42C4"
+              },
+              {
+                "name": "c",
+                "type": "int",
+                "value": "30",
+                "address": "0x7FFE42C8"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "Finally, the compiler reads the value stored inside the variable 'c' (30) and passes it to 'std::cout'.\n\nThis prints the number 30 onto your screen console.",
+            "variables": [
+              {
+                "name": "a",
+                "type": "int",
+                "value": "10",
+                "address": "0x7FFE42C0"
+              },
+              {
+                "name": "b",
+                "type": "int",
+                "value": "20",
+                "address": "0x7FFE42C4"
+              },
+              {
+                "name": "c",
+                "type": "int",
+                "value": "30",
+                "address": "0x7FFE42C8"
+              }
+            ],
+            "terminalOutput": "30"
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "7. Key Takeaways"
     },
     {
       "type": "callout",
       "style": "important",
-      "text": "Important: In JavaScript, declaring a variable with 'var' hoists it to the top of the function scope, which can lead to subtle logic bugs. Always prefer 'let' or 'const' which obey block-level scoping rules."
+      "text": "· Declaration: Tells the compiler the name and type of a variable.\n· Case Sensitivity: C++ is case-sensitive. 'speed' and 'Speed' are two completely different variables."
     },
     {
       "type": "heading",
-      "id": "scoping-mcq",
+      "id": "common-mistakes",
       "level": 2,
-      "text": "Review Exercise"
+      "text": "8. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "· Uninitialized Variables: Declaring 'int score;' and trying to print it before putting a value inside. C++ will print garbage values from memory!\n· Naming with numbers: Declaring 'int 1stPlace = 10;'. Suffixes must not begin with a numeric character!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "9. Practice Questions"
     },
     {
       "type": "mcq",
-      "question": "What happens if you reference a variable declared with 'let' outside of its containing block?",
+      "question": "What is the primary definition of a variable?",
       "options": [
-        "It returns 'undefined'.",
-        "It throws a ReferenceError.",
-        "It searches the parent function scope and returns the value.",
-        "The code compiles but warns at runtime."
+        "A line of code that comments out code blocks.",
+        "A labeled container or memory space in RAM to store data values.",
+        "An algorithm that prints text streams.",
+        "A system setup containing compilers."
       ],
       "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following is an INVALID variable name in C++?",
+      "options": [
+        "speed_limit",
+        "_playerCount",
+        "5th_level",
+        "scoreCard"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What is variable initialization?",
+      "options": [
+        "Deleting a variable to clear memory.",
+        "Declaring a variable and assigning it an initial value at the same time.",
+        "Importing standard libraries.",
+        "Writing single-line comments."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If you declare 'int score;' and print it without initializing, what does C++ print?",
+      "options": [
+        "It always prints 0.",
+        "It prints whatever random garbage values were left in that RAM address.",
+        "It prints empty space.",
+        "The program crashes immediately."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following is a reserved C++ keyword that cannot be used as a variable name?",
+      "options": [
+        "levelCount",
+        "int",
+        "myFloatValue",
+        "gameScore"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "10. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Variables are labeled memory boxes. To use them, declare their type and assign them values. Next, let us explore the different types of data boxes C++ supports!"
     }
   ]
 }

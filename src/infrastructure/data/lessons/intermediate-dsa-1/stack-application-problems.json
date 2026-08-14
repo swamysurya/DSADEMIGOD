@@ -1,0 +1,148 @@
+{
+  "id": "stack-application-problems",
+  "title": "Lesson 7: Min Stack, Valid Parentheses, Asteroid Collision & Histogram",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-queue",
+  "prevLessonId": "infix-prefix-postfix-notation",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the final lesson of the Stacks module. Today, we will explore four classic, heavy stack problems frequently asked in top tech company interviews: **Min Stack**, **Valid Parentheses**, **Asteroid Collision**, and **Largest Rectangle in Histogram**. Let's break them down!"
+    },
+    {
+      "type": "heading",
+      "id": "min-stack",
+      "level": 2,
+      "text": "1. Min Stack"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Problem**: Design a stack that supports push, pop, top, and retrieving the minimum element in **$O(1)$** constant time."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Strategy**: Maintain an auxiliary stack called `minStack`. Whenever we push a value `x`, we push `min(x, minStack.top())` onto the `minStack`. When we pop, we pop from both."
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <stack>\n#include <algorithm>\n\nclass MinStack {\nprivate:\n    std::stack<int> s;\n    std::stack<int> minStack;\n\npublic:\n    void push(int val) {\n        s.push(val);\n        if (minStack.empty() || val <= minStack.top()) {\n            minStack.push(val);\n        } else {\n            minStack.push(minStack.top());\n        }\n    }\n    \n    void pop() {\n        s.pop();\n        minStack.pop();\n    }\n    \n    int top() { return s.top(); }\n    int getMin() { return minStack.top(); }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "valid-parentheses",
+      "level": 2,
+      "text": "2. Valid Parentheses"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Problem**: Given a string containing brackets `()`, `[]`, `{}` determine if the input string is valid."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Strategy**: Push opening brackets onto the stack. When checking a closing bracket, pop the top of the stack and verify it matches the bracket type. If the stack is empty at the end, the string is valid!"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <stack>\n#include <string>\n\nbool isValid(std::string s) {\n    std::stack<char> st;\n    for (char c : s) {\n        if (c == '(' || c == '{' || c == '[') {\n            st.push(c);\n        } else {\n            if (st.empty()) return false;\n            char top = st.top();\n            if ((c == ')' && top == '(') || (c == '}' && top == '{') || (c == ']' && top == '[')) {\n                st.pop();\n            } else {\n                return false;\n            }\n        }\n    }\n    return st.empty();\n}"
+    },
+    {
+      "type": "heading",
+      "id": "asteroid-collision",
+      "level": 2,
+      "text": "3. Asteroid Collision"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Problem**: We are given an array of integers representing asteroids in a row. For each asteroid, the absolute value represents its size, and the sign represents its direction (positive means right, negative means left). Find the state of the asteroids after all collisions."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Strategy**: Use a stack to track moving asteroids. A collision only happens if the top asteroid is moving right (`+`) and the incoming asteroid is moving left (`-`). We pop smaller colliding asteroids until a larger one stops the collision or both explode."
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n#include <stack>\n#include <cmath>\n\nstd::vector<int> asteroidCollision(std::vector<int>& asteroids) {\n    std::vector<int> st;\n    for (int ast : asteroids) {\n        bool destroyed = false;\n        while (!st.empty() && ast < 0 && st.back() > 0) {\n            if (st.back() < -ast) {\n                st.pop_back(); // Pop smaller positive asteroid moving right\n                continue;\n            } else if (st.back() == -ast) {\n                st.pop_back(); // Both explode\n            }\n            destroyed = true;\n            break;\n        }\n        if (!destroyed) {\n            st.push_back(ast);\n        }\n    }\n    return st;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "largest-rectangle-histogram",
+      "level": 2,
+      "text": "4. Largest Rectangle in Histogram"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Problem**: Find the area of the largest rectangle in a histogram represented by an array of heights."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Strategy**: For each bar, find the first smaller bar to its left and right using a Monotonic Stack. The width is `rightIndex - leftIndex - 1`, and the area is `height * width`. Keep track of the maximum area."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "5. Visual Drawing: Max Rectangular Area"
+    },
+    {
+      "type": "drawing",
+      "id": "histogram-stack-drawing"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n#include <stack>\n#include <algorithm>\n\nint largestRectangleArea(std::vector<int>& heights) {\n    int n = heights.size();\n    std::stack<int> s;\n    int maxArea = 0;\n    \n    for (int i = 0; i <= n; i++) {\n        int h = (i == n) ? 0 : heights[i];\n        while (!s.empty() && heights[s.top()] > h) {\n            int height = heights[s.top()];\n            s.pop();\n            int width = s.empty() ? i : i - s.top() - 1;\n            maxArea = std::max(maxArea, height * width);\n        }\n        s.push(i);\n    }\n    return maxArea;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "6. Complexities Table"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Problem                        | Time Complexity | Space Complexity | Stack Pattern\n───────────────────────────────┼─────────────────┼──────────────────┼───────────────────────────────\nMin Stack                      |      O(1)       |       O(N)       | Dual Stack Tracking           \nValid Parentheses              |      O(N)       |       O(N)       | Bracket Matching              \nAsteroid Collision             |      O(N)       |       O(N)       | Dynamic Array Stack Simulation\nLargest Rectangle in Histogram |      O(N)       |       O(N)       | Monotonic Boundary Tracking"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "7. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the space complexity of the optimal Min Stack implementation?",
+      "options": [
+        "O(1)",
+        "O(N)",
+        "O(log N)",
+        "O(N^2)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Under what condition does a collision occur in the Asteroid Collision problem?",
+      "options": [
+        "A positive asteroid is on the left moving right (+), and a negative asteroid is on the right moving left (-).",
+        "A negative asteroid is on the left (-), and a positive asteroid is on the right (+).",
+        "Two positive asteroids are adjacent.",
+        "None of the above."
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "8. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "In this final lesson, we solved Min Stack, Valid Parentheses, Asteroid Collision, and Largest Rectangle in Histogram. You have completed the entire Stacks module! Congratulations!"
+    }
+  ]
+}

@@ -1,0 +1,181 @@
+{
+  "id": "introduction-to-algorithms",
+  "title": "Introduction to Algorithms",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "space-and-time-complexity",
+  "prevLessonId": null,
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "We already know how to write basic variables, loops, and conditional statements in C++. Today, we will build on that foundation to understand the bigger picture: what an **algorithm** actually is, and how we plan our steps before we write even a single line of code!"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-algorithm",
+      "level": 2,
+      "text": "1. What is an Algorithm?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you want to find a specific card in a deck of cards. To do this, you might follow these steps:\n1. Look at the first card.\n2. Check if it is the card you want. If it is, you stop!\n3. If it is not, pick up the next card.\n4. Repeat this check until you find your card or run out of cards."
+    },
+    {
+      "type": "paragraph",
+      "text": "This list of steps is an **algorithm**. Let's define it simply:"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Definition:\nAn algorithm is a step-by-step recipe to solve a specific problem. It takes some starting information, performs clear steps, and produces a final answer."
+    },
+    {
+      "type": "heading",
+      "id": "why-algorithms",
+      "level": 2,
+      "text": "2. Why Do We Need Algorithms?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Computers are incredibly fast at calculating, but they do not have a brain. They cannot 'figure out' a solution on their own. We must guide them by providing clear instructions:\n· What information to start with\n· What actions to perform\n· The exact order of those actions\n· When to stop"
+    },
+    {
+      "type": "paragraph",
+      "text": "Think of an algorithm as a bridge. It connects the problem you want to solve to the program you write."
+    },
+    {
+      "type": "heading",
+      "id": "characteristics-title",
+      "level": 2,
+      "text": "3. The 5 Rules of a Good Algorithm"
+    },
+    {
+      "type": "paragraph",
+      "text": "Not every list of steps is a good algorithm. A valid algorithm must follow 5 important rules. Let's look at them using our card-searching example:"
+    },
+    {
+      "type": "drawing",
+      "id": "algorithm-characteristics-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "design-analyze-test",
+      "level": 2,
+      "text": "4. The Lifecycle of an Algorithm"
+    },
+    {
+      "type": "paragraph",
+      "text": "When we build algorithms, we go through 4 simple steps to make sure they work correctly and efficiently:"
+    },
+    {
+      "type": "drawing",
+      "id": "algorithm-lifecycle-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "correctness-vs-finiteness",
+      "level": 2,
+      "text": "5. A Common Trap: Stopping vs. Correctness"
+    },
+    {
+      "type": "paragraph",
+      "text": "Sometimes beginners think: 'If my code stops running and does not crash, it must be correct!' But that is a trap."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Remember:\n· Stopping (Finiteness) just means the program does not run forever.\n· Correctness means that when it stops, it actually gives you the right answer.\nFor example, if you write a program to add two numbers, and it immediately outputs '100' every time, it stops instantly, but the answer is incorrect!"
+    },
+    {
+      "type": "heading",
+      "id": "multiple-solutions",
+      "level": 2,
+      "text": "6. One Problem, Different Solutions"
+    },
+    {
+      "type": "paragraph",
+      "text": "There are often many different recipes to solve the same problem. Let's look at searching for a word in a physical dictionary book:"
+    },
+    {
+      "type": "drawing",
+      "id": "problem-solutions-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "As you can see, we have different choices. One way is slow but simple. Another is fast but requires the words to be sorted. Analyzing these choices helps us choose the best one."
+    },
+    {
+      "type": "heading",
+      "id": "representing-algorithms",
+      "level": 2,
+      "text": "7. How Can We Write Down an Algorithm?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Before we write code in a real programming language, we can express our algorithm in 3 ways:"
+    },
+    {
+      "type": "drawing",
+      "id": "algorithm-representation-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Recipe Analogy: An algorithm is like a cooking recipe for a computer.\n· Clear Instructions: Every step must be clear and doable.\n· Multiple Choices: One problem can have different solutions with different tradeoffs."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is an algorithm?",
+      "options": [
+        "A hardware component in a computer",
+        "A step-by-step recipe to solve a problem",
+        "A programming language like C++",
+        "A storage folder inside a computer's memory"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If an algorithm stops running but outputs a wrong answer, which rule does it violate?",
+      "options": [
+        "Finiteness",
+        "Correctness",
+        "Input",
+        "Effectiveness"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which representation of an algorithm uses structured text that looks like code but has no strict syntax rules?",
+      "options": [
+        "Natural Language",
+        "Pseudocode",
+        "Flowchart",
+        "C++ Compiler"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "An algorithm is a step-by-step recipe to solve a problem. It must take input, produce output, stop eventually, and have clear, doable steps. We write algorithms in plain English, flowcharts, or pseudocode to plan our logic before coding. In the next lesson, we will build on this to understand how we measure if our recipe is fast or slow!"
+    }
+  ]
+}

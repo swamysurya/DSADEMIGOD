@@ -1,0 +1,114 @@
+{
+  "id": "min-stack",
+  "title": "Lesson 7: Min Stack",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "valid-parentheses",
+  "prevLessonId": "infix-prefix-postfix-notation",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we will build a very cool variations of the stack: a **Min Stack**. Our goal is to retrieve the minimum element from our stack at any time in constant $O(1)$ speed. Let's do it!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Design a stack class that supports standard push, pop, and top operations, plus an extra operation `getMin()` that retrieves the minimum value in the stack in **$O(1)$** time."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "In many real-time computing systems, we need to inspect the minimum or maximum values of a series of parameters (e.g. system temperatures, task weights, or memory priorities) instantly while maintaining LIFO ordering."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition & Design"
+    },
+    {
+      "type": "paragraph",
+      "text": "A simple sweep to find the minimum takes $O(N)$ time. To do this in $O(1)$ time, we use a second stack called `minStack` to track the minimum element. For each push operation:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· If the `minStack` is empty or the new value is less than or equal to the current top of the `minStack`, we push it onto the `minStack`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Otherwise, we push the top of the `minStack` onto the `minStack` again (duplicating the current minimum)."
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "4. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <stack>\n#include <algorithm>\n\nclass MinStack {\nprivate:\n    std::stack<int> s;\n    std::stack<int> minStack;\n\npublic:\n    void push(int val) {\n        s.push(val);\n        if (minStack.empty() || val <= minStack.top()) {\n            minStack.push(val);\n        } else {\n            minStack.push(minStack.top());\n        }\n    }\n    \n    void pop() {\n        s.pop();\n        minStack.pop();\n    }\n    \n    int top() {\n        return s.top();\n    }\n    \n    int getMin() {\n        return minStack.top();\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "5. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(1)$ for all operations (push, pop, top, getMin)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ because we store a duplicate element in the `minStack` for each item."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary advantage of a Min Stack over a standard stack?",
+      "options": [
+        "It takes up less memory.",
+        "It retrieves the minimum element in O(1) constant time instead of O(N) linear time.",
+        "It sorts all pushed elements automatically.",
+        "It prevents stack overflow completely."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If we push [5, 3, 7, 2] in sequence into an empty Min Stack, what will getMin() return?",
+      "options": [
+        "5",
+        "3",
+        "2",
+        "7"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We designed a Min Stack that uses an auxiliary tracker to resolve getMin queries in $O(1)$ time. In the next lesson, we will solve the classic Valid Parentheses matching problem!"
+    }
+  ]
+}

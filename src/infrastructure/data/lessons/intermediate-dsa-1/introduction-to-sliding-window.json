@@ -1,0 +1,1223 @@
+{
+  "id": "introduction-to-sliding-window",
+  "title": "Introduction to Sliding Window",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-two-pointer-technique",
+  "prevLessonId": "range-sum-query",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Welcome back! In our last lesson, we solved the Range Sum Query problem using Prefix Sums. Today, we are going to look at another super popular pattern: the **Sliding Window** technique. We will start with a simple puzzle to understand why this technique exists, and how it can make our code run incredibly fast!"
+    },
+    {
+      "type": "heading",
+      "id": "the-problem",
+      "level": 2,
+      "text": "1. The Problem: Maximum Sales in 3 Days"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you run a small bookstore. You have an array representing the number of books sold each day over a 6-day period:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Sales: `A = [2, 1, 5, 1, 3, 2]`"
+    },
+    {
+      "type": "paragraph",
+      "text": "Your manager walks in and asks: **'What is the maximum number of books we sold in any 3 consecutive days?'**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's list all possible groups of 3 consecutive days and calculate their sums:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Days 1 to 3: `[2, 1, 5]` → Sum = `2 + 1 + 5 = 8`"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Days 2 to 4: `[1, 5, 1]` → Sum = `1 + 5 + 1 = 7`"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Days 3 to 5: `[5, 1, 3]` → Sum = `5 + 1 + 3 = 9`"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Days 4 to 6: `[1, 3, 2]` → Sum = `1 + 3 + 2 = 6`"
+    },
+    {
+      "type": "paragraph",
+      "text": "Looking at these results, the maximum sales over 3 consecutive days is **9** (which happened on Days 3 to 5)."
+    },
+    {
+      "type": "heading",
+      "id": "brute-force",
+      "level": 2,
+      "text": "2. Approach 1: Brute Force (Nested Loops)"
+    },
+    {
+      "type": "paragraph",
+      "text": "In the brute force approach, we loop through all possible starting indices, and for each starting index, we run a nested loop to calculate the sum of `K` consecutive elements."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this executes: notice how it repeats the summation loop for each window, leading to redundant work:"
+    },
+    {
+      "type": "simulation",
+      "id": "brute-force-sliding-window-simulation",
+      "simulationData": {
+        "code": "int arr[6] = {2, 1, 5, 1, 3, 2};\nint k = 3;\nint maxSum = 0;\n\nfor (int i = 0; i <= 3; i++) {\n    int currentSum = 0;\n    for (int j = i; j < i + k; j++) {\n        currentSum += arr[j];\n    }\n    std::cout << \"Sum: \" << currentSum << \"\\n\";\n    maxSum = std::max(maxSum, currentSum);\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the array `arr` with 6 book sales counts.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "We set the window size `k = 3` (books sold over 3 consecutive days).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "We initialize `maxSum` to 0. This tracks the highest window sum found so far.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Outer loop starts. We set index `i = 0` (Window 1 starting at index 0). Since `0 <= 3` is true, we enter.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "For Window 1, we initialize a temporary accumulator `currentSum = 0`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "Inner loop starts for Window 1. Index `j` starts at `i = 0`. Since `0 < 3`, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "We add `arr[0] = 2` to `currentSum`. `currentSum` becomes 2.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "Loop increments `j` to 1. Since `1 < 3`, we enter the loop again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "We add `arr[1] = 1` to `currentSum`. `currentSum` becomes `2 + 1 = 3`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "Loop increments `j` to 2. Since `2 < 3`, we enter the loop again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "We add `arr[2] = 5` to `currentSum`. `currentSum` becomes `3 + 5 = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "Loop increments `j` to 3. Since `3 < 3` is false, this inner loop finishes.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 10,
+            "explanation": "We execute our print statement to output the sum of Window 1 (index 0 to 2) to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8"
+          },
+          {
+            "line": 11,
+            "explanation": "We update `maxSum = max(0, 8) = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8"
+          },
+          {
+            "line": 5,
+            "explanation": "Outer loop increments `i` to 1. Since `1 <= 3` is true, we re-enter to calculate the next window.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8"
+          },
+          {
+            "line": 6,
+            "explanation": "For Window 2 (index 1 to 3), we reset `currentSum = 0`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8"
+          },
+          {
+            "line": 7,
+            "explanation": "Inner loop runs for `j` from 1 to 3, adding `arr[1]=1`, `arr[2]=5`, and `arr[3]=1` one-by-one. `currentSum` becomes 7.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8"
+          },
+          {
+            "line": 10,
+            "explanation": "We execute our print statement to output the sum of Window 2 to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7"
+          },
+          {
+            "line": 11,
+            "explanation": "We update `maxSum = max(8, 7) = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7"
+          },
+          {
+            "line": 5,
+            "explanation": "Outer loop increments `i` to 2. Since `2 <= 3` is true, we re-enter to calculate the next window.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7"
+          },
+          {
+            "line": 6,
+            "explanation": "For Window 3 (index 2 to 4), we reset `currentSum = 0`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7"
+          },
+          {
+            "line": 7,
+            "explanation": "Inner loop runs for `j` from 2 to 4, adding `arr[2]=5`, `arr[3]=1`, and `arr[4]=3` one-by-one. `currentSum` becomes 9.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7"
+          },
+          {
+            "line": 10,
+            "explanation": "We execute our print statement to output the sum of Window 3 to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9"
+          },
+          {
+            "line": 11,
+            "explanation": "We update `maxSum = max(8, 9) = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9"
+          },
+          {
+            "line": 5,
+            "explanation": "Outer loop increments `i` to 3. Since `3 <= 3` is true, we re-enter to calculate our last window.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9"
+          },
+          {
+            "line": 6,
+            "explanation": "For Window 4 (index 3 to 5), we reset `currentSum = 0`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9"
+          },
+          {
+            "line": 7,
+            "explanation": "Inner loop runs for `j` from 3 to 5, adding `arr[3]=1`, `arr[4]=3`, and `arr[5]=2` one-by-one. `currentSum` becomes 6.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9"
+          },
+          {
+            "line": 10,
+            "explanation": "We execute our print statement to output the sum of Window 4 to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9\nSum: 6"
+          },
+          {
+            "line": 11,
+            "explanation": "We update `maxSum = max(9, 6) = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9\nSum: 6"
+          },
+          {
+            "line": 5,
+            "explanation": "Outer loop increments `i` to 4. Since `4 <= 3` is false, the loop terminates. The simulation ends with `maxSum = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": "Sum: 8\nSum: 7\nSum: 9\nSum: 6"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N * K)",
+      "timeExplanation": "For an array of size N and window of size K, we scan (N - K + 1) windows, performing K additions in each, resulting in (N - K + 1) * K total operations.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We do not allocate any extra arrays."
+    },
+    {
+      "type": "heading",
+      "id": "think-prediction",
+      "level": 2,
+      "text": "3. Think: Can We Do Better?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Now, think like a smart engineer. When we move from the first group `[2, 1, 5]` to the second group `[1, 5, 1]`, did you notice that the middle elements `1` and `5` are repeated in both calculations? "
+    },
+    {
+      "type": "paragraph",
+      "text": "Why did we add them all over again? Is there a way to reuse the previous sum to find the next sum?"
+    },
+    {
+      "type": "drawing",
+      "id": "sliding-window-discovery"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-sliding-window",
+      "level": 2,
+      "text": "4. What is a Sliding Window?"
+    },
+    {
+      "type": "paragraph",
+      "text": "As you discovered in the visualizer above, we don't need to recalculate the entire sum. When our window slides forward by one step, only two elements change:\n1. One element **leaves** the window (from the left).\n2. One element **enters** the window (from the right)."
+    },
+    {
+      "type": "paragraph",
+      "text": "This means we can calculate the sum of the new window using this simple formula:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "New Sum = Previous Sum - Element Leaving + Element Entering"
+    },
+    {
+      "type": "paragraph",
+      "text": "For example:\n· Previous Sum: `8` (for `[2, 1, 5]`)\n· Leaving Element: `2` (the left-most element of the old window)\n· Entering Element: `1` (the new element at index 3)\n· New Sum: `8 - 2 + 1 = 7`."
+    },
+    {
+      "type": "paragraph",
+      "text": "This is called the **Sliding Window** technique! It is called 'sliding window' because it behaves like a window of a fixed size sliding across a wall of numbers, showing you a different subset of numbers at each step."
+    },
+    {
+      "type": "heading",
+      "id": "optimal-sliding-window",
+      "level": 2,
+      "text": "5. Approach 2: Optimal Sliding Window"
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of nested loops, we initialize the sum of the first window once. Then, we slide the window across the array in a single loop. For each step, we add the new element entering on the right, and subtract the old element leaving on the left."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this sliding window executes in linear time:"
+    },
+    {
+      "type": "simulation",
+      "id": "optimal-sliding-window-simulation",
+      "simulationData": {
+        "code": "int arr[6] = {2, 1, 5, 1, 3, 2};\nint k = 3;\n\n// 1. First window sum\nint currentSum = 0;\nfor (int i = 0; i < k; i++) {\n    currentSum += arr[i];\n}\nint maxSum = currentSum;\nstd::cout << \"Initial Sum: \" << currentSum << \"\\n\";\n\n// 2. Slide the window\nfor (int i = k; i < 6; i++) {\n    currentSum += arr[i];     // Entering element\n    currentSum -= arr[i - k]; // Leaving element\n    std::cout << \"Slide Sum: \" << currentSum << \"\\n\";\n    maxSum = std::max(maxSum, currentSum);\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the array `arr` with 6 book sales counts.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "We set the window size `k = 3`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "We initialize a variable `currentSum = 0` to accumulate the sum of the first window.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We start a loop to calculate the sum of the first window (index 0 to 2). We set `i = 0`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We add `arr[0] = 2` to `currentSum`. `currentSum` becomes 2.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "2", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Loop increments `i` to 1. Since `1 < 3` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "2", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We add `arr[1] = 1` to `currentSum`. `currentSum` becomes 3.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "3", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Loop increments `i` to 2. Since `2 < 3` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "3", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We add `arr[2] = 5` to `currentSum`. `currentSum` becomes 8.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Loop increments `i` to 3. Since `3 < 3` is false, this loop ends. The first window sum is built.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 9,
+            "explanation": "We initialize `maxSum = currentSum = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 10,
+            "explanation": "We execute our print statement to output the sum of our initial window to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Initial Sum: 8"
+          },
+          {
+            "line": 13,
+            "explanation": "We start the sliding loop from `i = 3` (this index represents the new element entering on the right).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8"
+          },
+          {
+            "line": 14,
+            "explanation": "We add the entering element `arr[3] = 1` to `currentSum`. `currentSum` becomes `8 + 1 = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8"
+          },
+          {
+            "line": 15,
+            "explanation": "We subtract the leaving element `arr[0] = 2` (index `i - k = 3 - 3 = 0`). `currentSum` becomes `9 - 2 = 7`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8"
+          },
+          {
+            "line": 16,
+            "explanation": "We print the updated sum to the console terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7"
+          },
+          {
+            "line": 17,
+            "explanation": "We update `maxSum = max(8, 7) = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7"
+          },
+          {
+            "line": 13,
+            "explanation": "Loop increments `i` to 4. Since `4 < 6` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7"
+          },
+          {
+            "line": 14,
+            "explanation": "We add the entering element `arr[4] = 3` to `currentSum`. `currentSum` becomes `7 + 3 = 10`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "10", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7"
+          },
+          {
+            "line": 15,
+            "explanation": "We subtract the leaving element `arr[1] = 1` (index `i - k = 4 - 3 = 1`). `currentSum` becomes `10 - 1 = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7"
+          },
+          {
+            "line": 16,
+            "explanation": "We print the updated sum to the console terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9"
+          },
+          {
+            "line": 17,
+            "explanation": "We update `maxSum = max(8, 9) = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9"
+          },
+          {
+            "line": 13,
+            "explanation": "Loop increments `i` to 5. Since `5 < 6` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9"
+          },
+          {
+            "line": 14,
+            "explanation": "We add the entering element `arr[5] = 2` to `currentSum`. `currentSum` becomes `9 + 2 = 11`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "11", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9"
+          },
+          {
+            "line": 15,
+            "explanation": "We subtract the leaving element `arr[2] = 5` (index `i - k = 5 - 3 = 2`). `currentSum` becomes `11 - 5 = 6`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9"
+          },
+          {
+            "line": 16,
+            "explanation": "We print the updated sum to the console terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "8", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9\nSlide Sum: 6"
+          },
+          {
+            "line": 17,
+            "explanation": "We update `maxSum = max(9, 6) = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9\nSlide Sum: 6"
+          },
+          {
+            "line": 13,
+            "explanation": "Loop increments `i` to 6. Since `6 < 6` is false, the loop ends. The simulation finishes with `maxSum = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "5", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "1", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "k", "type": "int", "value": "3", "address": "0x7FFE18" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "maxSum", "type": "int", "value": "9", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Initial Sum: 8\nSlide Sum: 7\nSlide Sum: 9\nSlide Sum: 6"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N)",
+      "timeExplanation": "Answering all queries takes linear time because we process each element exactly once as it enters and once as it leaves the window.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We only use a few helper variables, storing no extra space."
+    },
+    {
+      "type": "heading",
+      "id": "comparison",
+      "level": 2,
+      "text": "6. Comparison Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's compare these two approaches side-by-side:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "**Sliding Window Comparison**:\n\n· **Brute Force**: Time = `O(N * K)`, Space = `O(1)`. Recomputes all window elements from scratch at each step.\n\n· **Sliding Window**: Time = `O(N)`, Space = `O(1)`. Reuses the previous sum by subtracting the leaving element and adding the entering element."
+    },
+    {
+      "type": "heading",
+      "id": "pattern-recognition",
+      "level": 2,
+      "text": "7. How to Recognize This Pattern?"
+    },
+    {
+      "type": "paragraph",
+      "text": "How do you know when to use a Sliding Window in a future interview? Look for these clues in the problem statement:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. **Linear Structure**: The input is an array, a string, or a linked list."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. **Contiguous Subarray**: You need to find a sub-segment (a continuous part of the array, not scattered elements) that matches a condition."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. **Size constraint**: The problem mentions a specific window size `K`, or keywords like *'longest'*, *'shortest'*, *'maximum sum'*, or *'minimum size'* of a subarray."
+    },
+    {
+      "type": "heading",
+      "id": "progressive-hints-practice",
+      "level": 2,
+      "text": "8. Guided Practice: Let's Reason!"
+    },
+    {
+      "type": "paragraph",
+      "text": "Try to solve this problem in your head first: **'Find the minimum sum subarray of size K=2 in the array: [4, 1, 3, 2, 7].'** If you get stuck, expand the hints below one by one."
+    },
+    {
+      "type": "progressive_hints",
+      "hints": [
+        "First, calculate the sum of the first window: [4, 1]. The sum is 5.",
+        "Now slide the window one slot. The element leaving is 4, and the element entering is 3. The new sum is: 5 - 4 + 3 = 4.",
+        "Slide the window again. The element leaving is 1, and the element entering is 2. The new sum is: 4 - 1 + 2 = 5.",
+        "Slide the window one last time. The element leaving is 3, and the element entering is 7. The new sum is: 5 - 3 + 7 = 9.",
+        "Compare all sums: [4, 1] -> 5, [1, 3] -> 4, [3, 2] -> 5, [2, 7] -> 9. The minimum sum is 4."
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "quiz-assessment",
+      "level": 2,
+      "text": "9. Mastery Assessment"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary benefit of the Sliding Window technique over the brute force approach?",
+      "options": [
+        "It uses less memory space (better space complexity)",
+        "It avoids redundant additions by reusing the previous window's sum (better time complexity)",
+        "It sorts the array automatically while sliding",
+        "It works on non-contiguous elements of the array"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "In the sliding window update formula: New Sum = Prev Sum + A[i] - A[i - k], what does A[i - k] represent?",
+      "options": [
+        "The element that just entered the window on the right side",
+        "The middle element of the current window",
+        "The element that just left the window on the left side",
+        "The maximum element found in the array so far"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "If you are asked to find the maximum sum of a subarray of size K, and the array has size N < K, what should your function return?",
+      "options": [
+        "The sum of all elements in the array",
+        "An error code or -1, because we cannot form a window of size K",
+        "The maximum single element in the array",
+        "Zero"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "10. Summary & Key Takeaways"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Sliding Window is a powerful tool to scan subarrays. Instead of running nested loops ($O(N \\times K)$), it slides a fixed window by adding the entering element and subtracting the leaving element, executing in $O(N)$ linear time and $O(1)$ space. Look for contiguous subarray keywords to recognize this pattern!"
+    }
+  ]
+}

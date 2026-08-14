@@ -1,0 +1,284 @@
+{
+  "id": "namespaces",
+  "title": "Namespaces & std",
+  "subjectId": "fundamentals",
+  "nextLessonId": "input-output",
+  "prevLessonId": "data-types",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "When we write C++ programs, we use built-in tools like `cout` to print messages. Have you ever wondered where these tools come from, or why we write `std::` before them? In this lesson, we will explore **Namespaces**—the folders of C++ that keep our code organized and safe from naming conflicts."
+    },
+    {
+      "type": "heading",
+      "id": "why-namespaces",
+      "level": 2,
+      "text": "1. Why do we need Namespaces?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you are in a classroom with two students named 'Alex'. If you call out, 'Alex, come here!', both students will look at you confused. They don't know who you are calling! In programming, if two developers create features with the exact same name, the computer will get confused and fail to build. This confusion is called a **naming clash**."
+    },
+    {
+      "type": "drawing",
+      "id": "confusion-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solve this, we use **namespaces**. Think of namespaces as separate named shelves. For example, you can have a jar labeled 'sugar' on the 'Baking Shelf' and another jar labeled 'sugar' on the 'Coffee Shelf'. Because the jars sit on different shelves, they will never be mixed up! In code, namespaces act as those shelves. They let us group our tools and variables so they never mix up, even if they share the same name."
+    },
+    {
+      "type": "heading",
+      "id": "analogy-namespaces",
+      "level": 2,
+      "text": "2. The Analogy: Family Surnames"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solve the 'Alex' problem in real life, we use surnames (family names). Instead of calling 'Alex', we say 'Alex Smith' or 'Alex Jones'. Now, everyone knows exactly who you mean! A **namespace** is like a surname for your code. It tells the computer which 'family' a tool belongs to."
+    },
+    {
+      "type": "drawing",
+      "id": "surnames-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "concept-namespaces",
+      "level": 2,
+      "text": "3. The standard Namespace (std) and Scope Operator"
+    },
+    {
+      "type": "paragraph",
+      "text": "C++ comes with a massive box of built-in features. This box is called the standard namespace, abbreviated as `std` (pronounced 's-t-d'). Inside `std`, you will find standard features like `cout` (screen writer), `cin` (keyboard reader), and `endl` (line skipper)."
+    },
+    {
+      "type": "paragraph",
+      "text": "To look inside this `std` box, we use the double colon `::`. This double colon is officially called the **Scope Resolution Operator**. Think of it as a key that unlocks a specific drawer. When we write `std::cout`, we are telling the computer: 'Look inside the standard std folder, find the cout tool, and use it!'"
+    },
+    {
+      "type": "drawing",
+      "id": "std-namespace-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "namespaces-drawing-section",
+      "level": 2,
+      "text": "4. Visual Drawing: Scopes in Action"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is how namespaces keep variables isolated from each other in memory shelves:"
+    },
+    {
+      "type": "drawing",
+      "id": "namespaces-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "simulation-namespaces",
+      "level": 2,
+      "text": "5. Interactive Code Simulation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Run the code simulation step-by-step to see how the compiler resolves variable lookups in namespaces:"
+    },
+    {
+      "type": "simulation",
+      "id": "namespaces-simulation",
+      "simulationData": {
+        "code": "#include <iostream>\n\nnamespace Math {\n    int value = 5;\n}\n\nint main() {\n    int value = 10;\n    std::cout << value << std::endl;\n    std::cout << Math::value << std::endl;\n    return 0;\n}",
+        "language": "cpp",
+        "visualizer": "variables",
+        "steps": [
+          {
+            "line": 3,
+            "explanation": "We declare a custom namespace named 'Math'. Inside it, we create a variable named 'value' and set it to 5. This variable is safely nested in the 'Math' shelf.",
+            "variables": [
+              {
+                "name": "Math::value",
+                "type": "int",
+                "value": "5",
+                "address": "0x7ffd1"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "The execution enters our main entry point function.",
+            "variables": [
+              {
+                "name": "Math::value",
+                "type": "int",
+                "value": "5",
+                "address": "0x7ffd1"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "A local variable named 'value' is created inside main() and set to 10. Notice how this lives in a separate memory box from Math::value.",
+            "variables": [
+              {
+                "name": "Math::value",
+                "type": "int",
+                "value": "5",
+                "address": "0x7ffd1"
+              },
+              {
+                "name": "value",
+                "type": "int",
+                "value": "10",
+                "address": "0x7ffd2"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 9,
+            "explanation": "We output the variable 'value'. Since there is no prefix, the compiler looks at the local scope, finds 'value' is 10, and prints it.",
+            "variables": [
+              {
+                "name": "Math::value",
+                "type": "int",
+                "value": "5",
+                "address": "0x7ffd1"
+              },
+              {
+                "name": "value",
+                "type": "int",
+                "value": "10",
+                "address": "0x7ffd2"
+              }
+            ],
+            "terminalOutput": "10\n"
+          },
+          {
+            "line": 10,
+            "explanation": "We output Math::value. The prefix 'Math::' tells the compiler to bypass local variables and look inside the Math namespace drawer, printing 5.",
+            "variables": [
+              {
+                "name": "Math::value",
+                "type": "int",
+                "value": "5",
+                "address": "0x7ffd1"
+              },
+              {
+                "name": "value",
+                "type": "int",
+                "value": "10",
+                "address": "0x7ffd2"
+              }
+            ],
+            "terminalOutput": "10\n5\n"
+          },
+          {
+            "line": 11,
+            "explanation": "The program exits successfully with status 0, closing all memory scopes.",
+            "variables": [],
+            "terminalOutput": "10\n5\n\nProcess exited with status 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "using-namespace-std",
+      "level": 2,
+      "text": "6. What is 'using namespace std;'?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Writing `std::` before every screen command can feel tedious. To save typing, C++ allows you to write `using namespace std;` at the top of your file. This command is like telling the compiler: 'If I write a command name and you cannot find it, automatically check inside the `std` folder!'"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a comparison of how the two styles look side-by-side in code:"
+    },
+    {
+      "type": "code_comparison",
+      "codeLeft": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello!\" << std::endl;\n    return 0;\n}",
+      "labelLeft": "Explicit Standard Form (std::cout)",
+      "codeRight": "#include <iostream>\nusing namespace std;\n\nint main() {\n    cout << \"Hello!\" << endl;\n    return 0;\n}",
+      "labelRight": "Shortcut Directive Form (using namespace)",
+      "language": "cpp"
+    },
+    {
+      "type": "heading",
+      "id": "namespace-warning",
+      "level": 2,
+      "text": "7. The Trade-Off: Why Pros Avoid It"
+    },
+    {
+      "type": "paragraph",
+      "text": "While `using namespace std;` is very common in school and quick code exercises, professional software developers rarely use it. Why? Because the standard `std` folder contains thousands of names. If you import the entire `std` folder, and you create a variable or function with a name that is already in `std`, your program will crash or compile with errors."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Best Practice Tip: In large projects, write explicit names like `std::cout` instead of importing the whole namespace. It is much safer!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "8. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary purpose of namespaces in C++?",
+      "options": [
+        "To compile code faster.",
+        "To organize names and prevent name collision errors.",
+        "To make screen animations run smoother.",
+        "To encrypt security files."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the name of the operator represented by the symbol '::'?",
+      "options": [
+        "Boolean extraction operator",
+        "Stream insertion operator",
+        "Scope resolution operator",
+        "Null terminator operator"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "If you write 'std::cout', what is 'std'?",
+      "options": [
+        "A header library file",
+        "A namespace container of standard C++ tools",
+        "A variable storing a decimal value",
+        "The computer's central CPU folder"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is 'using namespace std;' considered bad practice in large software development projects?",
+      "options": [
+        "It uses too much memory space in RAM.",
+        "It slows down runtimes.",
+        "It imports thousands of names, which can lead to naming collisions.",
+        "It disables the compiler's output streams."
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "9. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "A **namespace** is like a surname or folder that groups names together to avoid confusion. The double colon `::` is the **scope resolution operator** that opens these folders. C++ places all its built-in features inside the `std` standard namespace. You can use `using namespace std;` to save typing in small scripts, but writing explicit paths like `std::cout` is the professional standard for safe, clean code."
+    }
+  ]
+}

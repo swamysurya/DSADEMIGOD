@@ -1,0 +1,153 @@
+{
+  "id": "avl-rotations-and-intuition",
+  "title": "AVL Rotations & Intuition",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "avl-tree-insertion",
+  "prevLessonId": "introduction-to-avl-trees",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome back. In the previous lesson, we learned that when a node's Balance Factor becomes $+2$ or $-2$, the tree is unbalanced. Today, we are going to learn how to fix this using **rotations**. We will look at the physical intuition behind rotations and see how we can restore balance in a few simple steps!"
+    },
+    {
+      "type": "heading",
+      "id": "three-node-principle",
+      "level": 2,
+      "text": "1. The Three-Node Principle"
+    },
+    {
+      "type": "paragraph",
+      "text": "Rotations can feel overwhelming if you try to think about the whole tree. Here is the secret that experienced programmers use: **No matter how large the tree is, a rotation is performed using only three important nodes!**"
+    },
+    {
+      "type": "paragraph",
+      "text": "When an imbalance occurs, we look at the node that became unbalanced (let's call it $A$), its child in the direction of the imbalance ($B$), and its grandchild ($C$). Everything else in the tree is treated as independent subtrees that we simply reconnect. This simplifies our work immensely!"
+    },
+    {
+      "type": "heading",
+      "id": "nail-thread-analogy",
+      "level": 2,
+      "text": "2. Rotation Intuition: Nail and Thread"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine a whiteboard where we have a **nail** representing the pivot node. If we hang a string of beads on it, and the left side has too many beads, gravity pulls it down. To balance it, we pull the string around the center bead, making the center bead hang directly from the nail. This is exactly what a rotation does!"
+    },
+    {
+      "type": "drawing",
+      "id": "avl-rotations-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "four-imbalance-cases",
+      "level": 2,
+      "text": "3. The Four Imbalance Cases"
+    },
+    {
+      "type": "paragraph",
+      "text": "The names of the imbalances tell us the path from the unbalanced ancestor node to the newly inserted node. Here is a decision flow to help you easily identify which case you are dealing with:"
+    },
+    {
+      "type": "drawing",
+      "id": "avl-imbalance-flowchart-drawing"
+    },
+
+    {
+      "type": "heading",
+      "id": "double-rotation-shortcut",
+      "level": 3,
+      "text": "Teacher's Shortcut for Double Rotations"
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of executing two separate rotations in your head for LR or RL, use this shortcut: Look at the three nodes involved in the zig-zag. **Bring the lowest node (the middle value) directly to the top, and let the other two nodes hang on its left and right!**"
+    },
+    {
+      "type": "paragraph",
+      "text": "For example, in an LR zig-zag of nodes `30` (top), `10` (left child), and `20` (grandchild), the middle value is `20`. Pull `20` to the root, make `10` its left child, and make `30` its right child. It works every single time!"
+    },
+    {
+      "type": "heading",
+      "id": "rotation-summary-table",
+      "level": 2,
+      "text": "4. Rotation Summary Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a quick reference table to memorize the actions:"
+    },
+    {
+      "type": "table",
+      "headers": ["Insertion Path", "Imbalance Case", "Rotation Action", "Resulting Shape"],
+      "rows": [
+        ["Left → Left", "**LL**", "Single Right Rotation", "Balanced"],
+        ["Right → Right", "**RR**", "Single Left Rotation", "Balanced"],
+        ["Left → Right", "**LR**", "Left Rotate child + Right Rotate parent", "Balanced"],
+        ["Right → Left", "**RL**", "Right Rotate child + Left Rotate parent", "Balanced"]
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "subtree-reconnection",
+      "level": 2,
+      "text": "5. Reconnecting Subtrees"
+    },
+    {
+      "type": "paragraph",
+      "text": "When rotating nodes that have other subtrees underneath, we must preserve the Binary Search Tree properties: **all nodes to the left must remain smaller, and all nodes to the right must remain larger**."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's take a Right Rotation around node $Y$ with left child $X$:\n1. $X$ becomes the new root.\n2. $Y$ becomes $X$'s right child.\n3. What happens to $X$'s original right child (let's call it $T2$)? Since $T2$ is larger than $X$ but smaller than $Y$, it becomes $Y$'s new left child! This transition is clean and maintains the BST ordering perfectly."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which rotation is required to balance a Left-Left (LL) imbalance?",
+      "options": [
+        "Single Left Rotation",
+        "Single Right Rotation",
+        "Left-Right Double Rotation",
+        "Right-Left Double Rotation"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the shortcut outcome for an RL imbalance involving nodes 10 (root), 30 (right child), and 20 (grandchild)?",
+      "options": [
+        "10 becomes root, 20 is left child, 30 is right child",
+        "30 becomes root, 10 is left child, 20 is right child",
+        "20 becomes root, 10 is left child, 30 is right child",
+        "No rotation is needed"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "When performing a Right Rotation around Y (with left child X), what happens to X's right subtree T2?",
+      "options": [
+        "It is deleted from the tree.",
+        "It becomes Y's new left subtree.",
+        "It becomes X's new left subtree.",
+        "It becomes Y's new right subtree."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: AVL tree rotations focus only on three nodes. The LL case is fixed by a single Right rotation. The RR case is fixed by a single Left rotation. The LR and RL cases require double rotations (zig-zags), where the middle value is pulled to the root. Subtrees are shifted to maintain the BST properties. In our next lesson, we will build a complete AVL tree step-by-step from scratch using these rotations!"
+    }
+  ]
+}

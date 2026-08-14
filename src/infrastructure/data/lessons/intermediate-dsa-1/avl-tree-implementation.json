@@ -1,0 +1,176 @@
+{
+  "id": "avl-tree-implementation",
+  "title": "AVL Code Implementation",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": null,
+  "prevLessonId": "avl-tree-deletion",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the final lesson of this chapter. Now that we have built the visual mental models for AVL trees, rotations, and deletions, we are ready to write the complete C++ implementation! We will build this code step-by-step from scratch, explaining each part in plain English. Let's start coding!"
+    },
+    {
+      "type": "heading",
+      "id": "node-class-structure",
+      "level": 2,
+      "text": "1. Building the Node Class"
+    },
+    {
+      "type": "paragraph",
+      "text": "In an **AVL Tree node**, we store the key (`data`), `left` pointer, `right` pointer, and the node's current `height`. This allows us to calculate balance factors in $O(1)$ constant time."
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "struct Node {\n    int data;\n    Node* left;\n    Node* right;\n    int height;\n\n    Node(int val) {\n        data = val;\n        left = nullptr;\n        right = nullptr;\n        height = 0; // A new leaf node starts with height 0\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "helper-methods",
+      "level": 2,
+      "text": "2. Height and Balance Helpers"
+    },
+    {
+      "type": "paragraph",
+      "text": "To prevent pointer exceptions (like trying to access `nullptr->height`), we write safe helper functions to fetch node heights and calculate balance factors:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "// Helper to safely get the height of a node\nint getHeightOfNode(Node* node) {\n    if (node == nullptr) return -1; // Empty node has height -1\n    return node->height;\n}\n\n// Helper to get the Balance Factor of a node\nint getBalanceOfNode(Node* node) {\n    if (node == nullptr) return 0;\n    return getHeightOfNode(node->left) - getHeightOfNode(node->right);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "rotation-methods",
+      "level": 2,
+      "text": "3. Coding the Rotation Operations"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's translate our nail-and-thread rotation drawings into pointer modifications. Notice how the code shifts children subtrees while maintaining sorting order:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "// Single Right Rotation around node y (LL Case)\nNode* LLRoation(Node* y) {\n    Node* x = y->left;\n    Node* T2 = x->right;\n\n    // Perform rotation\n    x->right = y;\n    y->left = T2;\n\n    // Update heights\n    y->height = 1 + std::max(getHeightOfNode(y->left), getHeightOfNode(y->right));\n    x->height = 1 + std::max(getHeightOfNode(x->left), getHeightOfNode(x->right));\n\n    // Return the new root of this subtree\n    return x;\n}\n\n// Single Left Rotation around node y (RR Case)\nNode* RRrotation(Node* y) {\n    Node* x = y->right;\n    Node* T2 = x->left;\n\n    // Perform rotation\n    x->left = y;\n    y->right = T2;\n\n    // Update heights\n    y->height = 1 + std::max(getHeightOfNode(y->left), getHeightOfNode(y->right));\n    x->height = 1 + std::max(getHeightOfNode(x->left), getHeightOfNode(x->right));\n\n    // Return the new root of this subtree\n    return x;\n}\n\n// Double Left-Right Rotation (LR Case)\nNode* LRrotation(Node* y) {\n    y->left = RRrotation(y->left);\n    return LLRoation(y);\n}\n\n// Double Right-Left Rotation (RL Case)\nNode* RLrotation(Node* y) {\n    y->right = LLRoation(y->right);\n    return RRrotation(y);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "insertion-logic",
+      "level": 2,
+      "text": "4. The Balanced Insertion Function"
+    },
+    {
+      "type": "paragraph",
+      "text": "Our `insert` function works recursively. It traverses down the tree to insert the node, updates the heights on the way back up, checks for imbalances, and executes the correct rotation immediately:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "Node* insert(Node* node, int data) {\n    // 1. Perform standard BST insertion\n    if (node == nullptr) {\n        return new Node(data);\n    }\n\n    if (data < node->data) {\n        node->left = insert(node->left, data);\n    } else if (data > node->data) {\n        node->right = insert(node->right, data);\n    } else {\n        return node; // Duplicate keys are not allowed\n    }\n\n    // 2. Update height of this ancestor node\n    node->height = 1 + std::max(getHeightOfNode(node->left), getHeightOfNode(node->right));\n\n    // 3. Get the balance factor to check if it became unbalanced\n    int balance = getBalanceOfNode(node);\n\n    // 4. If unbalanced, we have 4 cases:\n\n    // Case A: Left-Left (LL) -> Right Rotate\n    if (balance > 1 && data < node->left->data) {\n        return LLRoation(node);\n    }\n\n    // Case B: Right-Right (RR) -> Left Rotate\n    if (balance < -1 && data > node->right->data) {\n        return RRrotation(node);\n    }\n\n    // Case C: Left-Right (LR) -> Left + Right Rotate\n    if (balance > 1 && data > node->left->data) {\n        return LRrotation(node);\n    }\n\n    // Case D: Right-Left (RL) -> Right + Left Rotate\n    if (balance < -1 && data < node->right->data) {\n        return RLrotation(node);\n    }\n\n    return node; // Return the unchanged node pointer\n}"
+    },
+    {
+      "type": "heading",
+      "id": "deletion-logic",
+      "level": 2,
+      "text": "5. The Balanced Deletion Function"
+    },
+    {
+      "type": "paragraph",
+      "text": "Deletion also runs recursively. We delete the node using standard BST rules, and then rebalance each ancestor node on our way back up to the root:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "// Find the node with minimum value in a subtree\nNode* getMinNode(Node* root) {\n    Node* current = root;\n\n    while (current->left != nullptr) {\n        current = current->left;\n    }\n\n    return current;\n}\n\n// Delete a node from AVL Tree\nNode* deleteNode(Node* root, int value) {\n\n    // 1. Normal BST deletion\n    if (root == nullptr)\n        return root;\n\n    // Search in left subtree\n    if (value < root->data) {\n        root->left = deleteNode(root->left, value);\n    }\n\n    // Search in right subtree\n    else if (value > root->data) {\n        root->right = deleteNode(root->right, value);\n    }\n\n    // Node found\n    else {\n\n        // Case 1: No child\n        if (root->left == nullptr && root->right == nullptr) {\n            delete root;\n            return nullptr;\n        }\n\n        // Case 2: Only right child\n        else if (root->left == nullptr) {\n            Node* temp = root->right;\n            delete root;\n            return temp;\n        }\n\n        // Case 3: Only left child\n        else if (root->right == nullptr) {\n            Node* temp = root->left;\n            delete root;\n            return temp;\n        }\n\n        // Case 4: Two children\n        else {\n            // Find inorder successor\n            Node* temp = getMinNode(root->right);\n\n            // Copy successor's value\n            root->data = temp->data;\n\n            // Delete successor\n            root->right = deleteNode(root->right, temp->data);\n        }\n    }\n\n    // 2. Update height\n    root->height = 1 + std::max(\n        getHeightOfNode(root->left),\n        getHeightOfNode(root->right)\n    );\n\n    // 3. Calculate balance factor\n    int balance = getBalanceOfNode(root);\n\n\n    // 4. LL Case\n    if (balance > 1 &&\n        getBalanceOfNode(root->left) >= 0) {\n\n        return LLRoation(root);\n    }\n\n\n    // 5. LR Case\n    if (balance > 1 &&\n        getBalanceOfNode(root->left) < 0) {\n\n        return LRrotation(root);\n    }\n\n\n    // 6. RR Case\n    if (balance < -1 &&\n        getBalanceOfNode(root->right) <= 0) {\n\n        return RRrotation(root);\n    }\n\n\n    // 7. RL Case\n    if (balance < -1 &&\n        getBalanceOfNode(root->right) > 0) {\n\n        return RLrotation(root);\n    }\n\n    return root;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "full-code-and-main",
+      "level": 2,
+      "text": "6. Complete Executable C++ Code"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the complete C++ program, including inserting our sample sequence and deleting the keys one by one so you can verify it on your system:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <algorithm>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    int height;\n    Node(int val) : data(val), left(nullptr), right(nullptr), height(0) {}\n};\n\nint getHeightOfNode(Node* node) {\n    return (node == nullptr) ? -1 : node->height;\n}\n\nint getBalanceOfNode(Node* node) {\n    return (node == nullptr) ? 0 : getHeightOfNode(node->left) - getHeightOfNode(node->right);\n}\n\nNode* LLRoation(Node* y) {\n    Node* x = y->left;\n    Node* T2 = x->right;\n    x->right = y;\n    y->left = T2;\n    y->height = 1 + std::max(getHeightOfNode(y->left), getHeightOfNode(y->right));\n    x->height = 1 + std::max(getHeightOfNode(x->left), getHeightOfNode(x->right));\n    return x;\n}\n\nNode* RRrotation(Node* y) {\n    Node* x = y->right;\n    Node* T2 = x->left;\n    x->left = y;\n    y->right = T2;\n    y->height = 1 + std::max(getHeightOfNode(y->left), getHeightOfNode(y->right));\n    x->height = 1 + std::max(getHeightOfNode(x->left), getHeightOfNode(x->right));\n    return x;\n}\n\nNode* LRrotation(Node* y) {\n    y->left = RRrotation(y->left);\n    return LLRoation(y);\n}\n\nNode* RLrotation(Node* y) {\n    y->right = LLRoation(y->right);\n    return RRrotation(y);\n}\n\nNode* insert(Node* node, int data) {\n    if (node == nullptr) return new Node(data);\n\n    if (data < node->data) {\n        node->left = insert(node->left, data);\n    } else if (data > node->data) {\n        node->right = insert(node->right, data);\n    } else {\n        return node;\n    }\n\n    node->height = 1 + std::max(getHeightOfNode(node->left), getHeightOfNode(node->right));\n    int balance = getBalanceOfNode(node);\n\n    if (balance > 1 && data < node->left->data) return LLRoation(node);\n    if (balance < -1 && data > node->right->data) return RRrotation(node);\n    if (balance > 1 && data > node->left->data) return LRrotation(node);\n    if (balance < -1 && data < node->right->data) return RLrotation(node);\n\n    return node;\n}\n\nNode* getMinNode(Node* root) {\n    Node* current = root;\n    while (current->left != nullptr) {\n        current = current->left;\n    }\n    return current;\n}\n\nNode* deleteNode(Node* root, int value) {\n    if (root == nullptr) return root;\n\n    if (value < root->data) {\n        root->left = deleteNode(root->left, value);\n    } else if (value > root->data) {\n        root->right = deleteNode(root->right, value);\n    } else {\n        if (root->left == nullptr && root->right == nullptr) {\n            delete root;\n            return nullptr;\n        } else if (root->left == nullptr) {\n            Node* temp = root->right;\n            delete root;\n            return temp;\n        } else if (root->right == nullptr) {\n            Node* temp = root->left;\n            delete root;\n            return temp;\n        } else {\n            Node* temp = getMinNode(root->right);\n            root->data = temp->data;\n            root->right = deleteNode(root->right, temp->data);\n        }\n    }\n\n    root->height = 1 + std::max(getHeightOfNode(root->left), getHeightOfNode(root->right));\n    int balance = getBalanceOfNode(root);\n\n    if (balance > 1 && getBalanceOfNode(root->left) >= 0) return LLRoation(root);\n    if (balance > 1 && getBalanceOfNode(root->left) < 0) return LRrotation(root);\n    if (balance < -1 && getBalanceOfNode(root->right) <= 0) return RRrotation(root);\n    if (balance < -1 && getBalanceOfNode(root->right) > 0) return RLrotation(root);\n\n    return root;\n}\n\nvoid preOrder(Node* root) {\n    if (root != nullptr) {\n        std::cout << root->data << \" \";\n        preOrder(root->left);\n        preOrder(root->right);\n    }\n}\n\nint main() {\n    Node* root = nullptr;\n    int insertKeys[] = {14, 11, 19, 7, 12, 17, 53, 4, 8, 13, 16, 20, 60};\n    for (int key : insertKeys) {\n        root = insert(root, key);\n    }\n\n    std::cout << \"Initial Pre-order traversal:\\n\";\n    preOrder(root);\n    std::cout << \"\\n\\n\";\n\n    int deleteKeys[] = {8, 7, 11, 14, 17};\n    for (int key : deleteKeys) {\n        root = deleteNode(root, key);\n        std::cout << \"After deleting \" << key << \":\\n\";\n        preOrder(root);\n        std::cout << \"\\n\";\n    }\n\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "7. Dry Run of Code"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us trace the deletion of key `8`:\n1. `deleteNode(root, 8)` is called.\n2. Standard BST deletion finds Node `8` as a leaf node, deletes it, and returns `nullptr` to its parent Node `7`.\n3. Unwinding to `7`: updates its height to 2. Its balance factor `getBalanceOfNode(7)` = 1 - 0 = +1. Since balance factor is within [-1, 1], no rotation is executed.\n4. Unwinding continues up to the root, recalculating heights and balance factors. Since no node violates the balance property, the function returns the root unmodified."
+    },
+    {
+      "type": "heading",
+      "id": "leetcode-practice",
+      "level": 2,
+      "text": "8. Practice Problems"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solidify your understanding of delete properties, try this relevant LeetCode problem:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. **LeetCode 450: Delete Node in a BST**\n· **Goal**: Delete a node in a standard BST.\n· **Strategy**: Implement standard BST deletion logic using inorder successors (exactly like the first phase of our `deleteNode` method)."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "9. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which function is used to locate the inorder successor in our implementation?",
+      "options": [
+        "LLRoation",
+        "deleteNode",
+        "getMinNode",
+        "getBalanceOfNode"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What is the return type of the deleteNode function?",
+      "options": [
+        "void",
+        "Node*",
+        "int",
+        "bool"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Under which condition does deleteNode execute a Left-Right (LR) double rotation?",
+      "options": [
+        "balance > 1 && getBalanceOfNode(root->left) >= 0",
+        "balance > 1 && getBalanceOfNode(root->left) < 0",
+        "balance < -1 && getBalanceOfNode(root->right) <= 0",
+        "balance < -1 && getBalanceOfNode(root->right) > 0"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "10. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: AVL tree deletion works by performing a standard BST deletion and then backtracking up to the root to fix heights and execute rotations if any node's Balance Factor becomes +2 or -2. By looking at the complete C++ implementation, we saw how LL, LR, RL, and RR rotations are triggered after a deletion. Congratulations on completing the AVL Trees chapter!"
+    }
+  ]
+}

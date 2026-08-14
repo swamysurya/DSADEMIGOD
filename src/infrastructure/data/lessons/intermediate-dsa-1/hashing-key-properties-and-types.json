@@ -1,0 +1,172 @@
+{
+  "id": "hashing-key-properties-and-types",
+  "title": "Key Properties of Hashing and Different Types of Hashing Techniques",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": null,
+  "prevLessonId": "collision-resolution-techniques",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello again! We already know how to map keys to a hash table and how to handle collisions using chaining or probing. In this lesson, we will look under the hood at the engine itself: the **Hash Function**. What makes a hash function 'good'? And what mathematical tricks can we use to build them? Let's find out."
+    },
+    {
+      "type": "heading",
+      "id": "key-properties",
+      "level": 2,
+      "text": "1. What Makes a Hash Function Good? (Key Properties)"
+    },
+    {
+      "type": "drawing",
+      "id": "hash-properties-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "different-types",
+      "level": 2,
+      "text": "2. Different Types of Hashing Techniques"
+    },
+    {
+      "type": "paragraph",
+      "text": "Computer scientists have developed several math techniques to generate index values. Let's learn the three most common ones:"
+    },
+    {
+      "type": "heading",
+      "id": "division-method",
+      "level": 3,
+      "text": "2a. The Division Method"
+    },
+    {
+      "type": "paragraph",
+      "text": "This is the simplest and most common technique. We divide the key by the table capacity `m` and use the remainder."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Formula**: `Hash(key) = key % m`"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Teacher Tip**: To get the best uniform distribution, the table capacity `m` should always be a **prime number** (like 11, 13, or 17). Prime numbers do not have common divisors, which helps break up patterns in keys and reduces collisions dramatically!"
+    },
+    {
+      "type": "drawing",
+      "id": "division-method-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "midsquare-method",
+      "level": 3,
+      "text": "2b. The Mid-Square Method"
+    },
+    {
+      "type": "paragraph",
+      "text": "If we want to spread out similar keys, the mid-square method is a great choice. We square the key and extract the middle digits to use as our index."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **How it works**: Suppose our table capacity is `100` (indices `0` to `99`). We need a 2-digit index. Let's hash the key `60`:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. Square the key: `60 * 60 = 3600`"
+    },
+    {
+      "type": "paragraph",
+      "text": "2. Extract the middle two digits of `3600`, which are `60`."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. The hash index is `60`."
+    },
+    {
+      "type": "paragraph",
+      "text": "Because the middle digits of a square depend on almost all the digits in the original key, changing even a tiny part of a key will result in a completely different middle square index, spreading out keys beautifully!"
+    },
+    {
+      "type": "drawing",
+      "id": "midsquare-method-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "folding-method",
+      "level": 3,
+      "text": "2c. The Folding Method"
+    },
+    {
+      "type": "paragraph",
+      "text": "When our keys are very large (like a 9-digit social security number), we can use the folding method. We slice the key into small equal-sized pieces, add those pieces together, and modulo the sum by the table size."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **How it works**: Suppose our table capacity is `100`, and our key is `123456`. We want 2-digit pieces:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. Slice the key: `12`, `34`, and `56`."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. Add them: `12 + 34 + 56 = 102`."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. Apply modulo table size: `102 % 100 = 2`."
+    },
+    {
+      "type": "paragraph",
+      "text": "4. The hash index is `2`."
+    },
+    {
+      "type": "drawing",
+      "id": "folding-method-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "3. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What does it mean for a hash function to be deterministic?",
+      "options": [
+        "It generates indices using random values.",
+        "It always produces the same index for the same input key.",
+        "It automatically resizes the table capacity.",
+        "It avoids all collisions."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is it highly recommended to choose a prime number as the table size in the Division Method?",
+      "options": [
+        "It makes index calculation much faster.",
+        "It prevents memory fragmentation.",
+        "It breaks key patterns and helps distribute keys more uniformly.",
+        "It eliminates the need for modulo calculations."
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "Using the Mid-Square Method, what is the hash index for key 30 with a table size of 100? (Note: 30 * 30 = 0900)",
+      "options": [
+        "9",
+        "90",
+        "0",
+        "30"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "4. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: A high-quality hash function must be deterministic, efficient, and distribute keys uniformly. We can build functions using the Division Method (`key % tableSize`), Mid-Square Method (extracting middle digits of squared key), or Folding Method (adding sliced pieces of the key). Next, let's explore where hashing is used in real-world systems!"
+    }
+  ]
+}

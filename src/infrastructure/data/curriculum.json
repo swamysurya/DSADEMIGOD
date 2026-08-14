@@ -5,7 +5,7 @@
     "chapters": [
       {
         "id": "module-1",
-        "title": "Module 1 — Getting Started",
+        "title": "Getting Started",
         "lessons": [
           { "id": "intro-to-programming", "title": "Introduction to Programming", "estimatedTime": "5 mins" },
           { "id": "installing-ide", "title": "Installing Compiler & IDE", "estimatedTime": "10 mins" },
@@ -14,13 +14,14 @@
           { "id": "comments", "title": "Comments", "estimatedTime": "3 mins" },
           { "id": "variables", "title": "Variables", "estimatedTime": "10 mins" },
           { "id": "data-types", "title": "Data Types", "estimatedTime": "12 mins" },
+          { "id": "namespaces", "title": "Namespaces & std", "estimatedTime": "10 mins" },
           { "id": "operators", "title": "Operators", "estimatedTime": "8 mins" },
           { "id": "expressions", "title": "Expressions", "estimatedTime": "5 mins" }
         ]
       },
       {
         "id": "module-2",
-        "title": "Module 2 — Control Flow",
+        "title": "Control Flow",
         "lessons": [
           { "id": "if", "title": "if", "estimatedTime": "5 mins" },
           { "id": "if-else", "title": "if else", "estimatedTime": "8 mins" },
@@ -34,7 +35,7 @@
       },
       {
         "id": "module-3",
-        "title": "Module-3 — Functions",
+        "title": "Functions",
         "lessons": [
           { "id": "functions", "title": "Functions", "estimatedTime": "15 mins" },
           { "id": "parameters", "title": "Parameters", "estimatedTime": "10 mins" },
@@ -47,7 +48,7 @@
       },
       {
         "id": "module-4",
-        "title": "Module 4 — Arrays & Strings",
+        "title": "Arrays & Strings",
         "lessons": [
           { "id": "arrays", "title": "Arrays", "estimatedTime": "12 mins" },
           { "id": "multidimensional-arrays", "title": "Multidimensional Arrays", "estimatedTime": "15 mins" },
@@ -58,7 +59,7 @@
       },
       {
         "id": "module-5",
-        "title": "Module 5 — Pointers",
+        "title": "Pointers",
         "lessons": [
           { "id": "memory", "title": "Memory", "estimatedTime": "8 mins" },
           { "id": "address-operator", "title": "Address Operator", "estimatedTime": "6 mins" },
@@ -70,7 +71,7 @@
       },
       {
         "id": "module-6",
-        "title": "Module 6 — Dynamic Memory",
+        "title": "Dynamic Memory",
         "lessons": [
           { "id": "stack-heap", "title": "Stack vs Heap", "estimatedTime": "12 mins" },
           { "id": "new", "title": "new", "estimatedTime": "8 mins" },
@@ -80,7 +81,7 @@
       },
       {
         "id": "module-7",
-        "title": "Module 7 — OOP",
+        "title": "OOP",
         "lessons": [
           { "id": "classes", "title": "Classes", "estimatedTime": "12 mins" },
           { "id": "objects", "title": "Objects", "estimatedTime": "10 mins" },
@@ -95,7 +96,7 @@
       },
       {
         "id": "module-8",
-        "title": "Module 8 — Templates",
+        "title": "Templates",
         "lessons": [
           { "id": "function-templates", "title": "Function Templates", "estimatedTime": "10 mins" },
           { "id": "class-templates", "title": "Class Templates", "estimatedTime": "12 mins" }
@@ -103,21 +104,21 @@
       },
       {
         "id": "module-9",
-        "title": "Module 9 — Exception Handling",
+        "title": "Exception Handling",
         "lessons": [
           { "id": "exception-handling", "title": "Exception Handling", "estimatedTime": "15 mins" }
         ]
       },
       {
         "id": "module-10",
-        "title": "Module 10 — File Handling",
+        "title": "File Handling",
         "lessons": [
           { "id": "file-handling", "title": "File Handling", "estimatedTime": "15 mins" }
         ]
       },
       {
         "id": "module-11",
-        "title": "Module 11 — STL",
+        "title": "STL",
         "lessons": [
           { "id": "vector", "title": "vector", "estimatedTime": "12 mins" },
           { "id": "pair", "title": "pair", "estimatedTime": "6 mins" },
@@ -134,6 +135,282 @@
           { "id": "algorithms", "title": "algorithms", "estimatedTime": "20 mins" },
           { "id": "iterators", "title": "iterators", "estimatedTime": "10 mins" },
           { "id": "lambda-expressions", "title": "lambda expressions", "estimatedTime": "12 mins" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "beginner-dsa",
+    "title": "Beginner DSA",
+    "chapters": [
+      {
+        "id": "algorithm-analysis-basics",
+        "title": "Introduction to Algorithms, Algorithm Analysis & Asymptotic Notations",
+        "lessons": [
+          { "id": "introduction-to-algorithms", "title": "Introduction to Algorithms", "estimatedTime": "15 mins" },
+          { "id": "space-and-time-complexity", "title": "Space and Time Complexity Analysis", "estimatedTime": "15 mins" },
+          { "id": "asymptotic-notations", "title": "Asymptotic Notations", "estimatedTime": "20 mins" }
+        ]
+      },
+      {
+        "id": "math-arrays",
+        "title": "Mathematical Foundations & Arrays",
+        "lessons": [
+          { "id": "math-basics-1", "title": "Math Basics Part 1", "estimatedTime": "15 mins" },
+          { "id": "math-basics-2-gcd-lcm", "title": "Math Basics Part 2 (GCD & LCM)", "estimatedTime": "12 mins" },
+          { "id": "array-fundamentals-largest", "title": "Array Fundamentals & Largest Element", "estimatedTime": "12 mins" },
+          { "id": "second-largest", "title": "Finding the Second Largest Element", "estimatedTime": "15 mins" },
+          { "id": "consecutive-ones-missing", "title": "Max Consecutive Ones & Missing Number", "estimatedTime": "15 mins" },
+          { "id": "sorted-array-duplicates", "title": "Sorted Array Checks & Removing Duplicates", "estimatedTime": "15 mins" },
+          { "id": "moving-zeros", "title": "Moving Zeros to the End", "estimatedTime": "12 mins" },
+          { "id": "zero-fill-matrix", "title": "Zero Fill Matrix (Set Matrix Zeroes)", "estimatedTime": "15 mins" },
+          { "id": "spiral-matrix-traversal", "title": "Spiral Matrix Traversal", "estimatedTime": "18 mins" },
+          { "id": "majority-element", "title": "Majority Element (Boyer-Moore)", "estimatedTime": "15 mins" },
+          { "id": "rotate-array", "title": "Rotate Array", "estimatedTime": "15 mins" },
+          { "id": "best-time-to-buy-and-sell-stock", "title": "Best Time to Buy and Sell Stock", "estimatedTime": "15 mins" },
+          { "id": "best-time-to-buy-and-sell-stock-ii", "title": "Best Time to Buy and Sell Stock II", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "strings",
+        "title": "Strings",
+        "lessons": [
+          { "id": "valid-anagram", "title": "Valid Anagram", "estimatedTime": "12 mins" },
+          { "id": "reverse-words", "title": "Reverse Words in a String", "estimatedTime": "15 mins" },
+          { "id": "construct-k-palindromes", "title": "Construct K Palindrome Strings", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "recursion",
+        "title": "Recursion & Backtracking",
+        "lessons": [
+          { "id": "understanding-recursion", "title": "Understanding Recursion", "estimatedTime": "15 mins" },
+          { "id": "print-1-to-n-n-to-1", "title": "Printing 1 to N and N to 1 Using Recursion", "estimatedTime": "12 mins" },
+          { "id": "sum-factorials-recursion", "title": "Sum of N & Factorial Using Recursion", "estimatedTime": "12 mins" },
+          { "id": "reverse-array-palindrome-recursion", "title": "Reversing an Array & Checking Palindromes Using Recursion", "estimatedTime": "15 mins" },
+          { "id": "fibonacci-recursion", "title": "Fibonacci Series Using Recursion", "estimatedTime": "15 mins" },
+          { "id": "backtracking-subsequences", "title": "Backtracking: Printing All Subsequences", "estimatedTime": "15 mins" },
+          { "id": "backtracking-unique-subsets", "title": "Backtracking: Unique Subsets (Subsets II)", "estimatedTime": "18 mins" },
+          { "id": "backtracking-combination-sum", "title": "Backtracking: Purchase Combinations (Combination Sum)", "estimatedTime": "18 mins" }
+        ]
+      },
+      {
+        "id": "sorting",
+        "title": "Sorting",
+        "lessons": [
+          { "id": "selection-sort", "title": "Selection Sort", "estimatedTime": "12 mins" },
+          { "id": "bubble-sort", "title": "Bubble Sort", "estimatedTime": "12 mins" },
+          { "id": "insertion-sort", "title": "Insertion Sort", "estimatedTime": "12 mins" },
+          { "id": "merge-sort", "title": "Merge Sort", "estimatedTime": "15 mins" },
+          { "id": "quick-sort", "title": "Quick Sort", "estimatedTime": "15 mins" },
+          { "id": "counting-sort", "title": "Counting Sort", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "searching",
+        "title": "Searching",
+        "lessons": [
+          { "id": "intro-to-searching-linear-search", "title": "Introduction to Searching & Linear Search", "estimatedTime": "10 mins" },
+          { "id": "lower-upper-bound", "title": "Lower Bound & Upper Bound", "estimatedTime": "12 mins" },
+          { "id": "search-rotated-sorted-array", "title": "Search in Rotated Sorted Array", "estimatedTime": "15 mins" },
+          { "id": "find-peak-element", "title": "Finding Peak Element", "estimatedTime": "15 mins" },
+          { "id": "nth-root-m", "title": "Finding Nth Root of M", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "bit-manipulation",
+        "title": "Bit Manipulation",
+        "lessons": [
+          { "id": "binary-operations", "title": "Binary Operations", "estimatedTime": "12 mins" },
+          { "id": "binary-conversion-code", "title": "Code for Binary Conversion", "estimatedTime": "15 mins" },
+          { "id": "bitwise-operators", "title": "Bitwise Operators", "estimatedTime": "12 mins" },
+          { "id": "bit-manipulation-techniques-1", "title": "Bit Manipulation Techniques 1", "estimatedTime": "15 mins" },
+          { "id": "bit-manipulation-techniques-2", "title": "Bit Manipulation Techniques 2", "estimatedTime": "15 mins" },
+          { "id": "min-bit-flips-convert", "title": "Minimum Bit Flips to Convert a Number", "estimatedTime": "15 mins" },
+          { "id": "single-element-1", "title": "Single Element 1", "estimatedTime": "12 mins" },
+          { "id": "min-bit-flips-or", "title": "Min Bit Flips for OR Operation", "estimatedTime": "15 mins" },
+          { "id": "bitwise-xor-range", "title": "Bitwise XOR For a Given Range", "estimatedTime": "15 mins" }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "intermediate-dsa-1",
+    "title": "Intermediate DSA Level 1",
+    "chapters": [
+      {
+        "id": "hashing",
+        "title": "Hashing",
+        "lessons": [
+          { "id": "introduction-to-hashing", "title": "Introduction to Hashing", "estimatedTime": "12 mins" },
+          { "id": "collision-resolution-techniques", "title": "Collision Resolution Techniques", "estimatedTime": "18 mins" },
+          { "id": "hashing-key-properties-and-types", "title": "Key Properties of Hashing and Different Types of Hashing Techniques", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "prefix-sum",
+        "title": "Prefix Sum",
+        "lessons": [
+          { "id": "introduction-to-prefix-sum", "title": "Introduction to Prefix Sum", "estimatedTime": "6 mins" },
+          { "id": "in-place-prefix-sum", "title": "In-Place Prefix Sum", "estimatedTime": "8 mins" },
+          { "id": "range-sum-query", "title": "Range Sum Query", "estimatedTime": "10 mins" }
+        ]
+      },
+      {
+        "id": "sliding-window-two-pointer",
+        "title": "Sliding Window & Two Pointer Technique",
+        "lessons": [
+          { "id": "introduction-to-sliding-window", "title": "Introduction to Sliding Window", "estimatedTime": "8 mins" },
+          { "id": "introduction-to-two-pointer-technique", "title": "Introduction to Two Pointer Technique", "estimatedTime": "8 mins" }
+        ]
+      },
+      {
+        "id": "linked-lists",
+        "title": "Linked Lists",
+        "lessons": [
+          { "id": "introduction-to-linked-lists", "title": "Lesson 1: Introduction to Linked Lists", "estimatedTime": "10 mins" },
+          { "id": "insertion-in-singly-linked-list", "title": "Lesson 2: Insertion in Singly Linked List", "estimatedTime": "12 mins" },
+          { "id": "deletion-in-singly-linked-list", "title": "Lesson 3: Deletion in Singly Linked List", "estimatedTime": "12 mins" },
+          { "id": "introduction-to-doubly-linked-lists", "title": "Lesson 4: Introduction to Doubly Linked Lists", "estimatedTime": "10 mins" },
+          { "id": "insertion-in-doubly-linked-list", "title": "Lesson 5: Insertion in Doubly Linked List", "estimatedTime": "12 mins" },
+          { "id": "deletion-in-doubly-linked-list", "title": "Lesson 6: Deletion in Doubly Linked List", "estimatedTime": "12 mins" },
+          { "id": "circular-linked-lists", "title": "Lesson 7: Circular Linked Lists", "estimatedTime": "15 mins" },
+          { "id": "reverse-a-linked-list", "title": "Lesson 8: Reverse a Linked List", "estimatedTime": "12 mins" },
+          { "id": "cycle-in-linked-list", "title": "Lesson 9: Cycle in Linked List", "estimatedTime": "12 mins" },
+          { "id": "flatten-a-linked-list", "title": "Lesson 10: Flatten a Linked List", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "stacks",
+        "title": "Stacks",
+        "lessons": [
+          { "id": "introduction-to-stack", "title": "Introduction to Stack", "estimatedTime": "10 mins" },
+          { "id": "stack-implementation-using-array", "title": "Stack Implementation using Array", "estimatedTime": "12 mins" },
+          { "id": "stack-implementation-using-linked-list", "title": "Stack Implementation using Linked List", "estimatedTime": "12 mins" },
+          { "id": "introduction-to-monotonic-stack", "title": "Introduction to Monotonic Stack", "estimatedTime": "12 mins" },
+          { "id": "next-greater-element", "title": "Next Greater Element", "estimatedTime": "15 mins" },
+          { "id": "infix-prefix-postfix-notation", "title": "Infix, Prefix, and Postfix Notation", "estimatedTime": "15 mins" },
+          { "id": "min-stack", "title": "Min Stack", "estimatedTime": "12 mins" },
+          { "id": "valid-parentheses", "title": "Valid Parentheses", "estimatedTime": "10 mins" },
+          { "id": "asteroid-collision", "title": "Asteroid Collision", "estimatedTime": "12 mins" },
+          { "id": "largest-rectangle-in-histogram", "title": "Largest Rectangle in Histogram", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "queues",
+        "title": "Queues",
+        "lessons": []
+      },
+      {
+        "id": "trees-bst",
+        "title": "Trees & Binary Search Trees (BST)",
+        "lessons": [
+          { "id": "intro-to-tree", "title": "Introduction to Trees", "estimatedTime": "10 mins" },
+          { "id": "tree-traversals", "title": "Tree Traversals", "estimatedTime": "12 mins" },
+          { "id": "levelorder-traversal", "title": "Level Order Traversal", "estimatedTime": "12 mins" },
+          { "id": "balanced-binary-tree-intro", "title": "Introduction to Balanced Binary Trees", "estimatedTime": "10 mins" },
+          { "id": "height-of-binary-tree", "title": "Height of a Binary Tree", "estimatedTime": "12 mins" },
+          { "id": "diameter-of-binary-tree", "title": "Diameter of a Binary Tree", "estimatedTime": "12 mins" },
+          { "id": "maximum-path-sum", "title": "Maximum Path Sum", "estimatedTime": "15 mins" },
+          { "id": "tree-views-lca", "title": "Top View, Right View & LCA", "estimatedTime": "15 mins" },
+          { "id": "binary-search-tree-intro", "title": "Introduction to BST", "estimatedTime": "10 mins" },
+          { "id": "insertion-deletion-bst", "title": "Insertion & Deletion in BST", "estimatedTime": "15 mins" },
+          { "id": "kth-smallest-bst", "title": "Kth Smallest Element in BST", "estimatedTime": "12 mins" },
+          { "id": "validate-bst", "title": "Validate BST", "estimatedTime": "12 mins" },
+          { "id": "predecessor-successor-bst", "title": "Predecessor & Successor in BST", "estimatedTime": "15 mins" },
+          { "id": "merge-two-bsts", "title": "Merge Two BSTs", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "avl-trees",
+        "title": "AVL Trees",
+        "lessons": [
+          { "id": "introduction-to-avl-trees", "title": "Introduction to AVL Trees", "estimatedTime": "12 mins" },
+          { "id": "avl-rotations-and-intuition", "title": "AVL Rotations & Intuition", "estimatedTime": "15 mins" },
+          { "id": "avl-tree-insertion", "title": "Step-by-Step AVL Insertion", "estimatedTime": "15 mins" },
+          { "id": "avl-tree-deletion", "title": "Step-by-Step AVL Deletion", "estimatedTime": "15 mins" },
+          { "id": "avl-tree-implementation", "title": "AVL Code Implementation", "estimatedTime": "20 mins" }
+        ]
+      },
+      {
+        "id": "heaps",
+        "title": "Heaps",
+        "lessons": []
+      }
+    ]
+  },
+  {
+    "id": "intermediate-dsa-2",
+    "title": "Intermediate DSA Level 2",
+    "chapters": [
+      {
+        "id": "greedy",
+        "title": "Greedy",
+        "lessons": [
+          { "id": "introduction-to-greedy", "title": "Introduction to Greedy", "estimatedTime": "8 mins" }
+        ]
+      },
+      {
+        "id": "dynamic-programming-1",
+        "title": "Dynamic Programming Part 1",
+        "lessons": [
+          { "id": "dynamic-programming-introduction", "title": "Dynamic Programming Introduction", "estimatedTime": "10 mins" },
+          { "id": "climbing-stairs", "title": "Climbing Stairs", "estimatedTime": "12 mins" },
+          { "id": "frog-jump", "title": "Frog Jump", "estimatedTime": "12 mins" },
+          { "id": "house-robber-1", "title": "House Robber 1", "estimatedTime": "15 mins" },
+          { "id": "unique-paths-1", "title": "Unique Paths 1", "estimatedTime": "15 mins" },
+          { "id": "maximum-path-sum", "title": "Maximum Path Sum", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "dynamic-programming-2",
+        "title": "Dynamic Programming Part 2",
+        "lessons": [
+          { "id": "subset-sum-problem", "title": "Subset Sum Problem", "estimatedTime": "15 mins" },
+          { "id": "partition-equal-subset-sum", "title": "Partition Equal Subset Sum", "estimatedTime": "15 mins" },
+          { "id": "count-subsets-with-target", "title": "Count Subsets with Target", "estimatedTime": "15 mins" },
+          { "id": "unbounded-knapsack", "title": "Unbounded Knapsack", "estimatedTime": "15 mins" },
+          { "id": "longest-common-subsequence", "title": "Longest Common Subsequence", "estimatedTime": "15 mins" },
+          { "id": "longest-palindromic-subsequence", "title": "Longest Palindromic Subsequence", "estimatedTime": "15 mins" },
+          { "id": "stock-trading-2", "title": "Stock Trading 2", "estimatedTime": "15 mins" },
+          { "id": "stock-trading-3", "title": "Stock Trading 3", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "graph-part-1",
+        "title": "Graph Part 1",
+        "lessons": [
+          { "id": "introduction-to-graphs", "title": "Introduction to Graphs", "estimatedTime": "8 mins" },
+          { "id": "graph-representation", "title": "Graph Representation", "estimatedTime": "10 mins" },
+          { "id": "bfs", "title": "BFS (Breadth-First Search)", "estimatedTime": "10 mins" },
+          { "id": "dfs", "title": "DFS (Depth-First Search)", "estimatedTime": "10 mins" },
+          { "id": "number-of-provinces", "title": "Number of Provinces", "estimatedTime": "12 mins" },
+          { "id": "number-of-islands", "title": "Number of Islands", "estimatedTime": "12 mins" },
+          { "id": "cycle-detection-undirected-bfs", "title": "Cycle Detection in Undirected Graph using BFS", "estimatedTime": "12 mins" },
+          { "id": "cycle-detection-undirected-dfs", "title": "Cycle Detection in Undirected Graph using DFS", "estimatedTime": "12 mins" },
+          { "id": "bipartite-graph-bfs", "title": "Bipartite Graph using BFS", "estimatedTime": "12 mins" },
+          { "id": "bipartite-graph-dfs", "title": "Bipartite Graph using DFS", "estimatedTime": "12 mins" },
+          { "id": "cycle-detection-directed", "title": "Cycle Detection in a Directed Graph", "estimatedTime": "12 mins" },
+          { "id": "topological-sort", "title": "Topological Sort", "estimatedTime": "12 mins" },
+          { "id": "kahns-algorithm", "title": "Kahn's Algorithm", "estimatedTime": "12 mins" },
+          { "id": "cycle-detection-directed-kahns", "title": "Cycle Detection in a Directed Graph using Kahn's Algorithm", "estimatedTime": "15 mins" }
+        ]
+      },
+      {
+        "id": "graph-part-2",
+        "title": "Graph Part 2",
+        "lessons": [
+          { "id": "dijkstras-algorithm", "title": "Dijkstra's Algorithm", "estimatedTime": "12 mins" },
+          { "id": "bellman-ford-algorithm", "title": "Bellman-Ford Algorithm", "estimatedTime": "12 mins" },
+          { "id": "floyd-warshall-algorithm", "title": "Floyd-Warshall Algorithm", "estimatedTime": "12 mins" },
+          { "id": "minimum-spanning-tree", "title": "Minimum Spanning Tree", "estimatedTime": "10 mins" },
+          { "id": "prims-kruskals-algorithm", "title": "Prim's & Kruskal's Algorithm", "estimatedTime": "12 mins" },
+          { "id": "prims-code-implementation", "title": "Prim's Algorithm Code Implementation", "estimatedTime": "15 mins" },
+          { "id": "disjoint-sets", "title": "Disjoint Sets", "estimatedTime": "12 mins" },
+          { "id": "disjoint-sets-code-implementation", "title": "Disjoint Sets Code Implementation", "estimatedTime": "15 mins" },
+          { "id": "kruskals-algorithm", "title": "Kruskal's Algorithm", "estimatedTime": "12 mins" },
+          { "id": "strongly-connected-components", "title": "Strongly Connected Components", "estimatedTime": "15 mins" },
+          { "id": "articulation-points", "title": "Articulation Points", "estimatedTime": "15 mins" }
         ]
       }
     ]

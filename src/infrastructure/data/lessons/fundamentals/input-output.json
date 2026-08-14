@@ -1,0 +1,226 @@
+{
+  "id": "input-output",
+  "title": "Input & Output",
+  "subjectId": "fundamentals",
+  "nextLessonId": "operators",
+  "prevLessonId": "namespaces",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "A computer program is only useful if it can talk to us. To create real programs, we need to display messages on the screen (Output) and read what the user types on their keyboard (Input)."
+    },
+    {
+      "type": "heading",
+      "id": "why-io",
+      "level": 2,
+      "text": "1. Why do we need Input and Output?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Without input, a program runs the exact same calculation every time. By reading input, we make programs dynamic. For example, a game needs to ask for your name and your age, then save your high score and print it back to you. We need input to let users enter data, and output to show them the results."
+    },
+    {
+      "type": "heading",
+      "id": "streams-io",
+      "level": 2,
+      "text": "2. Standard Streams: cin and cout"
+    },
+    {
+      "type": "paragraph",
+      "text": "In C++, we use two standard streams that live inside the standard namespace ('std') to print text and read keyboard inputs:"
+    },
+    {
+      "type": "syntax_explanation",
+      "items": [
+        {
+          "syntax": "std::cout << value;",
+          "explanation": "Prints text or box values to the console screen. The insertion operator ('<<') points towards 'std::cout' to insert values into the screen output stream."
+        },
+        {
+          "syntax": "std::cin >> variable;",
+          "explanation": "Reads keyboard values typed by the user and stores them in a storage box. The extraction operator ('>>') extracts data from standard input ('std::cin') and points towards the box in memory."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "visual-io",
+      "level": 2,
+      "text": "3. Visual Diagram: Data Stream Flow"
+    },
+    {
+      "type": "drawing",
+      "id": "input-output-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "integer-concept",
+      "level": 2,
+      "text": "4. What is a Storage Box?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Before reading a number from the user, we must create a container in memory to hold it. Think of this container as a labeled storage box. An integer box (written as 'int') is a named memory slot that stores a whole number. We use 'int' for numbers that do not have decimal parts, like age, count, or scores. Here, we write 'int age;' to reserve a box in memory to hold the user's age."
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "· Note: In programming, these memory boxes are called 'variables'. We will learn all about variables and how to declare them in detail in the very next chapter!"
+    },
+    {
+      "type": "heading",
+      "id": "code-example-io",
+      "level": 2,
+      "text": "5. Code Example"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a complete C++ program that reads a whole number into our storage box ('age') from the keyboard and prints it back to the screen:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nint main() {\n    int age; // Reserves a storage box in RAM to hold a whole number\n    \n    std::cout << \"Enter your age: \";\n    std::cin >> age; // Reads age from keyboard into the storage box\n    \n    std::cout << \"You entered: \" << age << \" years old!\" << std::endl;\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "interactive-simulation-io",
+      "level": 2,
+      "text": "6. Try it Out"
+    },
+    {
+      "type": "simulation",
+      "id": "input-output-simulation",
+      "simulationData": {
+        "code": "int age;\nstd::cout << \"Enter your age: \";\nstd::cin >> age;\nstd::cout << \"You entered: \" << age << \" years old!\";",
+        "language": "cpp",
+        "visualizer": "variables",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "A storage box named 'age' is created in memory to hold a whole number.\n\nThe computer reserves a slot in RAM and tags it with the label 'age'. Since no value has been stored yet, it is currently empty.",
+            "variables": [
+              {
+                "name": "age",
+                "type": "int",
+                "value": "?",
+                "address": "0x7FFE20"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "The console print statement executes, outputting the message 'Enter your age: ' to the screen to prompt the user.",
+            "variables": [
+              {
+                "name": "age",
+                "type": "int",
+                "value": "?",
+                "address": "0x7FFE20"
+              }
+            ],
+            "terminalOutput": "Enter your age: "
+          },
+          {
+            "line": 3,
+            "explanation": "The program waits for user keyboard input. Let's assume the user enters '25' and presses Enter. The extraction operator '>>' moves '25' from the keyboard stream and stores it inside our 'age' storage box in RAM.",
+            "variables": [
+              {
+                "name": "age",
+                "type": "int",
+                "value": "25",
+                "address": "0x7FFE20"
+              }
+            ],
+            "terminalOutput": "Enter your age: 25\n"
+          },
+          {
+            "line": 4,
+            "explanation": "The final print statement pulls the value '25' out of our 'age' storage box in RAM and inserts it into the console screen stream to show the result.",
+            "variables": [
+              {
+                "name": "age",
+                "type": "int",
+                "value": "25",
+                "address": "0x7FFE20"
+              }
+            ],
+            "terminalOutput": "Enter your age: 25\nYou entered: 25 years old!"
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "7. Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Extraction Direction: The extraction operator arrows point right ('>>'), moving data from the input stream into storage boxes.\n· Insertion Direction: The insertion operator arrows point left ('<<'), moving data from storage boxes to the console screen."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "8. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "· Operator Confusion: Writing 'std::cin << age;' or 'std::cout >> age;'. The arrows point the wrong way! Remember: output inserts '<<' into screen; input extracts '>>' into storage boxes."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "9. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which operator is used with std::cin to read keyboard values?",
+      "options": [
+        "<< (Insertion operator)",
+        ">> (Extraction operator)",
+        "== (Equal comparison)",
+        "!= (Not equal comparison)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is an integer box ('int') used to store?",
+      "options": [
+        "Whole numbers (like 25 or -5)",
+        "Decimals (like 3.14)",
+        "Text words (like 'Hello')",
+        "True or false flags"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "What is the purpose of std::cout?",
+      "options": [
+        "To read user keyboard input",
+        "To display outputs and text on the screen",
+        "To declare storage boxes in memory",
+        "To terminate the main function"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "10. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Input and output connect your program to the user. We read whole number inputs using 'std::cin >>' and print results using 'std::cout <<'."
+    }
+  ]
+}

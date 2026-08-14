@@ -1,0 +1,228 @@
+{
+  "id": "asymptotic-notations",
+  "title": "Asymptotic Notations",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "math-basics-1",
+  "prevLessonId": "space-and-time-complexity",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "In our last lesson, we learned how to count the execution steps and memory boxes our algorithms use. Today, we will take that a step further and learn a simple, standardized way to describe how those steps grow when problem sizes become extremely large. We do this using **Asymptotic Notations**."
+    },
+    {
+      "type": "heading",
+      "id": "why-notations",
+      "level": 2,
+      "text": "1. Why Do We Need Asymptotic Notations?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine two algorithms that solve the same problem:\n· Algorithm A takes $3n + 3$ steps.\n· Algorithm B takes $100n + 500$ steps."
+    },
+    {
+      "type": "paragraph",
+      "text": "Even though Algorithm B has larger numbers, both grow as a straight line (linearly). Asymptotic analysis lets us strip away constant coefficients and look only at the **growth rate**."
+    },
+    {
+      "type": "heading",
+      "id": "f-n-g-n-definition",
+      "level": 2,
+      "text": "2. What are f(n), g(n), and \"Boundary Lines\"?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's simplify these mathematical terms using a simple example:"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Core Definitions:\n1. f(n) is the exact number of steps your code executes (e.g., n² + 5).\n2. g(n) is the simplified standard shape we compare it to (e.g., n²).\n3. Boundary Line is a scaled-up limit (e.g., 2n²) that your code steps f(n) will never cross after a threshold size n₀."
+    },
+    {
+      "type": "drawing",
+      "id": "asymptotic-concepts-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "visualizing-bounds",
+      "level": 2,
+      "text": "3. Visualizing Bounds: Ceiling, Floor, and Tight Fit"
+    },
+    {
+      "type": "paragraph",
+      "text": "Asymptotic notations act as boundary lines around our algorithm's steps. Click through the tabs below to see how these boundaries behave:"
+    },
+    {
+      "type": "drawing",
+      "id": "asymptotic-bounds-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "big-o-notation",
+      "level": 2,
+      "text": "4. Big-O Notation (O) — Upper Bound"
+    },
+    {
+      "type": "paragraph",
+      "text": "Big-O defines the absolute worst-case scenario. It acts as a ceiling that our algorithm's step count $f(n)$ will never cross."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Mathematical Definition:\nf(n) = O(g(n)) means there exists a positive constant c and n₀ such that:\nf(n) ≤ c · g(n)  for all n ≥ n₀"
+    },
+    {
+      "type": "paragraph",
+      "text": "For example, if our program takes $3n + 2$ steps, we can prove it is $O(n)$ by showing that $3n + 2 \\le 4n$ for all $n \\ge 2$ (where $c = 4$ and $n_0 = 2$)."
+    },
+    {
+      "type": "heading",
+      "id": "big-omega-notation",
+      "level": 2,
+      "text": "5. Big-Omega Notation (Ω) — Lower Bound"
+    },
+    {
+      "type": "paragraph",
+      "text": "Big-Omega defines the absolute best-case scenario. It acts as a floor that our algorithm's step count $f(n)$ will never fall below."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Mathematical Definition:\nf(n) = Ω(g(n)) means there exists a positive constant c and n₀ such that:\nf(n) ≥ c · g(n)  for all n ≥ n₀"
+    },
+    {
+      "type": "heading",
+      "id": "big-theta-notation",
+      "level": 2,
+      "text": "6. Big-Theta Notation (Θ) — Tight Bound"
+    },
+    {
+      "type": "paragraph",
+      "text": "When the ceiling (Big-O) and the floor (Big-Omega) grow at the exact same rate, we have a tight bound."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Mathematical Definition:\nf(n) = Θ(g(n)) means there exist positive constants c₁, c₂ and n₀ such that:\nc₁ · g(n) ≤ f(n) ≤ c₂ · g(n)  for all n ≥ n₀"
+    },
+    {
+      "type": "heading",
+      "id": "little-notations",
+      "level": 2,
+      "text": "6b. Little-o (o) and Little-omega (ω) Notations"
+    },
+    {
+      "type": "paragraph",
+      "text": "Unlike their 'Big' counterparts which allow the growth rates to be equal, the 'Little' notations represent strictly faster or strictly slower growth rates. We define them using limits:"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Little-o (Strict Upper Bound):\nf(n) = o(g(n)) means f(n) grows strictly slower than g(n) as n approaches infinity:\nlim (n→∞) [ f(n) / g(n) ] = 0\n\n(Example: n = o(n²) is True, but n² = o(n²) is False)"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Little-omega (Strict Lower Bound):\nf(n) = ω(g(n)) means f(n) grows strictly faster than g(n) as n approaches infinity:\nlim (n→∞) [ f(n) / g(n) ] = ∞\n\n(Example: n² = ω(n) is True, but n² = ω(n²) is False)"
+    },
+    {
+      "type": "heading",
+      "id": "common-growth-categories",
+      "level": 2,
+      "text": "7. Common Growth Categories (Complexity Classes)"
+    },
+    {
+      "type": "paragraph",
+      "text": "In DSA, we group algorithms into a few common categories based on how they grow:"
+    },
+    {
+      "type": "syntax_explanation",
+      "items": [
+        {
+          "syntax": "O(1) — Constant Time",
+          "explanation": "The number of steps stays exactly the same, regardless of how big the input size becomes. (Example: Checking if a number is even or odd takes 1 step)."
+        },
+        {
+          "syntax": "O(log N) — Logarithmic Time",
+          "explanation": "The number of steps grows extremely slowly because the search space is divided in half at each step. (Example: Finding a word in a sorted dictionary by splitting it in the middle)."
+        },
+        {
+          "syntax": "O(N) — Linear Time",
+          "explanation": "The number of steps grows directly and one-by-one with the input size. (Example: Searching for an element in a list one-by-one)."
+        },
+        {
+          "syntax": "O(N log N) — Linearithmic Time",
+          "explanation": "Typically happens when we divide a problem in half and do linear work at each level. (Example: Fast sorting algorithms like Merge Sort and Quick Sort)."
+        },
+        {
+          "syntax": "O(N²) — Quadratic Time",
+          "explanation": "The number of steps grows squared. Typically happens when you have nested loops (a loop inside a loop). (Example: Comparing every pair of numbers in a list)."
+        },
+        {
+          "syntax": "O(2^N) — Exponential Time",
+          "explanation": "The number of steps doubles with every single new item added to the input. Extremely slow and usually avoided for large lists. (Example: Guessing a password combination by trying every possibility)."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Ceiling (Big-O): The maximum limit (worst case).\n· Floor (Big-Omega): The minimum limit (best case).\n· Tight Fit (Big-Theta): The exact rate matching both floor and ceiling."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which asymptotic notation represents the upper bound (ceiling), guaranteeing that the algorithm will never take more steps than this limit?",
+      "options": [
+        "Big-O (O)",
+        "Big-Omega (Ω)",
+        "Big-Theta (Θ)",
+        "Constant Time"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "If an algorithm's steps grow one-by-one with the size of the input list N, which complexity class does it belong to?",
+      "options": [
+        "O(1)",
+        "O(N)",
+        "O(N²)",
+        "O(log N)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What does Big-Theta (Θ) represent?",
+      "options": [
+        "A strict lower bound",
+        "A strict upper bound",
+        "A tight bound that fits both the upper and lower limits",
+        "A random growth rate"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Asymptotic notations describe how algorithms scale. Big-O gives the upper bound ceiling (worst case), Big-Omega provides the lower bound floor (best case), and Big-Theta represents a tight matching fit. We classify running times into categories like Constant O(1), Linear O(N), and Quadratic O(N²). In our next chapter, we will build on these mathematical foundations to start analyzing real numbers and array memory structures!"
+    }
+  ]
+}

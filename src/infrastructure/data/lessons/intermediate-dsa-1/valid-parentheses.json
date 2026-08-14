@@ -1,0 +1,130 @@
+{
+  "id": "valid-parentheses",
+  "title": "Lesson 8: Valid Parentheses",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "asteroid-collision",
+  "prevLessonId": "min-stack",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will solve a fundamental parsing problem: **Valid Parentheses**. This is the classic way stacks are used to check block scopes in text editors and compilers. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Given a string `s` containing just the characters `'('`, `')'`, `'{'`, `'}'`, `'['` and `']'`, determine if the input string is valid."
+    },
+    {
+      "type": "paragraph",
+      "text": "An input string is valid if:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. Open brackets are closed by the same type of brackets."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. Open brackets are closed in the correct order."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Editors need to highlight mismatched brackets as you type code, and compilers need to verify grammar rules prior to converting code to instructions. Both use stacks to achieve this."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition & Rules"
+    },
+    {
+      "type": "paragraph",
+      "text": "We iterate through the string characters:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· When we see an **opening bracket** (`(`, `{`, `[`), we push it onto the stack."
+    },
+    {
+      "type": "paragraph",
+      "text": "· When we see a **closing bracket** (`)`, `}`, `]`), we look at the top element of the stack. If the stack is empty or the top element does not match, the expression is invalid. Otherwise, we pop the top element."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If the stack is empty at the end of the sweep, all brackets matched correctly!"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "4. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <stack>\n#include <string>\n\nclass Solution {\npublic:\n    bool isValid(std::string s) {\n        std::stack<char> st;\n        for (char c : s) {\n            if (c == '(' || c == '{' || c == '[') {\n                st.push(c);\n            } else {\n                if (st.empty()) return false;\n                char topVal = st.top();\n                if ((c == ')' && topVal == '(') || \n                    (c == '}' && topVal == '{') || \n                    (c == ']' && topVal == '[')) {\n                    st.pop();\n                } else {\n                    return false;\n                }\n            }\n        }\n        return st.empty();\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "5. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(N)$ since we inspect each character exactly once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ for the bracket stack."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following strings is INVALID according to the rules?",
+      "options": [
+        "()[]{}",
+        "([{}])",
+        "([)]",
+        "{[]}"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What is the state of the stack after processing a valid bracket expression string?",
+      "options": [
+        "It contains all opening brackets.",
+        "It contains all closing brackets.",
+        "It is completely empty.",
+        "It has a size of 1."
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We solved Valid Parentheses using a stack to pair matching brackets. In the next lesson, we will simulate asteroid collisions using a stack!"
+    }
+  ]
+}

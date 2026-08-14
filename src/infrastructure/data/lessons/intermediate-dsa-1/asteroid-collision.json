@@ -1,0 +1,130 @@
+{
+  "id": "asteroid-collision",
+  "title": "Lesson 9: Asteroid Collision",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "largest-rectangle-in-histogram",
+  "prevLessonId": "valid-parentheses",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will solve a fun, physics-like simulation problem: **Asteroid Collision**. This teaches us how to resolve consecutive, cascading interactions using a stack. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Given an array `asteroids` representing asteroids in a row, where:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· The absolute value represents size."
+    },
+    {
+      "type": "paragraph",
+      "text": "· The sign represents direction: positive `+` means right, and negative `-` means left."
+    },
+    {
+      "type": "paragraph",
+      "text": "All asteroids move at the same speed. Find the state of the asteroids after all collisions. If two meet, the smaller one explodes. If they are the same size, both explode."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Simulations like collision resolution, game physics sweeps, and cascading UI animations (like collapsing chat notifications) rely on stack patterns to process elements interacting in sequence."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition & Rules"
+    },
+    {
+      "type": "paragraph",
+      "text": "Note that a collision ONLY occurs if a right-moving asteroid (`+`) is followed by a left-moving asteroid (`-`). If they move away from each other or in the same direction, they never collide!"
+    },
+    {
+      "type": "paragraph",
+      "text": "We iterate through the asteroids. For each asteroid:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· If it is moving right, we push it onto the stack."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If it is moving left, we check the top of the stack. While the stack has positive elements that are smaller than the incoming asteroid, they explode (we pop them). If they are equal, both explode. If the top element is larger, the incoming asteroid explodes."
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "4. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n#include <cmath>\n\nclass Solution {\npublic:\n    std::vector<int> asteroidCollision(std::vector<int>& asteroids) {\n        std::vector<int> st;\n        for (int ast : asteroids) {\n            bool destroyed = false;\n            while (!st.empty() && ast < 0 && st.back() > 0) {\n                if (st.back() < -ast) {\n                    st.pop_back(); // Pop smaller right-moving asteroid\n                    continue;\n                } else if (st.back() == -ast) {\n                    st.pop_back(); // Both explode\n                }\n                destroyed = true;\n                break;\n            }\n            if (!destroyed) {\n                st.push_back(ast);\n            }\n        }\n        return st;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "5. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(N)$ since each asteroid is pushed and popped at most once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ to store surviving asteroids."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following pairs will trigger a collision?",
+      "options": [
+        "[-5, 5] (Left then Right)",
+        "[5, -5] (Right then Left)",
+        "[5, 10] (Right then Right)",
+        "[-5, -10] (Left then Left)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the result of the asteroid series: [8, 8, -8]?",
+      "options": [
+        "[8]",
+        "[-8]",
+        "[8, 8, -8]",
+        "[] (all exploded)"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We solved Asteroid Collision by resolving cascading duels using a stack. In our final stack lesson, we will solve the famous Largest Rectangle in Histogram problem!"
+    }
+  ]
+}

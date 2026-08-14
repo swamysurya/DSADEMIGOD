@@ -9,13 +9,7 @@ import LearningLevelAccordion from "./LearningLevelAccordion";
 export default function LearningRoadmapPage() {
   const levels = roadmapData as LearningLevel[];
 
-  // Find the first unfinished level to expand by default
-  const initialOpenLevel = useMemo(() => {
-    const firstUnfinished = levels.find((l) => l.progress > 0 && l.progress < 100);
-    return firstUnfinished ? firstUnfinished.id : levels[0]?.id || "";
-  }, [levels]);
-
-  const [expandedLevelId, setExpandedLevelId] = useState<string>(initialOpenLevel);
+  const [expandedLevelId, setExpandedLevelId] = useState<string>("");
 
   const handleToggle = (id: string) => {
     setExpandedLevelId((prev) => (prev === id ? "" : id));

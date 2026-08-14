@@ -1,0 +1,213 @@
+{
+  "id": "real-world-applications-and-coding-problems",
+  "title": "Real-World Applications of Hashing and Coding Problems",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": null,
+  "prevLessonId": "real-world-applications-of-hashing-properties",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the final sub-lesson on Hashing. We have seen how hashing is used in databases and distributed systems. In this lesson, we will learn how to use Hash Maps and Hash Sets to solve key coding problems. By trading a tiny bit of memory (space), we can speed up our code from sluggish **O(N^2)** to lightning fast **O(N)** linear time! Let's master the patterns."
+    },
+    {
+      "type": "heading",
+      "id": "pattern-recognition",
+      "level": 2,
+      "text": "1. How to Recognize Hashing Patterns"
+    },
+    {
+      "type": "paragraph",
+      "text": "When you read a problem description, how do you know Hashing is the right tool? Look for these clue words:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· *'Check if an element exists...'* → Indicates a **Hash Set**."
+    },
+    {
+      "type": "paragraph",
+      "text": "· *'Find the frequency of...'* or *'Find pairs that sum to...'* or *'Group elements by...'* → Indicates a **Hash Map**."
+    },
+    {
+      "type": "heading",
+      "id": "hashing-patterns",
+      "level": 2,
+      "text": "2. The Four Essential Hashing Coding Patterns"
+    },
+    {
+      "type": "heading",
+      "id": "complement-lookup",
+      "level": 3,
+      "text": "Pattern 1: Complement Lookup (Two Sum)"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Goal**: Find two numbers in an array that add up to a target sum."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Why Brute Force fails**: Checking all pairs using two nested loops takes $O(N^2)$ time, which is too slow for large arrays."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Hashing Idea**: As we walk through the array, we ask: *'Has the helper number (target - current) been seen before?'* We store every number we see in a Hash Map. This turns the helper search into a constant-time $O(1)$ lookup!"
+    },
+    {
+      "type": "heading",
+      "id": "prefix-sum-hashing",
+      "level": 3,
+      "text": "Pattern 2: Prefix Sum + Hashing (Subarray Sum Equals K)"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Goal**: Count the number of continuous subarrays that add up to a target sum $K$."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Hashing Idea**: We compute a running sum as we iterate. If a segment from start to $j$ has sum $S$, and we want a subarray ending at $j$ to have sum $K$, we search our map to see if we have seen a running sum of $S - K$ earlier. We store the frequency of each running sum in a Hash Map."
+    },
+    {
+      "type": "heading",
+      "id": "existence-check",
+      "level": 3,
+      "text": "Pattern 3: Existence Check (Longest Consecutive Sequence)"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Goal**: Find the length of the longest sequence of consecutive integers (like 1, 2, 3, 4)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Hashing Idea**: We insert all numbers into a Hash Set to get $O(1)$ lookups. Then, we walk through the numbers. We only start building a sequence from a number $x$ if $x-1$ is **not** in the set. This ensures we start counting only from the beginning of each sequence, resulting in a linear $O(N)$ runtime!"
+    },
+    {
+      "type": "heading",
+      "id": "canonical-mapping",
+      "level": 3,
+      "text": "Pattern 4: Canonical Mapping (Group Anagrams)"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Goal**: Group words that are anagrams (contain the same characters, like `eat`, `tea`, `ate`)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **The Hashing Idea**: We sort each word to get a sorted 'signature' (e.g. all three sort to `aet`). We use this signature as the Hash Map key, mapping to a list of original words. This groups them instantly."
+    },
+    {
+      "type": "drawing",
+      "id": "hashing-coding-patterns-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "comparison-table",
+      "level": 2,
+      "text": "3. Comparison of Hashing Patterns"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a comparison table to help you match problems to the correct hashing technique:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Complement Lookup**: Maps key values to their original index. Used for finding pairs matching a target sum."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Prefix Sum + Hashing**: Maps prefix sum values to their frequency counts. Used for finding subarray target sums."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Existence Check**: Uses a Hash Set (no values, just keys). Used for finding consecutive ranges or checking membership."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Canonical Mapping**: Maps sorted signatures to a list of matching items. Used for grouping duplicates or anagrams."
+    },
+    {
+      "type": "heading",
+      "id": "code-example",
+      "level": 2,
+      "text": "4. Code Examples (C++)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's see how to write Two Sum and Group Anagrams in C++ using Hash Maps (`std::unordered_map`):"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <vector>\n#include <unordered_map>\n#include <algorithm>\n\nclass HashingSolutions {\npublic:\n    // 1. Two Sum (Complement Lookup)\n    std::vector<int> twoSum(std::vector<int>& nums, int target) {\n        std::unordered_map<int, int> seen; // value -> index\n        \n        for (int i = 0; i < nums.size(); i++) {\n            int complement = target - nums[i];\n            // Check if complement is in the map\n            if (seen.find(complement) != seen.end()) {\n                return {seen[complement], i}; // Found pair!\n            }\n            seen[nums[i]] = i; // Store current number\n        }\n        return {};\n    }\n\n    // 2. Group Anagrams (Canonical Mapping)\n    std::vector<std::vector<std::string>> groupAnagrams(std::vector<std::string>& strs) {\n        std::unordered_map<std::string, std::vector<std::string>> groups;\n        \n        for (std::string s : strs) {\n            std::string signature = s;\n            std::sort(signature.begin(), signature.end()); // e.g. \"tea\" becomes \"aet\"\n            groups[signature].push_back(s); // Group it\n        }\n        \n        std::vector<std::vector<std::string>> result;\n        for (auto pair : groups) {\n            result.push_back(pair.second);\n        }\n        return result;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "5. Dry Run: Two Sum"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's dry run the Two Sum code with array `[2, 7, 11, 15]` and target `9`:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. `i = 0`: `nums[0] = 2`. `complement = 9 - 2 = 7`. Check `seen`. Is `7` in map? No. Store `seen[2] = 0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. `i = 1`: `nums[1] = 7`. `complement = 9 - 7 = 2`. Check `seen`. Is `2` in map? Yes! `seen[2]` is `0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. The function returns `{0, 1}`, which are the correct indices for `2` and `7`. Done in exactly 2 checks instead of testing all pairs!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which hashing pattern is best suited for solving the 'Two Sum' problem in linear time?",
+      "options": [
+        "Canonical Mapping",
+        "Complement Lookup",
+        "Prefix Sum Hashing",
+        "Existence Check"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "In 'Longest Consecutive Sequence', why do we check if x-1 exists in the Hash Set before counting?",
+      "options": [
+        "To verify that the set contains negative numbers.",
+        "To ensure we only start counting from the actual beginning of a sequence, avoiding duplicate checks.",
+        "To automatically sort the hash set elements.",
+        "To clear memory before counting."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the common signature key used in a Hash Map to group Anagrams?",
+      "options": [
+        "The string length.",
+        "A sorted version of the word (or its character count frequency).",
+        "The word's index in the original array.",
+        "A random number."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: We can trade space for time using Hashing. The four essential coding patterns are Complement Lookup (Two Sum), Prefix Sum Hashing (Subarray Sum Equals K), Existence Check (Longest Consecutive Sequence), and Canonical Mapping (Group Anagrams). Recognizing these patterns is the key to passing technical interviews. Congratulations on finishing the Hashing chapter!"
+    }
+  ]
+}

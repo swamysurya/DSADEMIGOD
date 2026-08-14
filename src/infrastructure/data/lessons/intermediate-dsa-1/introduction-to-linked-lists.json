@@ -1,0 +1,264 @@
+{
+  "id": "introduction-to-linked-lists",
+  "title": "Introduction to Linked Lists",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "insertion-in-singly-linked-list",
+  "prevLessonId": "introduction-to-two-pointer-technique",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "We already know how arrays store elements side-by-side in one fixed block of memory. Today, we will use that knowledge to understand why arrays sometimes waste memory or make inserting and deleting elements slow. Then, we will introduce a beautiful, dynamic structure where elements can be scattered anywhere in memory, connected like a chain of clues. This is called a **Linked List**!"
+    },
+    {
+      "type": "heading",
+      "id": "why-linked-list",
+      "level": 2,
+      "text": "1. Why Do We Need Linked Lists?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Arrays are great for looking up values quickly, but they have two big limitations:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. **Fixed Size**: When you create an array, you must tell the computer its exact size. If you reserve a size of 100 but only use 5 slots, the other 95 slots are wasted. If you need to add a 101st item, you cannot fit it!"
+    },
+    {
+      "type": "paragraph",
+      "text": "2. **Expensive Insertion/Deletion**: If you want to insert a new element at the very beginning of an array, you have to shift every other element to the right to make room. This takes `O(N)` time!"
+    },
+    {
+      "type": "paragraph",
+      "text": "A **Linked List** solves these problems! Instead of reserving one giant block, each element is allocated in a separate small box (called a **Node**) only when we need it. These boxes can be scattered anywhere in the computer's memory, connected by links or pointers."
+    },
+    {
+      "type": "heading",
+      "id": "analogy",
+      "level": 2,
+      "text": "2. The Analogy: A Scavenger Hunt"
+    },
+    {
+      "type": "paragraph",
+      "text": "Think of a linked list as a **scavenger hunt**:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· You start at a clue called the **Head** pointer."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Each clue contains two pieces of information: some **Data** (e.g. 'Look under the desk') and a **Next address pointer** telling you where to find the next clue."
+    },
+    {
+      "type": "paragraph",
+      "text": "· You follow the trail from clue to clue until you reach a clue pointing to **NULL** (nothing), which means the hunt is over!"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's explore this scavenger hunt in our interactive visualizer below. Tracing nodes from Head to End is called **list traversal**:"
+    },
+    {
+      "type": "drawing",
+      "id": "linked-list-intro-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "node-definition",
+      "level": 2,
+      "text": "3. Representing a Node in Code"
+    },
+    {
+      "type": "paragraph",
+      "text": "In C++, we represent a Node using a custom structure. It contains a data variable and a pointer variable pointing to another Node:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "**C++ Node Definition**:\n\n```cpp\nstruct Node {\n    int data;     // Holds our actual value\n    Node* next;   // Holds the memory address of the next Node\n};\n```"
+    },
+    {
+      "type": "heading",
+      "id": "linked-list-traversal",
+      "level": 2,
+      "text": "4. Traversing a Linked List"
+    },
+    {
+      "type": "paragraph",
+      "text": "To visit every element in a linked list, we start a temporary pointer `temp` at the `head` node. In a loop, we print `temp->data` and then update `temp` to point to `temp->next`, moving along the chain until `temp` reaches `nullptr`."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this traversal loop executes step-by-step in memory, printing elements to the console:"
+    },
+    {
+      "type": "simulation",
+      "id": "linked-list-traversal-simulation",
+      "simulationData": {
+        "code": "// Node nodes are allocated at scattered RAM addresses:\n// Node A (at 0x100): data = 10, next = 0x300\n// Node B (at 0x300): data = 20, next = 0x200\n// Node C (at 0x200): data = 30, next = nullptr\n\nNode* temp = head;\nwhile (temp != nullptr) {\n    std::cout << temp->data << \" \";\n    temp = temp->next;\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 6,
+            "explanation": "We initialize a temporary helper pointer `temp` to point to the `head` node (Node A at memory address `0x100`).",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x100", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We check the loop condition: is `temp` pointer equal to `nullptr`? Since `0x100 != nullptr`, we enter the loop.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x100", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "We access Node A at address 0x100, read its data `10`, and print it to the terminal console.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x100", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 "
+          },
+          {
+            "line": 9,
+            "explanation": "We update `temp` to point to the next address clue: `temp->next` which is `0x300` (Node B).",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x300", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 "
+          },
+          {
+            "line": 7,
+            "explanation": "Next iteration starts. Since `temp (0x300) != nullptr` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x300", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 "
+          },
+          {
+            "line": 8,
+            "explanation": "We access Node B at address 0x300, read its data `20`, and print it to the console.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x300", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 "
+          },
+          {
+            "line": 9,
+            "explanation": "We update `temp` to point to `temp->next` which is `0x200` (Node C).",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x200", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 "
+          },
+          {
+            "line": 7,
+            "explanation": "Next iteration starts. Since `temp (0x200) != nullptr` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x200", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 "
+          },
+          {
+            "line": 8,
+            "explanation": "We access Node C at address 0x200, read its data `30`, and print it to the console.",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "0x200", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 30 "
+          },
+          {
+            "line": 9,
+            "explanation": "We update `temp` to point to `temp->next` which is `nullptr` (end of list).",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "nullptr", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 30 "
+          },
+          {
+            "line": 7,
+            "explanation": "We check the condition: is `temp` pointer equal to `nullptr`? Since `temp` is now `nullptr`, the loop terminates. Traversal is finished!",
+            "variables": [
+              { "name": "temp", "type": "Node*", "value": "nullptr", "address": "0x7FFE00" }
+            ],
+            "terminalOutput": "10 20 30 "
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N)",
+      "timeExplanation": "To visit all nodes or find a specific element, we have to start at Head and walk through all N nodes sequentially, which takes linear time.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We only use a single temporary helper pointer variable `temp`, which requires constant extra space."
+    },
+    {
+      "type": "heading",
+      "id": "comparison",
+      "level": 2,
+      "text": "5. Comparison Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's compare arrays and linked lists side-by-side to understand when to use each:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "**Array vs Linked List Comparison**:\n\n· **Direct Access (`A[i]`)**: Array is `O(1)` (instant lookups). Linked List is `O(N)` (must walk the clues).\n\n· **Insertion at Start**: Array is `O(N)` (must shift elements). Linked List is `O(1)` (just update pointer links!).\n\n· **Memory allocation**: Array must be in one contiguous block of fixed size. Linked List is scattered dynamically."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Guided Quizzes"
+    },
+    {
+      "type": "mcq",
+      "question": "Why is random access (looking up a value at a specific index) slower in a Linked List compared to an Array?",
+      "options": [
+        "Linked List elements are stored contiguously in memory",
+        "Nodes are scattered randomly in memory, so we must follow pointers one-by-one from the Head node",
+        "Linked List nodes can only hold characters, not integers",
+        "Linked lists do not have a Head pointer"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What value does the Next pointer of the last node (Tail node) in a singly linked list point to?",
+      "options": [
+        "The Head node address",
+        "A random memory address",
+        "nullptr / NULL",
+        "The node's own address"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "If you lose the reference pointer to the Head node of a linked list, what happens to the elements in memory?",
+      "options": [
+        "They automatically merge into an array",
+        "They remain fully accessible through index lookup",
+        "The list is lost in memory (memory leak) because we no longer know where the chain starts",
+        "The list automatically reverts its direction"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Linked Lists are powerful, dynamic linear data structures where elements (Nodes) are scattered in memory and connected via pointers. They solve the array limitation of fixed sizing and expensive initial insertions ($O(1)$ vs $O(N)$), but sacrifice instant random index lookup. Sorting or searching requires sequential traversal ($O(N)$) from the Head pointer. In our next lesson, we will see how to code the insertion of nodes in a singly linked list!"
+    }
+  ]
+}

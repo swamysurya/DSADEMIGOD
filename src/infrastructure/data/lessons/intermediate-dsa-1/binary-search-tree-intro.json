@@ -1,0 +1,86 @@
+{
+  "id": "binary-search-tree-intro",
+  "title": "Introduction to BST",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "insertion-deletion-bst",
+  "prevLessonId": "tree-views-lca",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will study **Binary Search Trees (BST)**. We briefly introduced this concept when talking about AVL trees. Today, we will study the BST property in detail, see how it helps us search, and write the search code in C++!"
+    },
+    {
+      "type": "heading",
+      "id": "bst-property",
+      "level": 2,
+      "text": "1. The Binary Search Tree Property"
+    },
+    {
+      "type": "paragraph",
+      "text": "A Binary Search Tree is a binary tree with a strict ordering rule:\nFor every node:\n1. All values in its **Left Subtree** are strictly smaller than the node's value.\n2. All values in its **Right Subtree** are strictly larger than the node's value."
+    },
+    {
+      "type": "heading",
+      "id": "bst-analogy",
+      "level": 2,
+      "text": "2. Real-World Analogy: Sorted Dictionaries"
+    },
+    {
+      "type": "paragraph",
+      "text": "Think of a BST like a sorted dictionary or phone book. If you want to search for a name starting with 'M', you don't start at page 1 and read every page (that is $O(N)$ linear search). You open to the middle. If you see 'S', you know 'M' must be in the left half, so you discard the right half. This is the power of sorted search!"
+    },
+    {
+      "type": "heading",
+      "id": "bst-search-code",
+      "level": 2,
+      "text": "3. Searching in a BST (C++)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Because of the BST property, we can find elements in $O(\\log N)$ average time. Here is the C++ code:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "struct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\n// Recursive search in a BST\nNode* searchBST(Node* root, int target) {\n    // Base Cases: root is null or key is present at root\n    if (root == nullptr || root->data == target) {\n        return root;\n    }\n\n    // Target is smaller than root's data -> search left subtree\n    if (target < root->data) {\n        return searchBST(root->left, target);\n    }\n\n    // Target is greater than root's data -> search right subtree\n    return searchBST(root->right, target);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the key property of a Binary Search Tree (BST)?",
+      "options": [
+        "Every node must have exactly two children.",
+        "Left child is smaller, right child is larger than the parent node.",
+        "All leaf nodes must be at the same level.",
+        "It stores only positive integers."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the average time complexity of searching in a balanced BST containing N elements?",
+      "options": [
+        "O(N)",
+        "O(N log N)",
+        "O(log N)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: In a BST, the left subtree contains smaller values, and the right subtree contains larger values. This order lets us search in average $O(\\log N)$ time. Next, we will learn how to insert and delete nodes in a BST!"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "id": "insertion-deletion-bst",
+  "title": "Insertion & Deletion in BST",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "kth-smallest-bst",
+  "prevLessonId": "binary-search-tree-intro",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will study **Insertion** and **Deletion** operations in a Binary Search Tree. Inserting is simple: we compare and find the leaf node boundary to attach the new element. Deletion, however, is a bit more involved because we must restructure the tree to maintain the BST properties. Let's see how!"
+    },
+    {
+      "type": "heading",
+      "id": "insertion-logic",
+      "level": 2,
+      "text": "1. Insertion Logic"
+    },
+    {
+      "type": "paragraph",
+      "text": "To insert a key, we compare it with the current node value:\n· If the key is smaller, we recurse to the left child.\n· If the key is larger, we recurse to the right child.\n· When we hit a `nullptr`, we create and return the new node, attaching it at the correct leaf position."
+    },
+    {
+      "type": "heading",
+      "id": "deletion-logic",
+      "level": 2,
+      "text": "2. Deletion Logic & Cases"
+    },
+    {
+      "type": "paragraph",
+      "text": "Deleting a node has three cases:\n· **Case 1 (Leaf Node)**: The node has no children. We can simply delete it and set its parent's pointer to `nullptr`.\n· **Case 2 (One Child)**: The node has only one child. We bypass it by linking its parent directly to its child, then deleting it.\n· **Case 3 (Two Children)**: The node has two children. To keep the tree sorted, we find the node's **Inorder Successor** (the smallest value in its right subtree), copy its value to the target node, and then recursively delete the inorder successor!"
+    },
+    {
+      "type": "heading",
+      "id": "insert-delete-code",
+      "level": 2,
+      "text": "3. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nNode* insert(Node* root, int key) {\n    if (root == nullptr) return new Node(key);\n\n    if (key < root->data) {\n        root->left = insert(root->left, key);\n    } else if (key > root->data) {\n        root->right = insert(root->right, key);\n    }\n    return root;\n}\n\nNode* findMin(Node* root) {\n    while (root->left != nullptr) root = root->left;\n    return root;\n}\n\nNode* deleteNode(Node* root, int key) {\n    if (root == nullptr) return root;\n\n    if (key < root->data) {\n        root->left = deleteNode(root->left, key);\n    } else if (key > root->data) {\n        root->right = deleteNode(root->right, key);\n    } else {\n        // Found the node to delete!\n        \n        // Case 1 & 2: One child or no child\n        if (root->left == nullptr) {\n            Node* temp = root->right;\n            delete root;\n            return temp;\n        } else if (root->right == nullptr) {\n            Node* temp = root->left;\n            delete root;\n            return temp;\n        }\n\n        // Case 3: Two children\n        Node* temp = findMin(root->right); // Find inorder successor\n        root->data = temp->data;           // Copy successor value\n        root->right = deleteNode(root->right, temp->data); // Delete successor node\n    }\n    return root;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the Inorder Successor of a node?",
+      "options": [
+        "The largest node in its left subtree.",
+        "The smallest node in its right subtree.",
+        "Its parent node.",
+        "The root node."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "How do we handle deleting a node with two children in a BST?",
+      "options": [
+        "Delete it and make both its children the root.",
+        "Delete the entire tree.",
+        "Replace it with its inorder successor (or predecessor), and delete that successor node recursively.",
+        "Convert the tree into a linked list first."
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Insertion in a BST places a node at the leaves. Deletion involves three cases: no child, one child, or two children (which requires swapping with the inorder successor). Next, we will find the Kth smallest element in a BST!"
+    }
+  ]
+}

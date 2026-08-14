@@ -1,0 +1,85 @@
+{
+  "id": "balanced-binary-tree-intro",
+  "title": "Introduction to Balanced Binary Trees",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "height-of-binary-tree",
+  "prevLessonId": "levelorder-traversal",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn about **Balanced Binary Trees**. We already saw how tree shapes affect search time. Now, we will formalize what a balanced tree is and why it guarantees optimal search performance!"
+    },
+    {
+      "type": "heading",
+      "id": "balanced-concept",
+      "level": 2,
+      "text": "1. What is a Balanced Binary Tree?"
+    },
+    {
+      "type": "paragraph",
+      "text": "A binary tree is considered **height-balanced** if, for every node in the tree, the height of its left and right subtrees differs by **at most 1**."
+    },
+    {
+      "type": "paragraph",
+      "text": "Mathematically, for every node:\n**| Height(Left) - Height(Right) | ≤ 1**"
+    },
+    {
+      "type": "heading",
+      "id": "seesaw-analogy",
+      "level": 2,
+      "text": "2. Real-World Analogy: The Seesaw"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine kids playing on a seesaw. If one side has a heavy weight and the other side is empty, the seesaw crashes down to one side. In tree terms, that side is too 'heavy' (tall). A balanced tree keeps the left and right subtrees nearly equal in height, making it look balanced."
+    },
+    {
+      "type": "heading",
+      "id": "why-balanced-matters",
+      "level": 2,
+      "text": "3. Why Balance Matters"
+    },
+    {
+      "type": "paragraph",
+      "text": "In a balanced tree containing $N$ elements, the height is guaranteed to be $O(\\log N)$. This means searching, insertion, and deletion will all take $O(\\log N)$ time, which is incredibly fast! Without balance, search time degrades to $O(N)$."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the maximum allowed height difference between the left and right subtrees of any node in a balanced binary tree?",
+      "options": [
+        "0",
+        "1",
+        "2",
+        "Unlimited"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the guaranteed height of a balanced binary tree containing N nodes?",
+      "options": [
+        "O(1)",
+        "O(N)",
+        "O(N log N)",
+        "O(log N)"
+      ],
+      "correctAnswerIndex": 3
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: A balanced binary tree has a left and right subtree height difference of at most 1 at every node. This property guarantees $O(\\log N)$ height and $O(\\log N)$ search time. Next, we will write C++ code to find the height of a binary tree!"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "id": "maximum-path-sum",
+  "title": "Maximum Path Sum",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "tree-views-lca",
+  "prevLessonId": "diameter-of-binary-tree",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will tackle the **Maximum Path Sum** problem. A path sum is the sum of the node values along any path connecting any two nodes in the tree. Because the tree can contain negative numbers, finding the maximum path sum requires a bit of clever recursive tracking. Let's see how!"
+    },
+    {
+      "type": "heading",
+      "id": "max-path-sum-concept",
+      "level": 2,
+      "text": "1. The Recursive Concept"
+    },
+    {
+      "type": "paragraph",
+      "text": "For any node $X$, the maximum path sum that has $X$ as its highest point is:\n**Path Sum = Value of X + max(0, Left Subtree Contribution) + max(0, Right Subtree Contribution)**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why do we use `max(0, contribution)`? Because if a subtree contributes a negative sum, it is better to ignore it completely (treat it as 0) to maximize our sum!"
+    },
+    {
+      "type": "heading",
+      "id": "max-path-sum-code",
+      "level": 2,
+      "text": "2. C++ Solution"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ code to find the maximum path sum in $O(N)$ time:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <algorithm>\n#include <climits>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nint calculateMaxPathSum(Node* root, int& maxSum) {\n    if (root == nullptr) return 0;\n\n    // Calculate left and right subtree contributions (ignoring negative paths)\n    int leftSum = std::max(0, calculateMaxPathSum(root->left, maxSum));\n    int rightSum = std::max(0, calculateMaxPathSum(root->right, maxSum));\n\n    // Path sum containing root as the highest pivot point\n    int currentPathSum = root->data + leftSum + rightSum;\n\n    // Update global maximum\n    maxSum = std::max(maxSum, currentPathSum);\n\n    // Return the maximum single-branch path sum to the parent node\n    return root->data + std::max(leftSum, rightSum);\n}\n\nint maxPathSum(Node* root) {\n    int maxSum = INT_MIN;\n    calculateMaxPathSum(root, maxSum);\n    return maxSum;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "3. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Why do we check std::max(0, calculateMaxPathSum(...)) when computing subtree sums?",
+      "options": [
+        "To check if the node has children.",
+        "To discard negative paths which would only decrease our sum.",
+        "To ensure all numbers are positive.",
+        "To sort the values."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What does a single call to calculateMaxPathSum return to its caller node?",
+      "options": [
+        "The overall maximum path sum in the entire tree.",
+        "The count of nodes in the subtree.",
+        "The maximum path sum of a single branch (left or right, not both) to be extended by the parent.",
+        "The height of the node."
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "4. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: The maximum path sum can span any path. We compute it recursively in $O(N)$ time, ignoring negative subtrees and tracking the highest path sum seen at any node. Next, we will study tree views and the Lowest Common Ancestor!"
+    }
+  ]
+}

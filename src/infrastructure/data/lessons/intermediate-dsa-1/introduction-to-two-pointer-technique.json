@@ -1,0 +1,1339 @@
+{
+  "id": "introduction-to-two-pointer-technique",
+  "title": "Introduction to Two Pointer Technique",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-linked-lists",
+  "prevLessonId": "introduction-to-sliding-window",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Welcome back! In our last lesson, we mastered the Sliding Window technique to process continuous segments of an array. Today, we are going to look at another super popular pattern: the **Two Pointer** technique. We will solve a classic search problem in a sorted array to see how this technique lets us navigate elements from both ends and solve problems in linear time!"
+    },
+    {
+      "type": "heading",
+      "id": "the-problem",
+      "level": 2,
+      "text": "1. The Problem: Finding a Pair Sum"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine we are given a sorted array of integers and a target sum. We need to find if there exist two elements in the array that add up exactly to the target sum."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Array: `A = [1, 2, 4, 6, 8, 9]`"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Target Sum: `14`"
+    },
+    {
+      "type": "heading",
+      "id": "brute-force",
+      "level": 2,
+      "text": "2. Approach 1: Brute Force (Nested Loops)"
+    },
+    {
+      "type": "paragraph",
+      "text": "In the brute force approach, we check every single pair of elements in the array by running two nested loops. This works, but it is slow because it checks many pairs that can't possibly be the answer."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this nested loop execution behaves: notice how it repeats the searches redundant times:"
+    },
+    {
+      "type": "simulation",
+      "id": "brute-force-two-pointer-simulation",
+      "simulationData": {
+        "code": "int arr[6] = {1, 2, 4, 6, 8, 9};\nint target = 14;\n\nfor (int i = 0; i < 6; i++) {\n    for (int j = i + 1; j < 6; j++) {\n        int currentSum = arr[i] + arr[j];\n        if (currentSum == target) {\n            std::cout << \"Pair: \" << arr[i] << \", \" << arr[j] << \"\\n\";\n            return;\n        }\n    }\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "[Step 1 of 47]: We declare our sorted input array `arr` with 6 elements.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "[Step 2 of 47]: We define our target sum = 14.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "[Step 3 of 47]: Outer loop starts. We set index `i = 0` (pointing to value 1).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 4 of 47]: Inner loop starts. We set index `j = i + 1 = 1` (pointing to value 2).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "1", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 5 of 47]: We calculate: currentSum = arr[0] + arr[1] = 1 + 2 = 3.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "1", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 6 of 47]: Since currentSum (3) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "1", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 7 of 47]: Inner loop increments index j to 2 (pointing to value 4).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 8 of 47]: We calculate: currentSum = arr[0] + arr[2] = 1 + 4 = 5.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "5", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 9 of 47]: Since currentSum (5) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 10 of 47]: Inner loop increments index j to 3 (pointing to value 6).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 11 of 47]: We calculate: currentSum = arr[0] + arr[3] = 1 + 6 = 7.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "7", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 12 of 47]: Since currentSum (7) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 13 of 47]: Inner loop increments index j to 4 (pointing to value 8).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 14 of 47]: We calculate: currentSum = arr[0] + arr[4] = 1 + 8 = 9.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "9", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 15 of 47]: Since currentSum (9) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 16 of 47]: Inner loop increments index j to 5 (pointing to value 9).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 17 of 47]: We calculate: currentSum = arr[0] + arr[5] = 1 + 9 = 10.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "10", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 18 of 47]: Since currentSum (10) == target (14) is false, this inner loop finishes.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "[Step 19 of 47]: Outer loop increments index i to 1 (pointing to value 2).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 20 of 47]: Inner loop starts. We set index j = i + 1 = 2 (pointing to value 4).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 21 of 47]: We calculate: currentSum = arr[1] + arr[2] = 2 + 4 = 6.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "6", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 22 of 47]: Since currentSum (6) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "2", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 23 of 47]: Inner loop increments index j to 3 (pointing to value 6).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 24 of 47]: We calculate: currentSum = arr[1] + arr[3] = 2 + 6 = 8.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "8", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 25 of 47]: Since currentSum (8) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 26 of 47]: Inner loop increments index j to 4 (pointing to value 8).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 27 of 47]: We calculate: currentSum = arr[1] + arr[4] = 2 + 8 = 10.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "10", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 28 of 47]: Since currentSum (10) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 29 of 47]: Inner loop increments index j to 5 (pointing to value 9).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 30 of 47]: We calculate: currentSum = arr[1] + arr[5] = 2 + 9 = 11.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "11", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 31 of 47]: Since currentSum (11) == target (14) is false, this inner loop finishes.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "[Step 32 of 47]: Outer loop increments index i to 2 (pointing to value 4).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 33 of 47]: Inner loop starts. We set index j = i + 1 = 3 (pointing to value 6).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 34 of 47]: We calculate: currentSum = arr[2] + arr[3] = 4 + 6 = 10.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "10", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 35 of 47]: Since currentSum (10) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "3", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 36 of 47]: Inner loop increments index j to 4 (pointing to value 8).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 37 of 47]: We calculate: currentSum = arr[2] + arr[4] = 4 + 8 = 12.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "12", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 38 of 47]: Since currentSum (12) == target (14) is false, we proceed with the inner loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 39 of 47]: Inner loop increments index j to 5 (pointing to value 9).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 40 of 47]: We calculate: currentSum = arr[2] + arr[5] = 4 + 9 = 13.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "13", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 41 of 47]: Since currentSum (13) == target (14) is false, this inner loop finishes.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "[Step 42 of 47]: Outer loop increments index i to 3 (pointing to value 6).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 43 of 47]: Inner loop starts. We set index j = i + 1 = 4 (pointing to value 8).",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 44 of 47]: We calculate: currentSum = arr[3] + arr[4] = 6 + 8 = 14.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "14", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 45 of 47]: Since currentSum (14) == target (14) is true, we enter the conditional block.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "[Step 46 of 47]: We execute our print statement to output the matched pair to the terminal console.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "j", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Pair: 6, 8"
+          },
+          {
+            "line": 9,
+            "explanation": "[Step 47 of 47]: We return from the function, terminating execution. The matching pair is found!",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": "Pair: 6, 8"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N²)",
+      "timeExplanation": "In the worst case where no pair equals the target, we check all possible combinations of size 2 from N elements, which equals N*(N-1)/2 operations.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We do not allocate any extra arrays or memory."
+    },
+    {
+      "type": "heading",
+      "id": "two-pointer-intuition",
+      "level": 2,
+      "text": "3. The Intuition: Can We Do Better?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why does brute force check so many pairs? Because it ignores the fact that the array is **sorted**! Since elements grow larger as we move right, we don't need to try every random combination. Instead, we can scan the array inward from both ends."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's discover this inward scanning technique interactively. Play the whiteboard simulation below to see how we adjust our left and right boundaries to converge on the target sum:"
+    },
+    {
+      "type": "drawing",
+      "id": "two-pointer-intro-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "optimal-two-pointer",
+      "level": 2,
+      "text": "4. Approach 2: Optimal Two Pointer (Inward Scan)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Now that you've discovered the update rules, let's look at the C++ code implementation of the Two Pointer inward scan. Since the array is sorted, either the left pointer increments or the right pointer decrements at each step, shrinking our search space in linear time."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this inward scanning executes in linear time:"
+    },
+    {
+      "type": "simulation",
+      "id": "optimal-two-pointer-simulation",
+      "simulationData": {
+        "code": "int arr[6] = {1, 2, 4, 6, 8, 9};\nint target = 14;\nint left = 0;\nint right = 5;\n\nwhile (left < right) {\n    int currentSum = arr[left] + arr[right];\n    if (currentSum == target) {\n        std::cout << \"Pair: \" << arr[left] << \", \" << arr[right] << \"\\n\";\n        return;\n    }\n    if (currentSum < target) {\n        left++;\n    } else {\n        right--;\n    }\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the sorted input array `arr` with 6 elements.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "We define our target sum = 14.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "We initialize `left = 0` pointing to index 0.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "We initialize `right = 5` pointing to the last index 5.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We start our loop. Since `left (0) < right (5)` is true, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We calculate: `currentSum = arr[left] + arr[right] = arr[0] + arr[5] = 1 + 9 = 10`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "10", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "Since `currentSum (10) == target (14)` is false, we skip the matching block.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 12,
+            "explanation": "Since `currentSum (10) < target (14)` is true, we enter this block to increase our sum.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 13,
+            "explanation": "We increment `left++`. `left` becomes 1. The sum will increase in the next iteration because we now point to a larger value: `arr[1] = 2`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Next iteration starts. Since `left (1) < right (5)` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We calculate: `currentSum = arr[1] + arr[5] = 2 + 9 = 11`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "11", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 12,
+            "explanation": "Since `currentSum (11) < target (14)` is true, we increment `left++` again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 13,
+            "explanation": "We increment `left++`. `left` becomes 2. We now point to `arr[2] = 4`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Next iteration starts. Since `left (2) < right (5)` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We calculate: `currentSum = arr[2] + arr[5] = 4 + 9 = 13`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "13", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 12,
+            "explanation": "Since `currentSum (13) < target (14)` is true, we increment `left++` again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 13,
+            "explanation": "We increment `left++`. `left` becomes 3. We now point to `arr[3] = 6`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Next iteration starts. Since `left (3) < right (5)` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We calculate: `currentSum = arr[3] + arr[5] = 6 + 9 = 15`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "15", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 12,
+            "explanation": "Since `currentSum (15) < target (14)` is false, we proceed to the `else` block.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "5", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 15,
+            "explanation": "We decrement `right--`. `right` becomes 4. Since the sum was too large, moving the right pointer inward decreases the sum because we now point to a smaller value: `arr[4] = 8`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "Next iteration starts. Since `left (3) < right (4)` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "We calculate: `currentSum = arr[3] + arr[4] = 6 + 8 = 14`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "currentSum", "type": "int", "value": "14", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "Since `currentSum (14) == target (14)` is true, we enter the conditional block.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 9,
+            "explanation": "We execute our print statement to output the matched pair to the terminal console.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" },
+              { "name": "target", "type": "int", "value": "14", "address": "0x7FFE18" },
+              { "name": "left", "type": "int", "value": "3", "address": "0x7FFE20" },
+              { "name": "right", "type": "int", "value": "4", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": "Pair: 6, 8"
+          },
+          {
+            "line": 10,
+            "explanation": "We return from the function, terminating execution. The matching pair is found in only 5 steps!",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "1", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "2", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "4", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "6", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "8", "address": "0x7FFE10" },
+              { "name": "arr[5]", "type": "int", "value": "9", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": "Pair: 6, 8"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N)",
+      "timeExplanation": "In each step, either the Left pointer moves right or the Right pointer moves left. The distance between them decreases by 1 in each step. Hence, we traverse the array of size N at most once, which takes O(N) linear time.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We only use a few pointer index variables, which takes constant O(1) space."
+    },
+    {
+      "type": "heading",
+      "id": "comparison",
+      "level": 2,
+      "text": "5. Comparison Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's compare the brute-force and two-pointer approaches side-by-side:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "**Approach Comparison Summary**:\n\n· **Brute Force**: Time = `O(N²)`, Space = `O(1)`. Works on any unsorted array. Scans all pairs.\n\n· **Two Pointer**: Time = `O(N)`, Space = `O(1)`. Requires the array to be **sorted**. Scans from boundaries inwards."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary prerequisite for applying the inward-scanning Two Pointer technique to find a target sum?",
+      "options": [
+        "The array must be unsorted",
+        "The array must be sorted",
+        "The array must contain only positive integers",
+        "The target sum must be even"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If your current sum of Left and Right elements is greater than the target sum, what action should you take?",
+      "options": [
+        "Move the Left pointer to the right (increment left)",
+        "Move the Right pointer to the left (decrement right)",
+        "Move both pointers inwards",
+        "Stop the search, no pair exists"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of the Two Pointer approach to find a target sum in a sorted array of size N?",
+      "options": [
+        "O(N²)",
+        "O(N)",
+        "O(log N)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Two Pointer technique is a highly optimized pattern to search pairs in sorted linear structures. Instead of nested loops ($O(N^2)$), we place Left at the start and Right at the end, moving them inwards based on comparison with the target sum. This executes in $O(N)$ linear time and $O(1)$ space. Remember: sorting is the key that enables the pointer adjustments!"
+    }
+  ]
+}

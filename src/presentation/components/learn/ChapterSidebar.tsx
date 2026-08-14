@@ -11,6 +11,7 @@ interface ChapterSidebarProps {
   subjectId: string;
   isOpen: boolean;
   onClose: () => void;
+  isCollapsed?: boolean;
 }
 
 export default function ChapterSidebar({
@@ -19,6 +20,7 @@ export default function ChapterSidebar({
   subjectId,
   isOpen,
   onClose,
+  isCollapsed = false,
 }: ChapterSidebarProps) {
   // Find which chapter has the active lesson on initial load
   const initialChapterId = () => {
@@ -44,7 +46,7 @@ export default function ChapterSidebar({
   };
 
   const sidebarContent = (
-    <div className="h-full flex flex-col bg-background select-none">
+    <div className="h-full flex flex-col bg-card select-none">
       {/* Sidebar Header */}
       <div className="h-14 px-4 flex items-center justify-between border-b border-border/80 shrink-0">
         <div className="flex items-center gap-2 text-foreground">
@@ -61,7 +63,7 @@ export default function ChapterSidebar({
       </div>
 
       {/* Accordions List */}
-      <div className="flex-1 overflow-y-auto divide-y divide-border/60">
+      <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {curriculum.chapters.map((chapter) => (
           <ChapterAccordion
             key={chapter.id}
@@ -79,9 +81,11 @@ export default function ChapterSidebar({
   return (
     <>
       {/* Desktop Permanent Sidebar Container */}
-      <aside className="hidden lg:block w-64 shrink-0 border-r border-border/80 sticky top-14 h-[calc(100vh-3.5rem)] bg-background">
-        {sidebarContent}
-      </aside>
+      {!isCollapsed && (
+        <aside className="hidden lg:block lg:col-start-1 w-full h-full border-r border-border/80 bg-card overflow-hidden">
+          {sidebarContent}
+        </aside>
+      )}
 
       {/* Mobile/Tablet Side Drawer */}
       <div

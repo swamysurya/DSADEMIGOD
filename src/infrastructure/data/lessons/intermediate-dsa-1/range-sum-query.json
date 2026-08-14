@@ -1,0 +1,703 @@
+{
+  "id": "range-sum-query",
+  "title": "Range Sum Query",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-sliding-window",
+  "prevLessonId": "in-place-prefix-sum",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "In our previous lessons, we learned how to build prefix sums and how they save memory when done in-place. Now, let's put this knowledge to solve a standard coding problem: **Range Sum Query**. We will compare a brute-force approach against an optimal prefix sum approach to build a deep intuition of why prefix sums are so powerful!"
+    },
+    {
+      "type": "heading",
+      "id": "the-problem-statement",
+      "level": 2,
+      "text": "1. The Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "We are given an input array of integers, and we need to answer multiple queries. Each query gives us two indices, `L` (Left) and `R` (Right), and asks us to find the sum of all elements from index `L` to `R` (inclusive)."
+    },
+    {
+      "type": "drawing",
+      "id": "range-sum-problem-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "brute-force",
+      "level": 2,
+      "text": "2. Approach 1: Brute Force (Looping)"
+    },
+    {
+      "type": "paragraph",
+      "text": "In the brute force approach, for every query `(L, R)` we receive, we start a loop from index `L` up to `R`, adding the array elements one-by-one."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this executes for two different queries: **Query 1 (L = 1, R = 3)** and **Query 2 (L = 2, R = 4)**. Note how a new loop has to run from scratch for every single query:"
+    },
+    {
+      "type": "simulation",
+      "id": "brute-force-range-sum-simulation",
+      "simulationData": {
+        "code": "int arr[5] = {2, 4, 1, 5, 3};\n\n// Query 1: L = 1, R = 3\nint sum1 = 0;\nfor (int i = 1; i <= 3; i++) {\n    sum1 += arr[i];\n}\nstd::cout << \"Query 1: \" << sum1 << \"\\n\";\n\n// Query 2: L = 2, R = 4\nint sum2 = 0;\nfor (int i = 2; i <= 4; i++) {\n    sum2 += arr[i];\n}\nstd::cout << \"Query 2: \" << sum2 << \"\\n\";",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the array `arr` with 5 elements. It is stored in memory as contiguous slots.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "We start Query 1 (L = 1, R = 3). We initialize its accumulator variable `sum1` to 0.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "0", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Query 1 loop starts. We set index `i = 1`. Since `1 <= 3` is true, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "0", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We add the value at index 1 (`arr[1] = 4`) to `sum1`. `sum1` is now 4.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "4", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 2. Since `2 <= 3` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "4", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We add the value at index 2 (`arr[2] = 1`) to `sum1`. `sum1` is now `4 + 1 = 5`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "5", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 3. Since `3 <= 3` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "5", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We add the value at index 3 (`arr[3] = 5`) to `sum1`. `sum1` is now `5 + 5 = 10`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 4. Since `4 <= 3` is false, this loop ends.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 8,
+            "explanation": "We execute our print statement to output Query 1's sum to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 11,
+            "explanation": "We start Query 2 (L = 2, R = 4). We initialize its accumulator variable `sum2` to 0.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "0", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 12,
+            "explanation": "A brand-new loop begins for Query 2. We set `i = 2`. Since `2 <= 4` is true, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 13,
+            "explanation": "We add the value at index 2 (`arr[2] = 1`) to `sum2`. `sum2` is now 1.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 12,
+            "explanation": "Loop increments `i` to 3. Since `3 <= 4` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 13,
+            "explanation": "We add the value at index 3 (`arr[3] = 5`) to `sum2`. `sum2` is now `1 + 5 = 6`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 12,
+            "explanation": "Loop increments `i` to 4. Since `4 <= 4` is true, we re-enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "6", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 13,
+            "explanation": "We add the value at index 4 (`arr[4] = 3`) to `sum2`. `sum2` is now `6 + 3 = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "9", "address": "0x7FFE1C" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE20" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 12,
+            "explanation": "Loop increments `i` to 5. Since `5 <= 4` is false, this loop ends.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "9", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 15,
+            "explanation": "We execute our print statement to output Query 2's sum to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE14" },
+              { "name": "sum2", "type": "int", "value": "9", "address": "0x7FFE1C" }
+            ],
+            "terminalOutput": "Query 1: 10\nQuery 2: 9"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(Q * N)",
+      "timeExplanation": "If we have Q queries, we run a loop of size up to N for each query, resulting in Q * N total operations.",
+      "spaceComplexity": "O(1)",
+      "spaceExplanation": "We do not allocate any extra arrays."
+    },
+    {
+      "type": "heading",
+      "id": "optimal-prefix-sum",
+      "level": 2,
+      "text": "3. Approach 2: Optimal Prefix Sum (Formula)"
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of looping, we build the prefix sum array `pref` once, and then answer all queries in $O(1)$ constant time by performing a single subtraction: `pref[R] - pref[L - 1]`."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see how this executes: first we construct the prefix sum array in memory, and then we answer the two queries instantly using the formula:"
+    },
+    {
+      "type": "simulation",
+      "id": "optimal-range-sum-simulation",
+      "simulationData": {
+        "code": "int arr[5] = {2, 4, 1, 5, 3};\nint pref[5];\n\npref[0] = arr[0];\nfor (int i = 1; i < 5; i++) {\n    pref[i] = pref[i - 1] + arr[i];\n}\n\n// Query 1: L = 1, R = 3\nint sum1 = pref[3] - pref[0];\nstd::cout << \"Query 1: \" << sum1 << \"\\n\";\n\n// Query 2: L = 2, R = 4\nint sum2 = pref[4] - pref[1];\nstd::cout << \"Query 2: \" << sum2 << \"\\n\";",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the input array `arr` containing values.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "We allocate the prefix sum array `pref`. Initially it holds garbage values ('?').",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "?", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "The first element of prefix sum is always the same: `pref[0] = arr[0] = 2`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "We start the construction loop from index `i = 1`. Since `1 < 5` is true, we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We calculate: `pref[1] = pref[0] + arr[1] = 2 + 4 = 6`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 2. Since `2 < 5` is true, we re-enter.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We calculate: `pref[2] = pref[1] + arr[2] = 6 + 1 = 7`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 3. Since `3 < 5` is true, we re-enter.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We calculate: `pref[3] = pref[2] + arr[3] = 7 + 5 = 12`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 4. Since `4 < 5` is true, we re-enter.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We calculate: `pref[4] = pref[3] + arr[4] = 12 + 3 = 15`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "Loop increments `i` to 5. Since `5 < 5` is false, the loop ends. Our prefix sum is now ready in O(N) time.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 10,
+            "explanation": "For Query 1 (L = 1, R = 3), we calculate the sum in one step using: `pref[3] - pref[0] = 12 - 2 = 10`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE30" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 11,
+            "explanation": "We execute our print statement to output Query 1's sum to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE30" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 14,
+            "explanation": "For Query 2 (L = 2, R = 4), we calculate the sum instantly using: `pref[4] - pref[1] = 15 - 6 = 9`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE30" },
+              { "name": "sum2", "type": "int", "value": "9", "address": "0x7FFE38" }
+            ],
+            "terminalOutput": "Query 1: 10"
+          },
+          {
+            "line": 15,
+            "explanation": "We execute our print statement to output Query 2's sum to the terminal.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "sum1", "type": "int", "value": "10", "address": "0x7FFE30" },
+              { "name": "sum2", "type": "int", "value": "9", "address": "0x7FFE38" }
+            ],
+            "terminalOutput": "Query 1: 10\nQuery 2: 9"
+          }
+        ]
+      }
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(Q)",
+      "timeExplanation": "Answering Q queries takes constant time per query, which equals Q total operations.",
+      "spaceComplexity": "O(N)",
+      "spaceExplanation": "We allocate a prefix sum array of size N to enable the constant-time queries."
+    },
+    {
+      "type": "heading",
+      "id": "comparison",
+      "level": 2,
+      "text": "4. Comparison Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's compare these two approaches side-by-side to understand when to use which:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "**Approach Comparison Summary**:\n\n· **Brute Force**: Build Time = `O(1)`, Query Time = `O(N)` (per query), Space = `O(1)`. Best when we only have very few query operations.\n\n· **Prefix Sum**: Build Time = `O(N)`, Query Time = `O(1)` (per query), Space = `O(N)`. Best when we have many query operations."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the query time complexity of finding a range sum using a precalculated prefix sum array?",
+      "options": [
+        "O(N)",
+        "O(1)",
+        "O(log N)",
+        "O(R - L)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If you have Q queries to answer on an array of size N, what is the total time complexity using the brute-force looping approach?",
+      "options": [
+        "O(Q + N)",
+        "O(Q * N)",
+        "O(Q)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If we want to find the sum from index L to R, why do we subtract P[L-1] instead of P[L]?",
+      "options": [
+        "Subtracting P[L] would accidentally include index L",
+        "Subtracting P[L] would accidentally exclude index L from our range sum",
+        "It doesn't matter, both give the same result",
+        "Because index L-1 is always zero"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Range Sum Query asks for the sum of elements between L and R. Brute force loops from L to R taking O(N) query time. Prefix sum precalculates cumulative sums in O(N) time and O(N) space, allowing us to answer any query instantly in O(1) time using `pref[R] - pref[L - 1]`. Choose prefix sum when you have many queries!"
+    }
+  ]
+}

@@ -1,0 +1,322 @@
+{
+  "id": "flatten-a-linked-list",
+  "title": "Lesson 10: Flatten a Linked List",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "introduction-to-hashing",
+  "prevLessonId": "cycle-in-linked-list",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we are going to learn how to solve a classic and interesting problem: **Flatten a Linked List**. Don't worry if it sounds a bit complicated at first—we will break it down step-by-step together!"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-flattening",
+      "level": 2,
+      "text": "1. What is a Multi-Level Linked List?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Before we dive in, let us explain some terms in plain English so we are on the same page:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Node**: A node is like a storage container in your computer's memory. It holds a piece of information and the address (location) of other nodes."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pointer**: A pointer is like a pointer finger. It is a small variable that stores the memory address of another box, telling us where to find it next."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Next Pointer**: The pointer that takes us to the next main node forward in the list."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Child Pointer**: The pointer that takes us down to a sub-list (a vertical line of nodes)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Recursion**: Recursion is when a function calls itself to solve a smaller part of the same problem. Think of it like a set of Russian nesting dolls."
+    },
+    {
+      "type": "paragraph",
+      "text": "In a standard singly linked list, each node points only to the next node in a straight line. But in a **multi-level linked list**, each node has two pointers: a `next` pointer pointing to the next main node, and a `child` (or `bottom`) pointer pointing downwards to another linked list. Both lists are already sorted in ascending order."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need to Flatten It?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you have a list of main categories (like books, clothes, and electronics), and each category has its own sub-list of items sorted by price. Traversing or searching through this grid-like structure is tricky because you have to jump up and down and left and right."
+    },
+    {
+      "type": "paragraph",
+      "text": "By **flattening** it, we merge all the sub-lists into one single, sorted list. This makes searching, sorting, and printing all items much simpler and faster!"
+    },
+    {
+      "type": "heading",
+      "id": "real-world-analogy",
+      "level": 2,
+      "text": "3. Real-World Analogy: Labeled Kitchen Jars"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine a street where each house has a basement with stairs going down to a line of sub-basements. Each house has a list of residents, sorted by age. The street is the main `next` pointer, and the basement stairs are the `child` pointers."
+    },
+    {
+      "type": "paragraph",
+      "text": "Our goal is to invite everyone to a street party and arrange them in a single line sorted by age. Instead of running around chaotic alleys, we will merge the houses one by one from right to left!"
+    },
+    {
+      "type": "heading",
+      "id": "concept-explanation",
+      "level": 2,
+      "text": "4. Concept Explanation"
+    },
+    {
+      "type": "paragraph",
+      "text": "To flatten the list, we can use a strategy called **Merge from Right to Left** using recursion:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. Go to the very end of the main list (the rightmost node)."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. Take the last column and merge it with the second-to-last column. Since both columns are sorted, we can merge them just like we merge two sorted lists in Merge Sort."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. Once merged, this combined column becomes our new rightmost list."
+    },
+    {
+      "type": "paragraph",
+      "text": "4. Repeat this merge step moving left until we reach the first node. The result will be a single vertical sorted list!"
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "5. Visual Drawing: Multi-Level vs. Flattened"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is what the multi-level list looks like before flattening:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Main List (next pointer) ──>\n\n   [ 5 ]  ──────────>  [ 10 ]  ──────────>  [ 19 ]\n     │                   │                    │\n     ▼ (child)           ▼ (child)            ▼ (child)\n   [ 7 ]               [ 20 ]               [ 22 ]\n     │                                        │\n     ▼                                        ▼\n   [ 8 ]                                    [ 50 ]"
+    },
+    {
+      "type": "paragraph",
+      "text": "And here is the final flattened list, where all nodes are linked using the child pointer and sorted:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "[ 5 ] ──(child)──> [ 7 ] ──> [ 8 ] ──> [ 10 ] ──> [ 19 ] ──> [ 20 ] ──> [ 22 ] ──> [ 50 ]"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Flattening a multi-level list step-by-step]"
+    },
+    {
+      "type": "heading",
+      "id": "step-by-step-explanation",
+      "level": 2,
+      "text": "6. Step-by-Step Explanation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us outline the algorithm steps:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Base Case**: If the list is empty or has only one node, return the node itself."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Recursive Step**: Recursively call `flatten` on `root->next`. This will flatten the entire right side of the list first."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Merge Step**: Merge the current column (`root`) with the flattened right side (`root->next`) using a helper function `mergeTwoLists`."
+    },
+    {
+      "type": "heading",
+      "id": "code-example",
+      "level": 2,
+      "text": "7. Code Example"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* next;\n    Node* child;\n    \n    Node(int val) {\n        data = val;\n        next = nullptr;\n        child = nullptr;\n    }\n};\n\n// Helper function to merge two sorted vertical lists\nNode* mergeTwoLists(Node* a, Node* b) {\n    // If one list is empty, return the other\n    if (a == nullptr) return b;\n    if (b == nullptr) return a;\n    \n    Node* result;\n    \n    // Pick the smaller value and recurse for the rest\n    if (a->data < b->data) {\n        result = a;\n        result->child = mergeTwoLists(a->child, b);\n    } else {\n        result = b;\n        result->child = mergeTwoLists(a, b->child);\n    }\n    \n    // Ensure the next pointer is always null for flattened nodes\n    result->next = nullptr;\n    return result;\n}\n\n// Main function to flatten the list\nNode* flatten(Node* root) {\n    // Base case: If list is empty or has no next column\n    if (root == nullptr || root->next == nullptr) {\n        return root;\n    }\n    \n    // Recurse to the rightmost column\n    root->next = flatten(root->next);\n    \n    // Merge current column with the flattened right side\n    root = mergeTwoLists(root, root->next);\n    \n    return root;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "8. Dry Run"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us trace the code with a small list:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "  5 ──> 10\n  │      │\n  7     20"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. `flatten(5)` is called. Since `5->next` (which is `10`) is not null, it recursively calls `flatten(10)`."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. `flatten(10)` is checked. Since `10->next` is null, it hit the base case and returns `10` directly."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. Back to `flatten(5)`: We assign `root->next = flatten(10)`, so `5->next` is now pointing to the flattened list `10`."
+    },
+    {
+      "type": "paragraph",
+      "text": "4. Next, we call `mergeTwoLists(5, 10)`:"
+    },
+    {
+      "type": "paragraph",
+      "text": "   · Compare `5->data` (5) and `10->data` (10). Since `5 < 10`, `result` is set to `5`."
+    },
+    {
+      "type": "paragraph",
+      "text": "   · We recurse: `5->child = mergeTwoLists(5->child (7), 10)`."
+    },
+    {
+      "type": "paragraph",
+      "text": "   · Compare `7` and `10`. Since `7 < 10`, `result` is set to `7`."
+    },
+    {
+      "type": "paragraph",
+      "text": "   · We recurse: `7->child = mergeTwoLists(nullptr, 10)`."
+    },
+    {
+      "type": "paragraph",
+      "text": "   · Since one list is null, it returns `10` directly."
+    },
+    {
+      "type": "paragraph",
+      "text": "   · The stack unwinds, linking: `5 -> child -> 7 -> child -> 10 -> child -> 20`."
+    },
+    {
+      "type": "paragraph",
+      "text": "5. The entire list is now flattened and sorted!"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "9. Time & Space Complexity"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: **$O(N \\times M)$**, where $N$ is the total number of main nodes along the horizontal line, and $M$ is the average number of child nodes in each vertical list. We merge lists multiple times, scanning each element."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: **$O(N)$** auxiliary stack space due to recursion. The system holds the function calls in memory until we reach the base case."
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "10. Key Takeaways"
+    },
+    {
+      "type": "paragraph",
+      "text": "· A multi-level linked list uses `next` for horizontal links and `child`/`bottom` for vertical lists."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Flattening is done right-to-left recursively."
+    },
+    {
+      "type": "paragraph",
+      "text": "· The core work is done by the `mergeTwoLists` helper, which behaves like the merge phase of Merge Sort."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Remember to set `next` pointer to `nullptr` for all processed nodes."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "11. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Forgetting to set next to null: If you do not clear `result->next = nullptr` during merging, the flattened list might still contain messy horizontal links, leading to bugs or infinite loops during traversal!"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Recursive Stack Overflow: If your base case checks are missing or wrong, the recursion will never stop and your computer will crash with a stack overflow!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "12. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary difference between a standard singly linked list and a multi-level linked list?",
+      "options": [
+        "A multi-level list stores only negative numbers.",
+        "A multi-level list has a child/bottom pointer pointing down to a sub-list, in addition to a next pointer.",
+        "A multi-level list cannot be modified.",
+        "A multi-level list does not use memory addresses."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which algorithm's merging logic is heavily reused to solve the Flatten a Linked List problem?",
+      "options": [
+        "Quick Sort partitioning",
+        "Merge Sort merging of two sorted sub-lists",
+        "Binary Search bounds dividing",
+        "Bubble Sort swapping of adjacent values"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity to flatten a multi-level list with N main horizontal nodes and an average of M child nodes per column?",
+      "options": [
+        "O(N log N)",
+        "O(N * M)",
+        "O(2^N)",
+        "O(N + M)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "13. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: Flattening a multi-level linked list simplifies hierarchical structures into a clean linear sorted format. We recursively traverse to the end of the list and merge columns from right to left. Excellent job finishing this chapter!"
+    }
+  ]
+}

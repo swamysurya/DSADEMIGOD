@@ -1,0 +1,233 @@
+{
+  "id": "rotate-array",
+  "title": "Rotate Array",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "best-time-to-buy-and-sell-stock",
+  "prevLessonId": "majority-element",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we are going to learn how to solve another classic array manipulation problem: **Rotate Array**. We will learn different ways to shift array elements, from simple methods using extra memory to clever in-place optimizations. Let's get started!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Given an array `nums` and an integer `k`, rotate the array to the **right** by `k` steps, where `k` is non-negative."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Example**: `nums = [1, 2, 3, 4, 5, 6, 7]` and `k = 3`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Output**: `[5, 6, 7, 1, 2, 3, 4]`. The last three elements `[5, 6, 7]` are moved to the front, and the first four elements `[1, 2, 3, 4]` shift to the back."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Rotating arrays is a fundamental task in computer science. For example, it is used when shifting images (horizontal scrolling), scheduling tasks in circular queues, or implementing text wraps in editors."
+    },
+    {
+      "type": "heading",
+      "id": "real-world-analogy",
+      "level": 2,
+      "text": "3. Real-World Analogy: Revolving Deck"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine a card holder slot. If you push cards out from the right end, they wrap around and enter from the left end. Alternatively, think of reversing sections of a card deck to rotate them in-place."
+    },
+    {
+      "type": "heading",
+      "id": "reversal-intuition",
+      "level": 2,
+      "text": "4. Intuition: Three-Reversal Method"
+    },
+    {
+      "type": "paragraph",
+      "text": "To rotate in-place with **$O(1)$** space, we can partition the array into two sections:"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. The first section containing the first $n-k$ elements."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. The second section containing the remaining $k$ elements at the back."
+    },
+    {
+      "type": "paragraph",
+      "text": "If we reverse both sections individually, and then reverse the entire array, the elements magically rotate to their correct final positions!"
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "5. Visual Drawing: Three-Reversal Steps"
+    },
+    {
+      "type": "drawing",
+      "id": "rotate-array-reversal-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Rotate Array Visualization]"
+    },
+    {
+      "type": "heading",
+      "id": "step-by-step-explanation",
+      "level": 2,
+      "text": "6. Step-by-Step Explanation of Approaches"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us explore the four primary ways to solve this problem:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Approach 1: Using an Extra Array**: Allocate a new temporary array. Copy each element `nums[i]` to index `(i + k) % n` in the temp array. Finally, copy it back to `nums`. This is simple but uses $O(N)$ extra memory."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Approach 2: Three-Reversal Method (In-place)**: Partition at index $n - k$. Reverse the first part, reverse the second part, and reverse the entire array. This is optimal with $O(1)$ space."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Approach 3: Cyclic Replacement**: Move each element directly to its target slot. Swap the replaced element to its new slot, tracing a path cycle until you return to the start index."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Approach 4: STL std::rotate**: C++ includes `std::rotate(first, middle, last)` in `<algorithm>`. Because `std::rotate` performs left rotation, we pass `nums.begin() + (n - k)` to convert our right rotation into a left rotation."
+    },
+    {
+      "type": "heading",
+      "id": "code-example",
+      "level": 2,
+      "text": "7. C++ Code Implementations"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 1: Extra Array**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Solution {\npublic:\n    void rotate(vector<int>& nums, int k) {\n        int n = nums.size();\n        k %= n;\n        vector<int> temp(n);\n        for (int i = 0; i < n; i++) {\n            temp[(i + k) % n] = nums[i];\n        }\n        nums = temp;\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 2: Three-Reversal Method (Optimal)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <algorithm>\n\nclass Solution {\npublic:\n    void rotate(vector<int>& nums, int k) {\n        int n = nums.size();\n        k %= n;\n        // Reverse first n-k elements\n        std::reverse(nums.begin(), nums.begin() + (n - k));\n        // Reverse last k elements\n        std::reverse(nums.begin() + (n - k), nums.end());\n        // Reverse whole array\n        std::reverse(nums.begin(), nums.end());\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 3: Cyclic Replacement**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Solution {\npublic:\n    void rotate(vector<int>& nums, int k) {\n        int n = nums.size();\n        k %= n;\n        int count = 0;\n        for (int start = 0; count < n; start++) {\n            int current = start;\n            int prev = nums[start];\n            do {\n                int next = (current + k) % n;\n                std::swap(prev, nums[next]);\n                current = next;\n                count++;\n            } while (current != start);\n        }\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 4: STL rotate()**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <algorithm>\n\nclass Solution {\npublic:\n    void rotate(vector<int>& nums, int k) {\n        int n = nums.size();\n        k %= n;\n        // Convert right rotation by k into left rotation by n-k\n        std::rotate(nums.begin(), nums.begin() + (n - k), nums.end());\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "comparison",
+      "level": 2,
+      "text": "8. Complexity Comparison"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Approach           | Time Complexity | Space Complexity | In-place | Difficulty\n───────────────────┼─────────────────┼──────────────────┼──────────┼───────────\nExtra Array        |      O(N)       |       O(N)       |    No    |    Easy   \nThree-Reversal     |      O(N)       |       O(1)       |    Yes   |    Easy   \nCyclic Replacement |      O(N)       |       O(1)       |    Yes   |   Medium  \nSTL rotate()       |      O(N)       |       O(1)       |    Yes   |  Very Easy"
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "9. Key Takeaways"
+    },
+    {
+      "type": "paragraph",
+      "text": "· Always modulo `k` by the size of the array: `k %= n` because rotating an array of size `N` by `N` steps yields the same original array."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Reversing segments of an array is a highly effective design pattern for solving rotation tasks without allocating memory."
+    },
+    {
+      "type": "paragraph",
+      "text": "· While STL functions are fast, interviewers will expect you to write out the element swapping logic manually."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "10. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "If an array of size 5 is rotated to the right by 12 steps, how many effective rotation steps are performed?",
+      "options": [
+        "12 steps",
+        "5 steps",
+        "2 steps (since 12 % 5 = 2)",
+        "0 steps"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "Which approach is in-place and solves the Rotate Array problem in O(N) time and O(1) space?",
+      "options": [
+        "Extra Array method",
+        "Three-Reversal method",
+        "Linear Search",
+        "Double Loop Brute Force"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "How is a right rotation by k converted to a left rotation for std::rotate()?",
+      "options": [
+        "Left rotation by k",
+        "Left rotation by n - k",
+        "Left rotation by n + k",
+        "Right rotation cannot be converted"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "11. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: We learned how to rotate arrays using an extra array, segments reversal, cyclic jumps, and the C++ STL library. Segment reversal is the ideal interview solution due to its constant space profile. Awesome job completing this lesson!"
+    }
+  ]
+}

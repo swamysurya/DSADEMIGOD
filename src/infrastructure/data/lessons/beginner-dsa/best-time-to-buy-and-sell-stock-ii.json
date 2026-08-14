@@ -1,0 +1,224 @@
+{
+  "id": "best-time-to-buy-and-sell-stock-ii",
+  "title": "Best Time to Buy and Sell Stock II",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "valid-anagram",
+  "prevLessonId": "best-time-to-buy-and-sell-stock",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome back. In our previous lesson, we learned how to find the maximum profit for a **single transaction** by keeping track of the running minimum price. Today, we will expand on that knowledge to solve **Best Time to Buy and Sell Stock II (LeetCode 122)**, where you can buy and sell multiple times. Let's build the solution step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "visual-plan",
+      "level": 3,
+      "text": "Internal Lesson Visual Plan"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Concept 1: Single vs. Multiple Transactions** → Comparison Table\n· **Concept 2: Valley-Peak Ascent** → Mountain Range Analogy\n· **Concept 3: Accumulating Slopes** → StockProfitIIDrawing\n· **Concept 4: Translation to Code** → Code Construction Step-by-Step\n· **Concept 5: Execution Trace** → Dry Run Table"
+    },
+    {
+      "type": "heading",
+      "id": "single-vs-multiple-comparison",
+      "level": 2,
+      "text": "1. Comparing the Concepts: Single vs. Multiple Trades"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's look at how the problem rules change when we allow multiple trades. This comparison table highlights the core differences:"
+    },
+    {
+      "type": "table",
+      "headers": ["Rule", "Stock I (LeetCode 121)", "Stock II (LeetCode 122)"],
+      "rows": [
+        ["Max Transactions", "Exactly 1 transaction (Buy once, sell once)", "Unlimited transactions"],
+        ["Constraint", "Must buy before you sell", "Must sell current stock before buying again"],
+        ["Strategy", "Running Minimum (Prefix Min)", "Greedy Ascent (Accumulating positive slopes)"],
+        ["Sample prices = [7, 1, 5, 3, 6, 4]", "Buy at 1, Sell at 6. Profit = 5", "Buy at 1, Sell at 5 (+4). Buy at 3, Sell at 6 (+3). Profit = 7"]
+      ]
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "💡 The Aha! Moment: In Stock I, you could only buy once and sell once, so you had to wait for the absolute best time. In Stock II, you can buy and sell as many times as you want! This means you don't need to predict the future. If a price goes up even by $1 tomorrow, you can make that profit immediately, sell it, and buy again if it keeps going up. The sum of all small gains is exactly equal to the total upward trend!"
+    },
+    {
+      "type": "heading",
+      "id": "mountain-range-analogy",
+      "level": 2,
+      "text": "2. Intuition: The Mountain Range Analogy"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine the stock prices plotted on a graph as a mountain range. Your goal is to collect as much **elevation gain** as possible."
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of searching for the single lowest valley and the single highest peak, you want to capture every upward step. If the path goes up tomorrow, we buy today and sell tomorrow to collect the height difference. If the path goes down, we just stay put!"
+    },
+    {
+      "type": "heading",
+      "id": "accumulating-slopes",
+      "level": 2,
+      "text": "3. The Math: Consecutive Gains"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why is selling day-by-day equivalent to holding across a long rise? Let's check the math. Suppose prices rise consecutively: `1 → 2 → 3 → 4 → 5`. The profit of buying at 1 and selling at 5 is: $5 - 1 = 4$."
+    },
+    {
+      "type": "paragraph",
+      "text": "If we buy and sell daily, our gains are: $(2-1) + (3-2) + (4-3) + (5-4) = 1 + 1 + 1 + 1 = 4$."
+    },
+    {
+      "type": "paragraph",
+      "text": "The result is exactly the same! This means we can find the maximum profit by simply adding up every positive difference between consecutive days."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "4. Visualizing Daily Slope Gains"
+    },
+    {
+      "type": "drawing",
+      "id": "stock-profit-ii-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "code-construction",
+      "level": 2,
+      "text": "5. Teach Code Construction"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's construct our optimal C++ code step-by-step using our construction framework:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Step 1: Idea**: We will iterate through the prices starting from the second day (index 1). If today's price is greater than yesterday's price, we add the difference to our total profit."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Step 2: Variables**: We only need one variable, `maxProfit`, initialized to `0` to keep track of our accumulated profits."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Step 3: Loops**: A single loop from `i = 1` to `n - 1` is sufficient to check every consecutive pair."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Step 4: Conditions**: We check `if (prices[i] > prices[i - 1])` to filter out downward slopes."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Step 5: Logic**: Inside the conditional block, we accumulate: `maxProfit += (prices[i] - prices[i - 1])`."
+    },
+    {
+      "type": "heading",
+      "id": "cpp-code",
+      "level": 2,
+      "text": "6. C++ Code Implementation"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <vector>\n\nclass Solution {\npublic:\n    int maxProfit(std::vector<int>& prices) {\n        int n = prices.size();\n        int maxProfit = 0;\n        \n        for (int i = 1; i < n; i++) {\n            // If the price increased today, add the daily gain\n            if (prices[i] > prices[i - 1]) {\n                maxProfit += (prices[i] - prices[i - 1]);\n            }\n        }\n        return maxProfit;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "7. Dry Run Trace Table"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's trace the execution using our standard example `prices = [7, 1, 5, 3, 6, 4]`:"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Day | Price | Yesterday Price | Difference | Action taken | maxProfit\n────┼───────┼─────────────────┼────────────┼──────────────┼──────────\n1   |   7   |        -        |     -      | Initialize   |    0     \n2   |   1   |        7        |     -6     | Decrease     |    0     \n3   |   5   |        1        |     +4     | Add (+4)     |    4     \n4   |   3   |        5        |     -2     | Decrease     |    4     \n5   |   6   |        3        |     +3     | Add (+3)     |    7     \n6   |   4   |        6        |     -2     | Decrease     |    7"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "8. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: **$O(N)$** because we loop through the array of size $N$ exactly once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: **$O(1)$** as we only use a single integer variable to accumulate our profits."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "9. What Beginners Usually Do Wrong"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Forgetting Loop Limits: Starting the loop from index 0 instead of 1. Comparing prices[0] with prices[-1] will cause an out-of-bounds error."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Adding Negative Differences: Forgetting to filter out days where price decreases. We only accumulate profits when prices[i] > prices[i-1]."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "10. Practice Quiz"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the maximum profit achievable from prices: [1, 5, 2, 8]?",
+      "options": [
+        "7 (Buy 1, Sell 8)",
+        "10 (Buy 1, Sell 5, then Buy 2, Sell 8: 4 + 6 = 10)",
+        "8",
+        "11"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is the consecutive sweep strategy equivalent to the valley-peak strategy?",
+      "options": [
+        "Because any large growth interval can be broken down into the sum of its daily increments.",
+        "Because stock values always double in size.",
+        "Because the space complexity is O(N).",
+        "None of the above."
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "heading",
+      "id": "confidence-checklist",
+      "level": 2,
+      "text": "11. Confidence Checklist"
+    },
+    {
+      "type": "paragraph",
+      "text": "Before you move on, make sure you can check all of these off:\n- [x] I understand how multi-transaction profits differ from single transactions.\n- [x] I know how to break down any long price ascent into consecutive daily steps.\n- [x] I can construct the single-loop greedy solution.\n- [x] I know why starting the loop at index 1 is required to prevent out-of-bounds errors."
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "12. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We solved LeetCode 122 optimally in O(N) time and O(1) space using a greedy choices slope sweep. In the next lesson, we will move to strings and study the Anagram validation problem!"
+    }
+  ]
+}

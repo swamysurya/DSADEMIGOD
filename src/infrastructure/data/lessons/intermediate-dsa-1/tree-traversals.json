@@ -1,0 +1,86 @@
+{
+  "id": "tree-traversals",
+  "title": "Tree Traversals",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "levelorder-traversal",
+  "prevLessonId": "intro-to-tree",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome back. Now that we know how tree nodes look in memory, how do we visit every element? In linear structures, we just run a simple loop. In trees, we have multiple paths. Today, we will study the three standard recursive ways to traverse a tree: **Inorder**, **Preorder**, and **Postorder** traversals!"
+    },
+    {
+      "type": "heading",
+      "id": "why-traversals",
+      "level": 2,
+      "text": "1. Why Do We Need Different Traversals?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Depending on when we process the current node relative to its children, we get different orders. These orders have direct applications (e.g. printing directories, evaluating math formulas, or listing sorted elements in a BST)."
+    },
+    {
+      "type": "heading",
+      "id": "traversal-definitions",
+      "level": 2,
+      "text": "2. Inorder, Preorder, and Postorder Defined"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's explain the three types of traversals in simple terms:\n· **Preorder (Root → Left → Right)**: We visit/process the root node first, then recurse left, then recurse right.\n· **Inorder (Left → Root → Right)**: We recurse left first, then visit/process the root node, then recurse right.\n· **Postorder (Left → Right → Root)**: We recurse left first, then recurse right, then visit/process the root node last."
+    },
+    {
+      "type": "heading",
+      "id": "traversal-code",
+      "level": 2,
+      "text": "3. Traversal Code in C++"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's see how simple recursion makes writing traversals a breeze:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nvoid preOrder(Node* root) {\n    if (root == nullptr) return;\n    std::cout << root->data << \" \"; // Visit Root\n    preOrder(root->left);           // Go Left\n    preOrder(root->right);          // Go Right\n}\n\nvoid inOrder(Node* root) {\n    if (root == nullptr) return;\n    inOrder(root->left);            // Go Left\n    std::cout << root->data << \" \"; // Visit Root\n    inOrder(root->right);           // Go Right\n}\n\nvoid postOrder(Node* root) {\n    if (root == nullptr) return;\n    postOrder(root->left);           // Go Left\n    postOrder(root->right);          // Go Right\n    std::cout << root->data << \" \";  // Visit Root\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which traversal processes the root node first, before its children?",
+      "options": [
+        "Inorder",
+        "Preorder",
+        "Postorder",
+        "Level Order"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If a binary tree node has left child 10, right child 30, and root value 20, what is its Inorder traversal output?",
+      "options": [
+        "20, 10, 30",
+        "10, 30, 20",
+        "10, 20, 30",
+        "30, 20, 10"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Recursive tree traversals differ based on when the root node is processed: Preorder (first), Inorder (middle), and Postorder (last). In the next lesson, we'll see how to traverse a tree row by row (Level Order traversal)!"
+    }
+  ]
+}

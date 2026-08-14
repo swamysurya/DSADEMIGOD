@@ -1,0 +1,917 @@
+{
+  "id": "counting-sort",
+  "title": "Counting Sort",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "intro-to-searching-linear-search",
+  "prevLessonId": "quick-sort",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "In our previous lessons, we mastered comparison-based sorting algorithms like Selection Sort, Bubble Sort, Insertion Sort, Merge Sort, and Quick Sort. All of these algorithms share a common rule: they sort elements by comparing them in pairs. This comparison step mathematically limits their fastest average speed to $O(N \\log N)$. Today, we will learn a completely different approach: **Counting Sort**, which breaks this limit and achieves linear speed by counting frequencies instead of comparing values!"
+    },
+    {
+      "type": "heading",
+      "id": "why-counting-sort",
+      "level": 2,
+      "text": "1. Why Do We Need Counting Sort?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine a teacher needs to sort a stack of 100 exam papers. Each paper has a score between 0 and 5. If she uses Quick Sort or Merge Sort, she will spend a lot of time comparing papers against each other (e.g., 'Is paper A higher than paper B?')."
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead, she can use a simpler method:\n1. Place 6 folders on her desk, labeled **0** through **5**.\n2. Go through the stack and drop each exam paper into its matching folder.\n3. Pick up the papers from folder 0, then folder 1, up to folder 5, and stack them."
+    },
+    {
+      "type": "paragraph",
+      "text": "By doing this, she sorts the papers in a single pass without ever comparing two scores! This is the core intuition behind Counting Sort."
+    },
+    {
+      "type": "heading",
+      "id": "counting-sort-visualization",
+      "level": 2,
+      "text": "2. Visualizing Counting Sort"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's explore how we use a count array to map frequencies and place elements in their correct positions step-by-step:"
+    },
+    {
+      "type": "drawing",
+      "id": "counting-sort-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "why-does-it-work",
+      "level": 2,
+      "text": "3. Why Does This Process Work?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Beginners often ask: **'Why does adding frequencies together give us the sorted positions?'**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's think logically:\n· If we know there are **2 elements** smaller than or equal to `1`, then the number `1` must occupy the first 2 slots of our sorted list (at index 0 and index 1).\n· If we know there are **3 elements** smaller than or equal to `2` (the two `1`s and the one `2`), then the number `2` must occupy the 3rd slot (index 2).\n· If there are **4 elements** smaller than or equal to `3`, then the number `3` belongs at index 3."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Core Concept:\nBy calculating cumulative sums, `count[x]` tells us exactly how many elements are **less than or equal to x**. If there are C elements less than or equal to x, then the element x belongs at output index C - 1!"
+    },
+    {
+      "type": "drawing",
+      "id": "counting-sort-intuition-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "counting-sort-simulation-title",
+      "level": 2,
+      "text": "4. Code Simulation: Sorting {3, 1, 3, 2}"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the simulator to trace our C++ Counting Sort code step-by-step on a small unsorted array. Watch how we find the maximum value first, count frequencies, accumulate positions, and rebuild the output sorted list:"
+    },
+    {
+      "type": "simulation",
+      "id": "counting-sort-simulation",
+      "simulationData": {
+        "code": "int arr[4] = {3, 1, 3, 2};\nint n = 4;\n\n// 1. Find maxVal\nint maxVal = arr[0];\nfor (int i = 1; i < n; i++) {\n    if (arr[i] > maxVal) {\n        maxVal = arr[i];\n    }\n}\n\n// 2. Count frequencies\nint count[4] = {0, 0, 0, 0};\nfor (int i = 0; i < n; i++) {\n    count[arr[i]]++;\n}\n\n// 3. Accumulate positions\nfor (int i = 1; i <= maxVal; i++) {\n    count[i] += count[i - 1];\n}\n\n// 4. Build sorted output array\nint output[4];\nfor (int i = n - 1; i >= 0; i--) {\n    output[count[arr[i]] - 1] = arr[i];\n    count[arr[i]]--;\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "[Step 1 of 42]: We define our unsorted array `arr` containing `{3, 1, 3, 2}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "[Step 2 of 42]: Array size `n = 4`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 5,
+            "explanation": "[Step 3 of 42]: We initialize `maxVal` with the first element `arr[0]` which is 3.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 4 of 42]: Loop to find maximum element starts. At `i = 1`: condition check `1 < 4` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 5 of 42]: Inside loop body. We check if `arr[1]` (1) > `maxVal` (3). Since 1 > 3 is false, we skip updating `maxVal`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 6 of 42]: We increment `i` to 2. Condition check `2 < 4` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 7 of 42]: Inside loop body. We check if `arr[2]` (3) > `maxVal` (3). Since 3 > 3 is false, we skip updating `maxVal`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 8 of 42]: We increment `i` to 3. Condition check `3 < 4` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "[Step 9 of 42]: Inside loop body. We check if `arr[3]` (2) > `maxVal` (3). Since 2 > 3 is false, we skip updating `maxVal`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE18" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "[Step 10 of 42]: We increment `i` to 4. Since `4 < 4` is false, the max-finding loop terminates.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 13,
+            "explanation": "[Step 11 of 42]: We allocate a count array of size `maxVal + 1 = 4`, filled with zeros: `count = {0, 0, 0, 0}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "0", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 14,
+            "explanation": "[Step 12 of 42]: Frequency counting loop starts. At `i = 0`: condition `0 < 4` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "0", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 15,
+            "explanation": "[Step 13 of 42]: Inside loop body. `arr[0] = 3`, so we increment `count[3]` to 1.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "1", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 14,
+            "explanation": "[Step 14 of 42]: We increment `i` to 1. Condition check `1 < 4` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "1", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 15,
+            "explanation": "[Step 15 of 42]: Inside loop body. `arr[1] = 1`, so we increment `count[1]` to 1.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "1", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 14,
+            "explanation": "[Step 16 of 42]: We increment `i` to 2. Condition check `2 < 4` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "1", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 15,
+            "explanation": "[Step 17 of 42]: Inside loop body. `arr[2] = 3`, so we increment `count[3]` to 2.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 14,
+            "explanation": "[Step 18 of 42]: We increment `i` to 3. Condition check `3 < 4` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "0", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 15,
+            "explanation": "[Step 19 of 42]: Inside loop body. `arr[3] = 2`, so we increment `count[2]` to 1.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 14,
+            "explanation": "[Step 20 of 42]: We increment `i` to 4. Since `4 < 4` is false, the frequency counting loop terminates.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 19,
+            "explanation": "[Step 21 of 42]: We begin cumulative sum loop. At `i = 1`: condition check `1 <= 3` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 20,
+            "explanation": "[Step 22 of 42]: Inside loop body. `count[1] += count[0]` -> `1 + 0 = 1`. `count` becomes `{0, 1, 1, 2}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 19,
+            "explanation": "[Step 23 of 42]: We increment `i` to 2. Condition check `2 <= 3` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 20,
+            "explanation": "[Step 24 of 42]: Inside loop body. `count[2] += count[1]` -> `1 + 1 = 2`. `count` becomes `{0, 1, 2, 2}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 19,
+            "explanation": "[Step 25 of 42]: We increment `i` to 3. Condition check `3 <= 3` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 20,
+            "explanation": "[Step 26 of 42]: Inside loop body. `count[3] += count[2]` -> `2 + 2 = 4`. `count` becomes `{0, 1, 2, 4}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 19,
+            "explanation": "[Step 27 of 42]: We increment `i` to 4. Since `4 <= 3` is false, the accumulation loop terminates. Position indices are fully pre-calculated: `{0, 1, 2, 4}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 24,
+            "explanation": "[Step 28 of 42]: We allocate a temporary output array of size 4 to construct the sorted result: `output = {?, ?, ?, ?}`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "?", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "?", "address": "0x7FFE34" },
+              { "name": "output[2]", "type": "int", "value": "?", "address": "0x7FFE38" },
+              { "name": "output[3]", "type": "int", "value": "?", "address": "0x7FFE3C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 25,
+            "explanation": "[Step 29 of 42]: Reconstruction loop starts from right-to-left. At `i = 3`: condition check `3 >= 0` is true, so we enter the loop.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 26,
+            "explanation": "[Step 30 of 42]: Inside loop body. `arr[3] = 2`, `count[2] = 2`. We place `2` at `output[count[2] - 1] = output[1]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "2", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 27,
+            "explanation": "[Step 31 of 42]: Inside loop body. We decrement `count[2]` from 2 to 1 to reserve the next slot for duplicate 2s.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 25,
+            "explanation": "[Step 32 of 42]: We decrement `i` to 2. Condition check `2 >= 0` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 26,
+            "explanation": "[Step 33 of 42]: Inside loop body. `arr[2] = 3`, `count[3] = 4`. We place `3` at `output[count[3] - 1] = output[3]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "4", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 27,
+            "explanation": "[Step 34 of 42]: Inside loop body. We decrement `count[3]` from 4 to 3.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 25,
+            "explanation": "[Step 35 of 42]: We decrement `i` to 1. Condition check `1 >= 0` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 26,
+            "explanation": "[Step 36 of 42]: Inside loop body. `arr[1] = 1`, `count[1] = 1`. We place `1` at `output[count[1] - 1] = output[0]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "1", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 27,
+            "explanation": "[Step 37 of 42]: Inside loop body. We decrement `count[1]` from 1 to 0.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 25,
+            "explanation": "[Step 38 of 42]: We decrement `i` to 0. Condition check `0 >= 0` is true, so we continue.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 26,
+            "explanation": "[Step 39 of 42]: Inside loop body. `arr[0] = 3`, `count[3] = 3`. We place `3` at `output[count[3] - 1] = output[2]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "3", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[2]", "type": "int", "value": "3", "address": "0x7FFE38" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 27,
+            "explanation": "[Step 40 of 42]: Inside loop body. We decrement `count[3]` from 3 to 2.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "count[0]", "type": "int", "value": "0", "address": "0x7FFE18" },
+              { "name": "count[1]", "type": "int", "value": "0", "address": "0x7FFE1C" },
+              { "name": "count[2]", "type": "int", "value": "1", "address": "0x7FFE20" },
+              { "name": "count[3]", "type": "int", "value": "2", "address": "0x7FFE24" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[2]", "type": "int", "value": "3", "address": "0x7FFE38" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" },
+              { "name": "i", "type": "int", "value": "0", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 25,
+            "explanation": "[Step 41 of 42]: We decrement `i` to -1. Since `-1 >= 0` is false, the loop terminates.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[2]", "type": "int", "value": "3", "address": "0x7FFE38" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 28,
+            "explanation": "[Step 42 of 42]: The output array is now fully populated and sorted: `{1, 2, 3, 3}`. Counting Sort is complete!",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "3", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "1", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "3", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "2", "address": "0x7FFE0C" },
+              { "name": "n", "type": "int", "value": "4", "address": "0x7FFE10" },
+              { "name": "maxVal", "type": "int", "value": "3", "address": "0x7FFE14" },
+              { "name": "output[0]", "type": "int", "value": "1", "address": "0x7FFE30" },
+              { "name": "output[1]", "type": "int", "value": "2", "address": "0x7FFE34" },
+              { "name": "output[2]", "type": "int", "value": "3", "address": "0x7FFE38" },
+              { "name": "output[3]", "type": "int", "value": "3", "address": "0x7FFE3C" }
+            ],
+            "terminalOutput": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "5. C++ Implementation of Counting Sort"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the standard C++ code implementing this frequency-based sorting algorithm:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <vector>\n\nvoid countingSort(std::vector<int>& arr) {\n    if (arr.empty()) return;\n\n    // 1. Find the maximum element to determine range\n    int maxVal = arr[0];\n    for (int val : arr) {\n        if (val > maxVal) maxVal = val;\n    }\n\n    // 2. Create count array filled with zeros\n    std::vector<int> count(maxVal + 1, 0);\n\n    // 3. Count frequencies\n    for (int val : arr) {\n        count[val]++;\n    }\n\n    // 4. Modify count to store cumulative indices\n    for (int i = 1; i <= maxVal; i++) {\n        count[i] += count[i - 1];\n    }\n\n    // 5. Build output array\n    std::vector<int> output(arr.size());\n    for (int i = arr.size() - 1; i >= 0; i--) {\n        output[count[arr[i]] - 1] = arr[i];\n        count[arr[i]]--;\n    }\n\n    // 6. Copy back to original array\n    arr = output;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "complexity-parameters",
+      "level": 2,
+      "text": "6. Complexity Parameters"
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N + K)",
+      "timeExplanation": "We perform three linear loops: one to find maxVal, one to map frequencies of size N, and one to rebuild of size N + K (where K is the key range).",
+      "spaceComplexity": "O(N + K)",
+      "spaceExplanation": "Requires extra storage array of size K + 1 to hold the frequencies, and a temporary output array of size N to build the sorted results."
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways-sort",
+      "level": 2,
+      "text": "Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Non-Comparison Based: Breaks the O(N log N) limit by counting occurrences rather than comparing elements.\n· Stable Sorting: Iterating right-to-left in Step 5 ensures that duplicate keys keep their original relative order (stability).\n· Memory Trade-off: Achieves blazing speed but consumes additional memory to maintain count tables."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes-sort",
+      "level": 2,
+      "text": "Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "· Out-of-Bounds Range: Using Counting Sort when the range of numbers K is extremely large (e.g., sorting an array with a value like 1,000,000,000). Allocating a count array of that size will trigger Out of Memory errors!\n· Negative Value Crash: Standard implementation crashes on negative values since array indices must be positive (though shifting values can resolve this)."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following describes why Counting Sort is able to sort elements faster than O(N log N)?",
+      "options": [
+        "It uses binary division recursion trees.",
+        "It is non-comparison based and relies on direct memory mapping indexes.",
+        "It uses highly optimized swap pointers.",
+        "It uses multi-threading parallel processors."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If you need to sort an array of 5 elements, but the maximum value in the array is 10,000,000, is Counting Sort a good choice?",
+      "options": [
+        "Yes, it is always the fastest choice.",
+        "No, because the count array will allocate a massive amount of memory (10,000,001 slots) for just 5 elements, wasting space.",
+        "Yes, but only if you sort in reverse order.",
+        "No, because Counting Sort does not work on arrays smaller than 10 elements."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "In step 5 of the Counting Sort algorithm, why do we scan the original array from right-to-left instead of left-to-right?",
+      "options": [
+        "To make the sorting faster.",
+        "To ensure the sort is stable (preserving the relative order of duplicate elements).",
+        "Because C++ arrays can only be traversed backwards.",
+        "To save space in the count array."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Counting Sort is a non-comparison based sorting algorithm. It counts frequencies of elements and computes cumulative indices to place items in sorted order in O(N + K) time. It is highly efficient for small integer ranges, but inefficient for large ranges due to memory scaling."
+    }
+  ]
+}

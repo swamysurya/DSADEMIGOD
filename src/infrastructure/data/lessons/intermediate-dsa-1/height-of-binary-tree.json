@@ -1,0 +1,90 @@
+{
+  "id": "height-of-binary-tree",
+  "title": "Height of a Binary Tree",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "diameter-of-binary-tree",
+  "prevLessonId": "balanced-binary-tree-intro",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn how to find the **height** of a Binary Tree. The height of a tree is the length of the longest path from the root node to a leaf node. We will write a simple recursive function to calculate this in linear time. Let's do it!"
+    },
+    {
+      "type": "heading",
+      "id": "height-concept",
+      "level": 2,
+      "text": "1. The Height Calculation Logic"
+    },
+    {
+      "type": "paragraph",
+      "text": "The height of any node can be found by looking at its children:\n**Height of node = 1 + max(Height of Left Child, Height of Right Child)**"
+    },
+    {
+      "type": "paragraph",
+      "text": "By applying this recursively, the height of a leaf node (with no children) becomes `0`, and an empty tree (`nullptr`) is defined to have height `-1`."
+    },
+    {
+      "type": "heading",
+      "id": "height-code",
+      "level": 2,
+      "text": "2. Height Calculator Code in C++"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the recursive C++ implementation:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <algorithm>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nint calculateHeight(Node* root) {\n    // Base Case: empty tree has height -1\n    if (root == nullptr) {\n        return -1;\n    }\n\n    // Recurse left and right\n    int leftHeight = calculateHeight(root->left);\n    int rightHeight = calculateHeight(root->right);\n\n    // Current height is 1 plus the max of children heights\n    return 1 + std::max(leftHeight, rightHeight);\n}"
+    },
+    {
+      "type": "heading",
+      "id": "height-dry-run",
+      "level": 2,
+      "text": "3. Dry Run Trace"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us trace the height of a small tree:\n`   20` (root)\n`  /  \\`\n` 10  30`\n1. `calculateHeight(20)` is called, which asks for `calculateHeight(10)` and `calculateHeight(30)`.\n2. `calculateHeight(10)` has both children as `nullptr`, so it receives `-1` and `-1`. Returns `1 + max(-1, -1) = 0`.\n3. Similarly, `calculateHeight(30)` returns `0`.\n4. `calculateHeight(20)` calculates `1 + max(0, 0) = 1`. The height is 1!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the height of an empty tree (nullptr)?",
+      "options": [
+        "0",
+        "-1",
+        "1",
+        "Undefined"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of the calculateHeight function?",
+      "options": [
+        "O(log N)",
+        "O(N)",
+        "O(N^2)",
+        "O(1)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: The height of a binary tree is found recursively by taking $1 + \\max(\\text{leftHeight}, \\text{rightHeight})$. The time complexity is $O(N)$ because we visit every node exactly once. In our next lesson, we will use this to find the diameter of a binary tree!"
+    }
+  ]
+}

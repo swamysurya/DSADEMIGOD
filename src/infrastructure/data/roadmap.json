@@ -4,7 +4,7 @@
     "title": "Fundamentals",
     "shortDescription": "Master the building blocks: variables, loops, control flow, functions, and memory basics.",
     "difficulty": "Beginner",
-    "progress": 100,
+    "progress": 0,
     "about": "Before tackling complex algorithms, you must build a flawless foundation. This level guides you through basic programming constructs, primitive types, memory allocations, and scoping, preparing your mind for computational thinking.",
     "whatYouWillLearn": [
       "Basic syntax & scoping rules",
@@ -21,78 +21,78 @@
   {
     "id": "beginner-dsa",
     "title": "Beginner DSA",
-    "shortDescription": "Get comfortable with linear data structures like Arrays, Linked Lists, Stacks, and Queues.",
+    "shortDescription": "Master mathematical foundations, arrays, strings, basic recursion, sorting, searching, and bit manipulation.",
     "difficulty": "Easy",
-    "progress": 85,
-    "about": "Learn how data is organized sequentially in computer memory. Understand the trade-offs of contiguous versus node-based lists, and implement LIFO/FIFO patterns that form the backbone of modern runtime systems.",
+    "progress": 0,
+    "about": "Step into the core methodologies of computational problem solving. Learn mathematical bases, array manipulation, search boundaries, basic divide-and-conquer, and hardware-level bit trickery.",
     "whatYouWillLearn": [
-      "Array allocations & dynamic resizing",
-      "Singly & Doubly Linked Lists",
-      "Stacks (LIFO) and Queues (FIFO) structures",
-      "Prefix Sums and Two-Pointer technique basics"
+      "Mathematical foundations & array algorithms",
+      "String scanning & basic sorting techniques",
+      "Recursive function states & binary searching",
+      "Bitwise operations & computational complexity basics"
     ],
     "duration": "12 hours",
     "modulesCount": 6,
     "projectsCount": 2,
     "certificateAvailable": true,
-    "startUrl": "/learn/beginner-dsa/intro"
+    "startUrl": "/learn/beginner-dsa"
   },
   {
     "id": "intermediate-dsa-1",
     "title": "Intermediate DSA Level 1",
-    "shortDescription": "Explore asymptotic analysis, sorting algorithms, and binary search methodologies.",
+    "shortDescription": "Master core intermediate data structures and algorithms: Hashing, Prefix Sum, Sliding Window, Linked Lists, Stacks, Queues, Trees, and Heaps.",
     "difficulty": "Medium",
-    "progress": 50,
-    "about": "Transition from simple coding to writing high-efficiency solutions. Learn how to quantify algorithm speeds using Big O notation, perform divide-and-conquer splits, and search sorted spaces instantly.",
+    "progress": 0,
+    "about": "Take your programming skills to the next level by mastering foundational data structures and patterns. This level takes you through efficient lookup maps, window traversal strategies, dynamic linear nodes, priority structures, and hierarchical trees.",
     "whatYouWillLearn": [
-      "Big-O, Big-Theta, and Big-Omega analysis",
-      "Classic sorting algorithms (Merge, Quick, Heap sort)",
-      "Binary Search on values and decision spaces",
-      "Hashing mechanisms and hash maps implementation"
+      "Hashing map queries & prefix sum arrays",
+      "Sliding window & two-pointer techniques",
+      "Linked list insertions, deletions & structures",
+      "Stacks, Queues, Binary Search Trees, and Heaps"
     ],
     "duration": "18 hours",
     "modulesCount": 8,
     "projectsCount": 2,
     "certificateAvailable": true,
-    "startUrl": "/learn/intermediate-dsa-1/intro"
+    "startUrl": "/learn/intermediate-dsa-1"
   },
   {
     "id": "intermediate-dsa-2",
     "title": "Intermediate DSA Level 2",
-    "shortDescription": "Dive into Trees, Binary Search Trees, Heaps, and priority queues.",
+    "shortDescription": "Master Greedy Choice, Dynamic Programming (DP), and Graph Algorithms (BFS, DFS, Dijkstra, Bellman-Ford, Floyd-Warshall).",
     "difficulty": "Medium",
-    "progress": 20,
-    "about": "Hierarchical data representation is key for operating systems, databases, and searching. At this level, you'll master tree structures, learn traversal algorithms, and understand how to build efficient priority queues.",
+    "progress": 0,
+    "about": "Explore optimizing complex problems using greedy paradigms, state transition models, and graph traversals. Master subset-sum logic, path transitions, cycle detection, shortest paths, and articulation points.",
     "whatYouWillLearn": [
-      "Binary trees & depth-first/breadth-first traversals",
-      "Binary Search Trees (BST) properties & mutations",
-      "Max/Min Heap structures and heapifying algorithms",
-      "Priority Queues and their applications"
+      "Greedy algorithms & optimization models",
+      "Dynamic programming state transition equations",
+      "Graph representations & BFS/DFS traversals",
+      "Shortest paths, minimum spanning trees, and disjoint sets"
     ],
     "duration": "20 hours",
-    "modulesCount": 7,
+    "modulesCount": 5,
     "projectsCount": 2,
     "certificateAvailable": true,
-    "startUrl": "/learn/intermediate-dsa-2/intro"
+    "startUrl": "/learn/intermediate-dsa-2"
   },
   {
     "id": "advanced-dsa",
     "title": "Advanced DSA",
-    "shortDescription": "Conquer Graphs, BFS/DFS traversal, Dijkstra's algorithm, and dynamic programming basics.",
+    "shortDescription": "Conquer advanced graphs, network flow models, bipartite matching, and heuristic search algorithms.",
     "difficulty": "Hard",
     "progress": 0,
-    "about": "Model interconnected systems using graphs. Learn pathfinding algorithms used by maps and routers, and explore the power of subproblem memoization to solve complex recursive optimizations.",
+    "about": "Model interconnected systems with constraints. Learn pathfinding algorithms used by maps and routers, and explore the power of subproblem memoization to solve complex recursive optimizations.",
     "whatYouWillLearn": [
-      "Graph representations: Adjacency list and matrix",
-      "Depth-First Search (DFS) & Breadth-First Search (BFS)",
-      "Shortest paths: Dijkstra, Bellman-Ford",
-      "Introduction to Dynamic Programming (1D & 2D tables)"
+      "Ford-Fulkerson & Edmonds-Karp Max Flow",
+      "Bipartite matching and min-cut analysis",
+      "A* search & heuristic optimizations",
+      "Eulerian Paths and Hamiltonian cycles"
     ],
     "duration": "30 hours",
-    "modulesCount": 10,
+    "modulesCount": 4,
     "projectsCount": 3,
     "certificateAvailable": true,
-    "startUrl": "/learn/advanced-dsa/intro"
+    "startUrl": "/learn/advanced-dsa"
   },
   {
     "id": "masters-dsa-1",
@@ -111,7 +111,7 @@
     "modulesCount": 8,
     "projectsCount": 3,
     "certificateAvailable": true,
-    "startUrl": "/learn/masters-dsa-1/intro"
+    "startUrl": "/learn/masters-dsa-1"
   },
   {
     "id": "masters-dsa-2",
@@ -130,7 +130,7 @@
     "modulesCount": 9,
     "projectsCount": 3,
     "certificateAvailable": true,
-    "startUrl": "/learn/masters-dsa-2/intro"
+    "startUrl": "/learn/masters-dsa-2"
   },
   {
     "id": "masters-dsa-3",
@@ -149,7 +149,7 @@
     "modulesCount": 8,
     "projectsCount": 4,
     "certificateAvailable": true,
-    "startUrl": "/learn/masters-dsa-3/intro"
+    "startUrl": "/learn/masters-dsa-3"
   },
   {
     "id": "dsa-demi-god",
@@ -168,6 +168,6 @@
     "modulesCount": 12,
     "projectsCount": 5,
     "certificateAvailable": true,
-    "startUrl": "/learn/dsa-demi-god/intro"
+    "startUrl": "/learn/dsa-demi-god"
   }
 ]

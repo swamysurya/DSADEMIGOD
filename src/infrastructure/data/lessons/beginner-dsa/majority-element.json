@@ -1,0 +1,315 @@
+{
+  "id": "majority-element",
+  "title": "Majority Element (Boyer-Moore)",
+  "subjectId": "beginner-dsa",
+  "nextLessonId": "rotate-array",
+  "prevLessonId": "spiral-matrix-traversal",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we are going to learn how to solve a very famous coding interview question: **Majority Element**. This problem teaches us that sometimes the best solution is not about storing everything, but recognizing a clever pattern. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "problem-statement",
+      "level": 2,
+      "text": "1. Problem Statement"
+    },
+    {
+      "type": "paragraph",
+      "text": "Given an array `nums` of size `n`, return the **majority element**."
+    },
+    {
+      "type": "paragraph",
+      "text": "The majority element is the element that appears **more than $\\lfloor n/2 \\rfloor$ times** in the array. You may assume that the majority element always exists in the input."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's take a look at two examples:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Example 1**: `nums = [3, 2, 3]`. Array size `n = 3`. Half is $3/2 = 1$. The number `3` appears 2 times, which is greater than 1. So, `3` is the majority element."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Example 2**: `nums = [2, 2, 1, 1, 1, 2, 2]`. Array size `n = 7`. Half is $7/2 = 3$. The number `2` appears 4 times, which is greater than 3. So, `2` is the majority element."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-this",
+      "level": 2,
+      "text": "2. Why Do We Need This?"
+    },
+    {
+      "type": "paragraph",
+      "text": "In programming, we often need to identify dominant items—like the most popular product in a catalog, the most common error code in a log, or the winning option in a voting system. Solving this efficiently saves computer memory and CPU processing cycles."
+    },
+    {
+      "type": "heading",
+      "id": "intuition",
+      "level": 2,
+      "text": "3. Intuition & Key Observation"
+    },
+    {
+      "type": "paragraph",
+      "text": "An important observation is: **There can be only one majority element in any array.**"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why? If one element occupies more than half of the array slots, there are fewer than half of the slots left for all other elements combined. Therefore, no other element can also occupy more than half of the slots!"
+    },
+    {
+      "type": "heading",
+      "id": "real-world-analogy",
+      "level": 2,
+      "text": "4. Real-World Analogy: The Duel Arena"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine an arena where players of different teams duel. If two players from different teams meet, they knock each other out and leave the arena."
+    },
+    {
+      "type": "paragraph",
+      "text": "If one team has **more players than all other teams combined**, then even if all other teams gang up and eliminate players one-by-one in pairs, the majority team will still have survivors standing at the end! This is the concept of **Pairwise Cancellation**."
+    },
+    {
+      "type": "heading",
+      "id": "concept-explanation",
+      "level": 2,
+      "text": "5. Concept Explanation: Boyer-Moore Voting Algorithm"
+    },
+    {
+      "type": "paragraph",
+      "text": "Instead of storing frequencies of all numbers in a table, the **Boyer-Moore Voting Algorithm** uses pairwise cancellation using only two variables:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· `candidate`: The number we currently think is the majority element."
+    },
+    {
+      "type": "paragraph",
+      "text": "· `count`: The net 'votes' the candidate has."
+    },
+    {
+      "type": "paragraph",
+      "text": "We iterate through the array and apply three simple rules:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Rule 1**: If `count` is `0`, we choose the current number as our new `candidate`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Rule 2**: If the current number is equal to `candidate`, we increment `count++`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Rule 3**: If the current number is different from `candidate`, we decrement `count--` (cancellation)."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "6. Visual Drawing: Pairwise Cancellation"
+    },
+    {
+      "type": "drawing",
+      "id": "majority-cancellation-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Boyer-Moore Voting Algorithm step-by-step]"
+    },
+    {
+      "type": "heading",
+      "id": "step-by-step-explanation",
+      "level": 2,
+      "text": "7. Step-by-Step Explanation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us trace the algorithm step-by-step using an example: `nums = [2, 2, 1, 1, 1, 2, 2]`"
+    },
+    {
+      "type": "paragraph",
+      "text": "1. **Start**: `candidate = 0`, `count = 0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "2. **First Element (2)**: Since `count == 0`, we pick `2` as candidate. `candidate = 2`, `count = 1`."
+    },
+    {
+      "type": "paragraph",
+      "text": "3. **Second Element (2)**: Matches candidate. `count++` $\\rightarrow$ `count = 2`."
+    },
+    {
+      "type": "paragraph",
+      "text": "4. **Third Element (1)**: Does not match. `count--` $\\rightarrow$ `count = 1`."
+    },
+    {
+      "type": "paragraph",
+      "text": "5. **Fourth Element (1)**: Does not match. `count--` $\\rightarrow$ `count = 0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "6. **Fifth Element (1)**: Since `count == 0`, we pick `1` as new candidate. `candidate = 1`, `count = 1`."
+    },
+    {
+      "type": "paragraph",
+      "text": "7. **Sixth Element (2)**: Does not match. `count--` $\\rightarrow$ `count = 0`."
+    },
+    {
+      "type": "paragraph",
+      "text": "8. **Seventh Element (2)**: Since `count == 0`, we pick `2` as candidate. `candidate = 2`, `count = 1`."
+    },
+    {
+      "type": "paragraph",
+      "text": "At the end, our candidate is `2`, which is indeed the majority element!"
+    },
+    {
+      "type": "heading",
+      "id": "code-example",
+      "level": 2,
+      "text": "8. Code Example"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's look at the three approaches in C++:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 1: Brute Force (Double Loop)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Solution {\npublic:\n    int majorityElement(std::vector<int>& nums) {\n        int n = nums.size();\n        for (int i = 0; i < n; i++) {\n            int count = 0;\n            for (int j = 0; j < n; j++) {\n                if (nums[i] == nums[j]) count++;\n            }\n            if (count > n / 2) return nums[i];\n        }\n        return -1;\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 2: Hash Map (Frequency Counter)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <unordered_map>\n#include <vector>\n\nclass Solution {\npublic:\n    int majorityElement(std::vector<int>& nums) {\n        std::unordered_map<int, int> freq;\n        for (int num : nums) {\n            freq[num]++;\n        }\n        for (auto entry : freq) {\n            if (entry.second > nums.size() / 2) {\n                return entry.first;\n            }\n        }\n        return -1;\n    }\n};"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Approach 3: Boyer-Moore Voting Algorithm (Optimal)**"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Solution {\npublic:\n    int majorityElement(std::vector<int>& nums) {\n        int candidate = 0;\n        int count = 0;\n        \n        for (int num : nums) {\n            if (count == 0) {\n                candidate = num;\n            }\n            if (num == candidate) {\n                count++;\n            } else {\n                count--;\n            }\n        }\n        return candidate;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "dry-run",
+      "level": 2,
+      "text": "9. Dry Run Trace Table"
+    },
+    {
+      "type": "code",
+      "language": "text",
+      "code": "Input array: [2, 2, 1, 1, 1, 2, 2]\n\nStep | Current Value | Candidate | Count | Action taken\n─────┼───────────────┼───────────┼───────┼───────────────────────────────\n1    |       2       |     2     |   1   | count was 0, new candidate=2\n2    |       2       |     2     |   2   | value matches candidate, count++\n3    |       1       |     2     |   1   | mismatch, count--\n4    |       1       |     2     |   0   | mismatch, count--\n5    |       1       |     1     |   1   | count was 0, new candidate=1\n6    |       2       |     1     |   0   | mismatch, count--\n7    |       2       |     2     |   1   | count was 0, new candidate=2"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "10. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Brute Force**: Time **$O(N^2)$**, Space **$O(1)$**."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Hash Map**: Time **$O(N)$**, Space **$O(N)$**."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Boyer-Moore Voting**: Time **$O(N)$**, Space **$O(1)$**."
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "11. Key Takeaways"
+    },
+    {
+      "type": "paragraph",
+      "text": "· The majority element appears more than half the time, making its net vote count positive even after all possible cancellations."
+    },
+    {
+      "type": "paragraph",
+      "text": "· Boyer-Moore allows us to find the majority element in a single pass without using extra storage maps."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If a majority element is not guaranteed to exist in the input, a second pass is needed to verify if the candidate's actual frequency is indeed $> n/2$."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "12. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Missing Second Pass when Not Guaranteed: In interviews, the interviewer might NOT guarantee that a majority element exists. In that case, returning the final candidate directly is a bug! You must check its occurrences in a second pass first."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "13. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the core mathematical observation that makes the Boyer-Moore Voting Algorithm work?",
+      "options": [
+        "The array must be sorted in ascending order.",
+        "The majority element appears more than n/2 times, so it survives pairwise cancellations with all other elements.",
+        "The majority element is always the largest element in the array.",
+        "The count of odd numbers is always equal to the count of even numbers."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What are the time and space complexities of the Boyer-Moore Voting Algorithm?",
+      "options": [
+        "Time: O(N^2), Space: O(1)",
+        "Time: O(N), Space: O(N)",
+        "Time: O(N), Space: O(1)",
+        "Time: O(log N), Space: O(1)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "If the input array does NOT guarantee that a majority element exists, what extra step is required?",
+      "options": [
+        "We must sort the array first.",
+        "We must run a second pass to count the occurrences of the final candidate and verify it exceeds n/2.",
+        "We must use Double Hashing.",
+        "No extra step is needed; Boyer-Moore is always correct."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "14. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: The Majority Element problem can be solved optimally in $O(N)$ time and $O(1)$ space using the Boyer-Moore Voting Algorithm. By cancelling votes between different elements, the true majority candidate always survives. Excellent job finishing this lesson!"
+    }
+  ]
+}

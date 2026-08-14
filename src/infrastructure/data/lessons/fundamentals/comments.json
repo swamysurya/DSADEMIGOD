@@ -1,0 +1,185 @@
+{
+  "id": "comments",
+  "title": "Comments",
+  "subjectId": "fundamentals",
+  "nextLessonId": "variables",
+  "prevLessonId": "first-program",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "When writing long, complex code, you might forget why you wrote a line of code a week later. To prevent this, C++ lets you leave notes for yourself. These notes are called Comments."
+    },
+    {
+      "type": "heading",
+      "id": "why-comments",
+      "level": 2,
+      "text": "1. Why do we need Comments?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Programs are read by humans much more than they are run by computers. Comments explain the logic of your code in plain English, helping other developers understand what your program is trying to solve. When the compiler translates the C++ code into machine language, it completely ignores comments."
+    },
+    {
+      "type": "heading",
+      "id": "concept-comments",
+      "level": 2,
+      "text": "2. Single-Line vs. Multi-Line Comments"
+    },
+    {
+      "type": "paragraph",
+      "text": "C++ supports two styles of comments to write notes inside your code:"
+    },
+    {
+      "type": "syntax_explanation",
+      "items": [
+        {
+          "syntax": "// comment text",
+          "explanation": "Single-line comment. C++ completely ignores everything after the double slashes '//' on that exact line. Used for short, quick notes next to active code."
+        },
+        {
+          "syntax": "/* comment text */",
+          "explanation": "Multi-line comment block. C++ ignores everything between the opening '/*' and the closing '*/' tags, even if it spans several lines. Used for long descriptions or headers."
+        }
+      ]
+    },
+    {
+      "type": "heading",
+      "id": "visual-comments",
+      "level": 2,
+      "text": "3. Visual Drawing: Code vs. Comments"
+    },
+    {
+      "type": "drawing",
+      "id": "comments-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "code-example-comments",
+      "level": 2,
+      "text": "4. Code Example"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a C++ program using both comment styles to document its logic:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "/*\n   This program displays player statistics.\n   Created by: Bjarne\n*/\n#include <iostream>\n\nint main() {\n    int level = 5; // Start at level 5\n    std::cout << \"Level: \" << level << std::endl;\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "interactive-simulation-comments",
+      "level": 2,
+      "text": "5. Try it Out"
+    },
+    {
+      "type": "simulation",
+      "id": "comments-simulation",
+      "simulationData": {
+        "code": "// int score = 50;\nint score = 100;\n/*\nscore = 200;\n*/",
+        "language": "cpp",
+        "visualizer": "variables",
+        "steps": [
+          {
+            "line": 2,
+            "explanation": "C++ completely skips the first line ('// int score = 50;') because of the double slashes. It starts execution on line 2, creating a storage box named 'score' in memory and placing '100' inside it.",
+            "variables": [
+              {
+                "name": "score",
+                "type": "int",
+                "value": "100",
+                "address": "0x7FFE10"
+              }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "The compiler ignores the multi-line block from '/*' to '*/'. The assignment 'score = 200;' is never run, so the value inside our 'score' storage box remains '100'.",
+            "variables": [
+              {
+                "name": "score",
+                "type": "int",
+                "value": "100",
+                "address": "0x7FFE10"
+              }
+            ],
+            "terminalOutput": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "6. Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "· Zero Footprint: Comments have zero effect on program execution speeds or compiled file size.\n· Compilation Boundaries: Multi-line comments must close with '*/' or the compiler will treat the entire rest of your file as a comment!"
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "7. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "· Unfinished Block Comments: Writing '/* my comment' and forgetting the closing '*/'. This comments out all subsequent functional lines and breaks your code!\n· Over-commenting: Explaining obvious code (like 'int x = 5; // sets x to 5'). Only comment to explain *why* code exists, not *what* the raw syntax says."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "8. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the main purpose of comments in C++?",
+      "options": [
+        "To speed up code execution",
+        "To make notes for humans explaining code logic",
+        "To define decimal variable containers",
+        "To import library header structures"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Do comments increase the size of the final compiled executable program file?",
+      "options": [
+        "Yes, every character of comments adds bytes to the binary file.",
+        "No, comments are stripped out by the compiler and have zero footprint in the binary file.",
+        "Yes, but only multi-line comments do.",
+        "Yes, they increase size by reserving memory stack slots."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following is an unfinished multi-line comment that will cause compilation errors?",
+      "options": [
+        "// my comment",
+        "/* my comment */",
+        "/* my comment",
+        "// my comment */"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "9. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Comments are notes for humans. Use '//' for single-line notes, and '/* ... */' for longer blocks. C++ completely strips them away during compilation."
+    }
+  ]
+}

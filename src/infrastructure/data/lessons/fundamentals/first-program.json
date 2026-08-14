@@ -1,0 +1,216 @@
+{
+  "id": "first-program",
+  "title": "Writing Your First Program",
+  "subjectId": "fundamentals",
+  "nextLessonId": "input-output",
+  "prevLessonId": "installing-ide",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "It is time to write your very first C++ program! We will build a small program that prints a greeting on the screen. To do this, we need to understand the basic skeleton (called boilerplate code) that every C++ file uses."
+    },
+    {
+      "type": "heading",
+      "id": "why-boilerplate",
+      "level": 2,
+      "text": "1. Why do we need Boilerplate code?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Boilerplate code is like the foundation of a house. Before you can put up walls or paint the rooms, you need a solid base. In C++, the boilerplate setup tells the compiler where to import tools and where the program should start reading."
+    },
+    {
+      "type": "heading",
+      "id": "code-hello",
+      "level": 2,
+      "text": "2. The Hello World Program"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the standard boilerplate template to print text on a screen. Every standard C++ program begins with this basic structure:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "visual-boilerplate",
+      "level": 2,
+      "text": "3. Visual Drawing: Skeleton of C++"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is a quick map of what each part of the skeleton does, drawn out like a whiteboard sketch:"
+    },
+    {
+      "type": "drawing",
+      "id": "skeleton-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "step-by-step",
+      "level": 2,
+      "text": "4. Step-by-Step Breakdown"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us walk through the most important line in the program: the `std::cout` instruction. Here is a diagram showing how the different parts are connected and what each part means:"
+    },
+    {
+      "type": "drawing",
+      "id": "step-breakdown-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "mega-header",
+      "level": 2,
+      "text": "5. The Mega Header: bits/stdc++.h"
+    },
+    {
+      "type": "paragraph",
+      "text": "Usually, in C++, you have to import different headers (like `<iostream>` for printing, `<string>` for text, or `<cmath>` for math) depending on what features you want to use. This means you might end up writing a lot of include statements at the top of your file."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let us compare how your program changes when you write each header manually versus using the mega header side-by-side:"
+    },
+    {
+      "type": "code_comparison",
+      "labelLeft": "Manual Imports (Without bits/stdc++.h)",
+      "labelRight": "Mega Header (With bits/stdc++.h)",
+      "codeLeft": "// Manual Headers:\n#include <iostream>\n#include <string>\n#include <cmath>\n\nint main() {\n    std::cout << \"Manual includes\";\n    return 0;\n}",
+      "codeRight": "// Mega Header:\n#include <bits/stdc++.h>\n\nint main() {\n    std::cout << \"All included\";\n    return 0;\n}",
+      "language": "cpp"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "While bits/stdc++.h is great for saving time in speed coding contests, it makes compiling a bit slower because it imports everything. Avoid using it in real-world professional projects!"
+    },
+    {
+      "type": "heading",
+      "id": "interactive-placeholder-2",
+      "level": 2,
+      "text": "6. Visualize Execution Flow"
+    },
+    {
+      "type": "simulation",
+      "id": "first-program-simulation",
+      "simulationData": {
+        "code": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}",
+        "language": "cpp",
+        "visualizer": "variables",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "The program begins by processing headers.\n\n`#include <iostream>` imports the standard C++ library that lets us print output to the screen.",
+            "variables": [],
+            "terminalOutput": ""
+          },
+          {
+            "line": 3,
+            "explanation": "The CPU enters the `main()` function.\n\nEvery C++ program MUST have a `main()` function. This is the entry point where execution officially starts.",
+            "variables": [],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "The print statement executes.\n\n`std::cout` sends the text \"Hello, World!\" to the console screen. `std::endl` moves the screen cursor to the next line.",
+            "variables": [],
+            "terminalOutput": "Hello, World!\n"
+          },
+          {
+            "line": 5,
+            "explanation": "The program executes `return 0;`.\n\nThis tells the operating system that our code finished successfully without any issues. The program now terminates.",
+            "variables": [],
+            "terminalOutput": "Hello, World!\n\nProcess exited with status 0"
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "7. Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "· Main Function: Every C++ program must contain exactly one 'int main()' function as the entry door.\n· Semicolons (;): Every instruction statement inside C++ must end with a semicolon, like a period at the end of a sentence.\n· Mega Header: bits/stdc++.h imports all libraries in one line, but it slows down compile times."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "8. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "· Missing Semicolon: Writing 'std::cout << \"Hello\"' without a ';' at the end. This is the most common C++ error!\n· Case Errors: Writing 'Main()' instead of 'main()'. C++ is case-sensitive, so it won't find the entry point!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "9. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary function of the '#include <iostream>' statement?",
+      "options": [
+        "It declares the main entry function of the script.",
+        "It imports the library needed to print output text and read user keyboard inputs.",
+        "It sets the compiler's execution speed limit.",
+        "It deletes temporary compiler files."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What happens if you omit the semicolon ';' at the end of an instruction statement in C++?",
+      "options": [
+        "The compiler completes it automatically at runtime.",
+        "The compiler throws a syntax compilation error and refuses to build the code.",
+        "The program executes slower.",
+        "The editor converts the line into a comment."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which operator is used to push text messages into the std::cout stream?",
+      "options": [
+        ">> (Extraction operator)",
+        "<< (Insertion operator)",
+        "== (Equal comparison)",
+        "&& (Logical AND)"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is the main benefit of using the mega header '<bits/stdc++.h>'?",
+      "options": [
+        "It runs the code faster on the computer CPU.",
+        "It automatically imports all standard C++ header libraries in a single include line, saving you from writing multiple headers.",
+        "It removes the need to write the main() function.",
+        "It automatically formats your brackets and spaces."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "10. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Boilerplate code lays the foundation for your C++ script. With library imports, main doors, print streams, and return codes, you have a solid scaffold. Now let us explore how to write notes to ourselves using comments!"
+    }
+  ]
+}

@@ -2,69 +2,153 @@
   "id": "intro-to-programming",
   "title": "Introduction to Programming",
   "subjectId": "fundamentals",
-  "nextLessonId": "variables",
+  "nextLessonId": "installing-ide",
   "prevLessonId": null,
   "content": [
     {
       "type": "paragraph",
-      "text": "Welcome to your first step in learning Data Structures and Algorithms. Programming is the craft of writing instructions that a computer can execute to solve problems, manipulate data, and perform operations."
+      "text": "Hello there! Welcome to your first step in learning programming. We will start from absolute scratch and walk through this together, step by step."
     },
     {
       "type": "heading",
       "id": "what-is-programming",
       "level": 2,
-      "text": "What is a Computer Program?"
+      "text": "1. What is Programming?"
     },
     {
       "type": "paragraph",
-      "text": "At the lowest level, computer processors only understand binary code (0s and 1s), known as machine code. High-level languages like C++ allow us to write human-readable code that is subsequently translated into binary by a specialized software tool called a Compiler."
+      "text": "Programming is simply giving a computer a clear, ordered list of steps to complete a task. Imagine teaching a robot how to make tea: you must instruct it to grab a cup, boil water, and drop the bag in. That recipe list is a Program."
+    },
+    {
+      "type": "drawing",
+      "id": "robot-tea"
     },
     {
       "type": "heading",
-      "id": "why-cpp",
+      "id": "the-language-gap",
       "level": 2,
-      "text": "Why Learn C++?"
+      "text": "2. The Language Gap: ON and OFF"
     },
     {
       "type": "paragraph",
-      "text": "C++ is a highly popular, statically typed, compiled programming language. It is renowned for its speed, close-to-hardware memory access, and granular control. Most modern operating systems, web browsers, database systems, and game engines are written in C++ because of its extreme efficiency."
+      "text": "Computer chips do not understand human language. They only understand electrical currents: ON (represented as 1) and OFF (represented as 0). This language is called Binary. To talk to the computer, we write our instructions in a high-level language like C++ using English-like words, and then use a translator to convert it to binary."
     },
     {
-      "type": "callout",
-      "style": "tip",
-      "text": "Tip: Learning DSA in C++ forces you to manage memory and pointers explicitly. This builds a deeper mechanical sympathy for how computers actually run algorithms."
+      "type": "drawing",
+      "id": "language-gap"
     },
     {
       "type": "heading",
-      "id": "preview-cpp",
+      "id": "translator-tools",
       "level": 2,
-      "text": "A First Look at C++ Code"
+      "text": "3. Translator Tools: Compilers vs. Interpreters"
     },
     {
       "type": "paragraph",
-      "text": "Here is a simple C++ program. It prints a message and returns a status code of 0, indicating success."
+      "text": "Compilers and interpreters are the software tools that translate code into machine binary. They translate in different ways:"
     },
     {
-      "type": "code",
-      "language": "cpp",
-      "code": "#include <iostream>\n\nint main() {\n    std::cout << \"Welcome to C++!\\n\";\n    return 0;\n}"
+      "type": "drawing",
+      "id": "translator-comparison"
     },
     {
       "type": "heading",
-      "id": "review-intro",
+      "id": "compilation-journey",
       "level": 2,
-      "text": "Review Exercise"
+      "text": "4. The Compilation Journey"
+    },
+    {
+      "type": "paragraph",
+      "text": "C++ is a compiled language. Its translation takes place in 5 quick, simple stages to turn your source text into a fast, runnable binary program (.exe):"
+    },
+    {
+      "type": "drawing",
+      "id": "compilation-flow"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-history-usage",
+      "level": 2,
+      "text": "5. C++ History & Usage"
+    },
+    {
+      "type": "paragraph",
+      "text": "C++ was created in 1979 to combine high-level structure with machine-level speed. Today, it remains the most widely used language in coding contests due to its raw performance."
+    },
+    {
+      "type": "drawing",
+      "id": "cpp-history-usage"
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Practice Questions"
     },
     {
       "type": "mcq",
-      "question": "What is the primary role of a compiler in C++?",
+      "question": "What is the primary role of a compiler?",
       "options": [
-        "To execute the code line-by-line during runtime.",
-        "To translate human-readable source code into machine-executable binary.",
-        "To display the output window on the screen.",
-        "To format the text layout of the editor."
+        "To run the code line-by-line while writing it.",
+        "To translate the entire source code file into a machine-executable binary file.",
+        "To scan the system for duplicate files.",
+        "To write comments automatically."
       ],
       "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which of the following describes how an interpreter works?",
+      "options": [
+        "It translates the entire program at once into an executable file.",
+        "It translates and executes code line-by-line in real time during runtime.",
+        "It links object files with external libraries.",
+        "It deletes comments from files."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What language does computer hardware understand directly?",
+      "options": [
+        "C++ source code",
+        "Binary (1s and 0s)",
+        "Assembly text",
+        "Python script instructions"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is C++ highly preferred in competitive programming contests?",
+      "options": [
+        "It is slow and easy to debug.",
+        "It runs extremely fast and includes built-in helper tools for writing algorithms.",
+        "It doesn't require compiling before running.",
+        "It doesn't use variables or loops."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Who created the C++ programming language?",
+      "options": [
+        "Dennis Ritchie",
+        "Bjarne Stroustrup",
+        "Guido van Rossum",
+        "James Gosling"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "In short: programming is how we talk to computers. C++ is a super-fast compiled language that converts code into binary using a compiler. Now that we understand how code works, let's learn how to set up our computer to write it!"
     }
   ]
 }

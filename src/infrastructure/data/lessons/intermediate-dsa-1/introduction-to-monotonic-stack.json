@@ -1,0 +1,118 @@
+{
+  "id": "introduction-to-monotonic-stack",
+  "title": "Lesson 4: Introduction to Monotonic Stack",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "next-greater-element",
+  "prevLessonId": "stack-implementation-using-linked-list",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to this lesson. Today, we are going to learn about a very powerful variation of the stack called a **Monotonic Stack**. Don't let the name scare you—it just means a stack that keeps its items in a specific sorted order. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-monotonic",
+      "level": 2,
+      "text": "1. What is a Monotonic Stack?"
+    },
+    {
+      "type": "paragraph",
+      "text": "The word **monotonic** comes from mathematics and means 'moving in a single direction'. A **Monotonic Stack** is a stack that maintains its elements in a strictly sorted order (either increasing or decreasing) from bottom to top."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Monotonic Increasing Stack**: Elements are in increasing order (e.g. `[10, 20, 30]`). Pushing a smaller element than the top requires popping off the larger elements first."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Monotonic Decreasing Stack**: Elements are in decreasing order (e.g. `[30, 20, 10]`). Pushing a larger element than the top requires popping off the smaller elements first."
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-it",
+      "level": 2,
+      "text": "2. Why Do We Need It?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Monotonic stacks are excellent for solving 'range-query' problems. Specifically, they help us answer questions like: *'For each element in the array, what is the next element that is greater or smaller than it?'* in linear time!"
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "3. Visual Drawing: Monotonic Stack"
+    },
+    {
+      "type": "drawing",
+      "id": "monotonic-stack-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "4. C++ Monotonic Increasing Stack logic"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the basic pattern to build a Monotonic Increasing stack in C++:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <stack>\n#include <vector>\n\nvoid buildMonotonicIncreasing(std::vector<int>& arr) {\n    std::stack<int> s;\n    for (int num : arr) {\n        // Pop elements that are larger than the current element\n        while (!s.empty() && s.top() > num) {\n            s.pop();\n        }\n        s.push(num);\n    }\n}"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "5. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(N)$ because every element is pushed onto the stack at most once and popped at most once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ to store stack nodes."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is a monotonic decreasing stack?",
+      "options": [
+        "A stack that allows elements to decrease in capacity over time.",
+        "A stack where elements from bottom to top are sorted in strictly decreasing order.",
+        "A stack that only allows negative values.",
+        "A stack implemented using a double-ended queue."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why is the time complexity of building a monotonic stack O(N) even though there is a nested loop?",
+      "options": [
+        "Because it uses binary search.",
+        "Because every element is pushed and popped at most once.",
+        "Because the stack does not allow duplicate entries.",
+        "Because we only process arrays of size less than 10."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We learned that monotonic stacks maintain sorted properties by popping violating elements prior to pushing. Next, we will use this exact data structure to solve a classic interview question: Next Greater Element!"
+    }
+  ]
+}

@@ -1,0 +1,141 @@
+{
+  "id": "installing-ide",
+  "title": "Installing Compiler & IDE",
+  "subjectId": "fundamentals",
+  "nextLessonId": "first-program",
+  "prevLessonId": "intro-to-programming",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Welcome! In this lesson, we will set up our coding environment. We need an Editor (to write our code) and a Compiler (to translate our code into machine instructions). Follow along with Microsoft engineer Tariq Brown using our interactive visual guide below!"
+    },
+    {
+      "type": "video_layout"
+    },
+    {
+      "type": "drawing",
+      "id": "ide-workspace"
+    },
+    {
+      "type": "heading",
+      "id": "write-run-file",
+      "level": 2,
+      "text": "1. Writing & Running C++ in VS Code"
+    },
+    {
+      "type": "paragraph",
+      "text": "Now that you have installed both tools, let's learn how to write, compile, and run your first C++ program! Follow along step-by-step using our interactive slide-deck presentation below:"
+    },
+    {
+      "type": "slide_deck"
+    },
+    {
+      "type": "heading",
+      "id": "troubleshooting",
+      "level": 2,
+      "text": "2. Troubleshooting Tips"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "If you get 'g++ is not recognized as an internal or external command', you either skipped adding the path variable (Step 3 in MinGW tab) or need to restart VS Code to apply the changes."
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Be sure to use the 'ucrt64' directory path (typically C:\\msys64\\ucrt64\\bin) as shown in the walkthrough. This ensures you are using the updated C++ standard library compiler!"
+    },
+    {
+      "type": "heading",
+      "id": "visualizer",
+      "level": 2,
+      "text": "3. Interactive Setup Simulator"
+    },
+    {
+      "type": "paragraph",
+      "text": "[Interactive Visualizer: Environment setup simulator showing terminal outputs for successful compiler configuration]"
+    },
+    {
+      "type": "heading",
+      "id": "key-takeaways",
+      "level": 2,
+      "text": "4. Key Takeaways"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "· VS Code is just a text editor; it needs the MinGW compiler to translate and run C++ code.\n· The C/C++ Extension is the bridge between VS Code and the compiler.\n· PATH environment variables tell Windows where programs are saved so we can run them from anywhere."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary function of the compiler in our C++ setup?",
+      "options": [
+        "To serve as a text editor with color highlighting.",
+        "To translate our human-readable C++ code into machine code (ones and zeros) that the computer understands.",
+        "To download third-party extensions for VS Code.",
+        "To host web pages on the internet."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which software did Tariq Brown use in the video to download and install the MinGW compiler toolchain?",
+      "options": [
+        "Node Package Manager (npm)",
+        "MSYS2",
+        "Visual Studio Installer",
+        "Windows Update"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Why do we add the directory 'C:\\msys64\\ucrt64\\bin' to the Windows PATH Environment Variable?",
+      "options": [
+        "To tell Windows and VS Code where to find the compiler so it can run from any folder.",
+        "To compress the size of our code files.",
+        "To back up our code on a cloud server.",
+        "To prevent viruses from attacking our program."
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "What is the command to compile a file named 'main.cpp' and name the output executable 'main'?",
+      "options": [
+        "compile main.cpp --go",
+        "g++ main.cpp -o main",
+        "run main.cpp -output main",
+        "g++ compiler main.cpp"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What should you do if the terminal says 'g++ is not recognized' after installation?",
+      "options": [
+        "Uninstall VS Code immediately.",
+        "Double-check your PATH environment variables and restart your VS Code/terminal.",
+        "Change the name of the file from main.cpp to main.txt.",
+        "Reinstall your Windows operating system."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Setting up your environment might feel like a lot of steps, but once done, you have a solid workspace. You write C++ inside VS Code, which uses the C/C++ Extension bridge to send your text to the MinGW compiler. The compiler translates it into ones and zeros, and runs it on Windows. Now that you are ready, let's write our first actual program!"
+    }
+  ]
+}

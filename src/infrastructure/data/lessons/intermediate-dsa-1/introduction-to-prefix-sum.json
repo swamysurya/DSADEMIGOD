@@ -1,0 +1,391 @@
+{
+  "id": "introduction-to-prefix-sum",
+  "title": "Introduction to Prefix Sum",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "in-place-prefix-sum",
+  "prevLessonId": "hashing-key-properties-and-types",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello there! In our last lessons, we explored hashing and how to quickly look up items. Today, we are going to learn a simple but incredibly powerful trick called **Prefix Sum**. We already know how arrays store elements side-by-side in memory and how we can access any element instantly if we know its index. Today, we will use this knowledge to learn how to prepare arrays for fast computations."
+    },
+    {
+      "type": "heading",
+      "id": "what-is-prefix-sum",
+      "level": 2,
+      "text": "1. What is Prefix Sum?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's start by breaking down the name. **Prefix** means 'at the beginning', and **Sum** means 'adding things together'. Put them together, and a **Prefix Sum** is a new array where each slot stores the sum of all elements from the very beginning of the original array up to that current slot."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's define it using a concrete example of an input array A and its corresponding output prefix sum array P:"
+    },
+    {
+      "type": "drawing",
+      "id": "prefix-sum-intro-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "how-to-build-it",
+      "level": 2,
+      "text": "2. How to Build It"
+    },
+    {
+      "type": "paragraph",
+      "text": "How do we construct the prefix sum array? We can build it in **O(N)** time by reusing our previous calculations!"
+    },
+    {
+      "type": "paragraph",
+      "text": "The key idea is: **The sum up to the current index is equal to the sum up to the previous index plus the current element.**"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Formula to build prefix sum:\n`P[i] = P[i - 1] + A[i]`  (for i > 0)"
+    },
+    {
+      "type": "drawing",
+      "id": "prefix-sum-building-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's launch the interactive simulator below to see the C++ code and watch how memory slots get populated line-by-line as the CPU runs it. Note how the memory elements are grouped into contiguous array blocks:"
+    },
+    {
+      "type": "simulation",
+      "id": "prefix-sum-build-simulation",
+      "simulationData": {
+        "code": "int arr[5] = {2, 4, 1, 5, 3};\nint pref[5];\n\npref[0] = arr[0];\n\nfor (int i = 1; i < 5; i++) {\n    pref[i] = pref[i - 1] + arr[i];\n}",
+        "language": "cpp",
+        "visualizer": "array",
+        "steps": [
+          {
+            "line": 1,
+            "explanation": "We declare the input array `arr` with 5 elements. The computer allocates 5 adjacent memory slots for it.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 2,
+            "explanation": "We declare the `pref` array of size 5 to store our prefix sums. At first, all slots contain uninitialized/garbage values (represented as '?').",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "?", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 4,
+            "explanation": "The first element of `pref` is set equal to the first element of `arr` because there are no previous values to accumulate. So, `pref[0] = arr[0] = 2`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "We enter the loop to calculate prefix sums for the remaining indices. We initialize the loop variable `i` to 1.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "?", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "For `i = 1`, we calculate: `pref[1] = pref[0] + arr[1] = 2 + 4 = 6`. We store 6 in `pref[1]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "1", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "The loop increments `i` to 2. Since `2 < 5`, we enter the loop again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "?", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "For `i = 2`, we calculate: `pref[2] = pref[1] + arr[2] = 6 + 1 = 7`. We store 7 in `pref[2]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "2", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "The loop increments `i` to 3. Since `3 < 5`, we enter the loop again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "?", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "For `i = 3`, we calculate: `pref[3] = pref[2] + arr[3] = 7 + 5 = 12`. We store 12 in `pref[3]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "3", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "The loop increments `i` to 4. Since `4 < 5`, we enter the loop again.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "?", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 7,
+            "explanation": "For `i = 4`, we calculate: `pref[4] = pref[3] + arr[4] = 12 + 3 = 15`. We store 15 in `pref[4]`.",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" },
+              { "name": "i", "type": "int", "value": "4", "address": "0x7FFE28" }
+            ],
+            "terminalOutput": ""
+          },
+          {
+            "line": 6,
+            "explanation": "The loop increments `i` to 5. Since `5 < 5` is false, the loop ends. Our prefix sum array is fully built!",
+            "variables": [
+              { "name": "arr[0]", "type": "int", "value": "2", "address": "0x7FFE00" },
+              { "name": "arr[1]", "type": "int", "value": "4", "address": "0x7FFE04" },
+              { "name": "arr[2]", "type": "int", "value": "1", "address": "0x7FFE08" },
+              { "name": "arr[3]", "type": "int", "value": "5", "address": "0x7FFE0C" },
+              { "name": "arr[4]", "type": "int", "value": "3", "address": "0x7FFE10" },
+              { "name": "pref[0]", "type": "int", "value": "2", "address": "0x7FFE14" },
+              { "name": "pref[1]", "type": "int", "value": "6", "address": "0x7FFE18" },
+              { "name": "pref[2]", "type": "int", "value": "7", "address": "0x7FFE1C" },
+              { "name": "pref[3]", "type": "int", "value": "12", "address": "0x7FFE20" },
+              { "name": "pref[4]", "type": "int", "value": "15", "address": "0x7FFE24" }
+            ],
+            "terminalOutput": ""
+          }
+        ]
+      }
+    },
+    {
+      "type": "heading",
+      "id": "why-prefix-sum",
+      "level": 2,
+      "text": "3. Why Do We Need Prefix Sum?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Now that we know *how* to build a prefix sum array, let's understand *why* we need it. What makes it so powerful?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine you are running an online store, and you have an array storing your daily sales. Suddenly, a manager asks you: *'What was the total sum of sales from Day L to Day R?'*"
+    },
+    {
+      "type": "paragraph",
+      "text": "If we do not use prefix sums, we must run a loop starting from index `L` all the way to `R`, adding the values one-by-one. This takes **O(N)** time in the worst case because we might need to scan the entire array."
+    },
+    {
+      "type": "paragraph",
+      "text": "If the manager asks this question **Q times** for different ranges, running a loop every single time will take **O(Q * N)** operations, which is extremely slow."
+    },
+    {
+      "type": "drawing",
+      "id": "sales-query-comparison-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "With our precalculated **Prefix Sum** array `P`, we can answer any range sum query in a single subtraction: **O(1) Constant Time**! The formula is:"
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "For any query from index L to R:\n· If L > 0: Range Sum = P[R] - P[L - 1]\n· If L = 0: Range Sum = P[R]"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's check this formula! What is the sum of elements from index `1` to `3` in our original array `A = [2, 4, 1, 5, 3]`?\n· Using a loop: `4 + 1 + 5 = 10`.\n· Using our formula: `P[3] - P[0] = 12 - 2 = 10`.\nIt matches perfectly, and we didn't run any loop! We just looked at two slots in our prefix sum array."
+    },
+    {
+      "type": "heading",
+      "id": "complexity",
+      "level": 2,
+      "text": "4. Complexity Analysis"
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(N)",
+      "timeExplanation": "We loop through the original array exactly once to fill the prefix sum array.",
+      "spaceComplexity": "O(N)",
+      "spaceExplanation": "We allocate a new array of size N to store the cumulative sums."
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "5. Common Mistakes to Avoid"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Off-by-One Boundaries**: When answering a query from `L` to `R`, always remember that if `L > 0`, we subtract `P[L - 1]`. If you subtract `P[L]`, you will accidentally exclude `A[L]` from the sum!"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Index Out of Bounds**: If `L = 0`, accessing `P[L - 1]` means accessing `P[-1]`, which will crash your program. Always include an `if` condition to handle `L = 0` as a special case."
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "6. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Given the original array A = [3, 1, 4, 2], what is its Prefix Sum array?",
+      "options": [
+        "[3, 4, 8, 10]",
+        "[3, 3, 7, 9]",
+        "[3, 4, 6, 8]",
+        "[0, 3, 4, 8]"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "What is the time complexity of answering a single range sum query from L to R using a precalculated prefix sum array?",
+      "options": [
+        "O(N)",
+        "O(log N)",
+        "O(1)",
+        "O(R - L)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "If you want to find the sum of elements from index 2 to index 5 (inclusive) in array A, what is the correct formula using the prefix sum array P?",
+      "options": [
+        "P[5] - P[2]",
+        "P[5] - P[1]",
+        "P[5] - P[0]",
+        "P[4] - P[1]"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary",
+      "level": 2,
+      "text": "7. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: A prefix sum array stores cumulative sums from the beginning of the array. Building a prefix sum array takes **O(N)** time and **O(N)** extra space. Once built, it lets us query any range sum in **O(1)** time using `P[R] - P[L - 1]`. Remember to handle the boundary case when `L = 0` to avoid errors!"
+    }
+  ]
+}

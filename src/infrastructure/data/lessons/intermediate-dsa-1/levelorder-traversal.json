@@ -1,0 +1,86 @@
+{
+  "id": "levelorder-traversal",
+  "title": "Level Order Traversal",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "balanced-binary-tree-intro",
+  "prevLessonId": "tree-traversals",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will study **Level Order Traversal** (also known as Breadth-First Search or BFS on trees). Instead of diving deep down a branch recursively, Level Order visits nodes row by row, from top to bottom, and left to right. Let's find out how it works!"
+    },
+    {
+      "type": "heading",
+      "id": "why-levelorder",
+      "level": 2,
+      "text": "1. Why Do We Need Level Order Traversal?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Imagine printing a directory tree where you want to list top-level folders first, then their sub-folders. Level order traversal is perfect for this. It also helps us find the shortest path in unweighted graphs or trees."
+    },
+    {
+      "type": "heading",
+      "id": "using-queue",
+      "level": 2,
+      "text": "2. The Key Helper: A Queue"
+    },
+    {
+      "type": "paragraph",
+      "text": "To traverse row by row, we cannot rely on recursive functions alone because recursion uses a stack. Instead, we use a **Queue** (First-In, First-Out). When we visit a node, we add its left and right children to the back of the queue, ensuring they are visited in the next level's turn."
+    },
+    {
+      "type": "heading",
+      "id": "levelorder-code",
+      "level": 2,
+      "text": "3. C++ Code Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ code utilizing `std::queue`:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <queue>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nvoid levelOrder(Node* root) {\n    if (root == nullptr) return;\n\n    std::queue<Node*> q;\n    q.push(root); // Start with root node\n\n    while (!q.empty()) {\n        Node* curr = q.front();\n        q.pop();\n\n        std::cout << curr->data << \" \";\n\n        // Add children to the queue\n        if (curr->left != nullptr) {\n            q.push(curr->left);\n        }\n        if (curr->right != nullptr) {\n            q.push(curr->right);\n        }\n    }\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which data structure is essential for implementing Level Order Traversal?",
+      "options": [
+        "Stack",
+        "Hash Map",
+        "Queue",
+        "Priority Queue"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What order does Level Order traversal follow?",
+      "options": [
+        "Depth-first",
+        "Level-by-level (row-by-row) from top to bottom",
+        "Bottom-to-top leaf first",
+        "Sorted key order"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Level Order traversal visits nodes level by level using a Queue helper. It maintains the FIFO order to process children left-to-right. In the next lesson, we will introduce the concept of Balanced Binary Trees!"
+    }
+  ]
+}

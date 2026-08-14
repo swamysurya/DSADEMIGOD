@@ -1,0 +1,94 @@
+{
+  "id": "tree-views-lca",
+  "title": "Top View, Right View & LCA",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "binary-search-tree-intro",
+  "prevLessonId": "maximum-path-sum",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will learn about **Top View**, **Right View**, and the **Lowest Common Ancestor (LCA)** of a Binary Tree. These are very popular interview questions that test your understanding of tree geometry and traversals. Let's explore them!"
+    },
+    {
+      "type": "heading",
+      "id": "tree-views-concept",
+      "level": 2,
+      "text": "1. What are Tree Views?"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Top View**: Imagine standing directly above a tree looking down. You will only see the nodes that are at the outermost boundaries of each column. We can compute this using Level Order traversal and column indexes (vertical distance from root)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Right View**: Imagine standing to the right of a tree. You will only see the rightmost node at each vertical level. We can compute this using a modified Preorder traversal (Root → Right → Left)."
+    },
+    {
+      "type": "heading",
+      "id": "lca-concept",
+      "level": 2,
+      "text": "2. What is Lowest Common Ancestor (LCA)?"
+    },
+    {
+      "type": "paragraph",
+      "text": "The **Lowest Common Ancestor** of two nodes $p$ and $q$ is the lowest node in the tree that has both $p$ and $q$ as descendants (where we allow a node to be a descendant of itself)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Real-World Analogy**: Think of it like finding the closest common manager in a company chart for two employees. It is the first manager going upwards who has authority over both."
+    },
+    {
+      "type": "heading",
+      "id": "lca-code",
+      "level": 2,
+      "text": "3. LCA C++ Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the recursive C++ solution to find the LCA of two nodes in $O(N)$ time:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n    Node(int val) : data(val), left(nullptr), right(nullptr) {}\n};\n\nNode* findLCA(Node* root, Node* p, Node* q) {\n    // Base Case: empty tree or if we found p or q\n    if (root == nullptr || root == p || root == q) {\n        return root;\n    }\n\n    // Recurse left and right\n    Node* leftLCA = findLCA(root->left, p, q);\n    Node* rightLCA = findLCA(root->right, p, q);\n\n    // If both left and right calls returned non-null, current node is the LCA!\n    if (leftLCA != nullptr && rightLCA != nullptr) {\n        return root;\n    }\n\n    // Otherwise, return the non-null result\n    return (leftLCA != nullptr) ? leftLCA : rightLCA;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "4. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "Which traversal logic is most useful for finding the Right View of a binary tree?",
+      "options": [
+        "Inorder traversal",
+        "Preorder traversal that visits Right before Left",
+        "Postorder traversal",
+        "Linear search"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If root node X has node p in its left subtree and node q in its right subtree, what is the LCA of p and q?",
+      "options": [
+        "Node p",
+        "Node q",
+        "Node X",
+        "nullptr"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "5. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Tree views isolate specific perspectives: Top View uses columns, while Right View captures the last node at each level. The Lowest Common Ancestor is the deepest node where paths to $p$ and $q$ split. Next, we will introduce Binary Search Trees (BST)!"
+    }
+  ]
+}

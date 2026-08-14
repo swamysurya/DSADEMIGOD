@@ -1,0 +1,255 @@
+{
+  "id": "collision-resolution-techniques",
+  "title": "Collision Resolution Techniques",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "hashing-key-properties-and-types",
+  "prevLessonId": "introduction-to-hashing",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello again! In our last lesson, we discovered that when two keys map to the same slot index, they **collide**. In this lesson, we will learn how to resolve these collisions so we can store all our keys safely!"
+    },
+    {
+      "type": "heading",
+      "id": "what-is-resolution",
+      "level": 2,
+      "text": "1. What is Collision Resolution?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Collision resolution is the strategy we use to store multiple keys that have the same hash index. There are two primary schools of thought:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Open Hashing (Chaining)**: Store colliding elements outside the hash table using linked lists."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Closed Hashing (Open Addressing)**: Keep all elements inside the hash table array by searching for another empty slot."
+    },
+    {
+      "type": "drawing",
+      "id": "collision-classification-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "As shown in the classification tree above, these resolution techniques divide into Chaining and three types of Probing. Let's study each of them step-by-step."
+    },
+    {
+      "type": "heading",
+      "id": "chaining",
+      "level": 2,
+      "text": "2. Open Hashing: Chaining"
+    },
+    {
+      "type": "paragraph",
+      "text": "In **Chaining**, each slot of the hash table is not a single value, but a pointer to a **Linked List**. When a collision occurs, we simply append the new key to the linked list at that index slot."
+    },
+    {
+      "type": "callout",
+      "style": "tip",
+      "text": "What is a Linked List? Think of it like a train of boxes. Each box stores a value and has a connector (hook) that points to the next box. The last box points to **null** (empty space). We will explore Linked Lists step-by-step in an upcoming chapter, so don't worry about the details yet!"
+    },
+    {
+      "type": "drawing",
+      "id": "chaining-simulation"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pros**: Very easy to implement. The table never gets 'full'—we can always add more nodes to our lists."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Cons**: Uses extra memory for linked list pointers. If too many keys hash to the same slot, the linked list gets long, and searching becomes slow (degrading to `O(N)`)."
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(1)",
+      "timeExplanation": "Insert is O(1) because we simply insert at the head of the list. Search and Delete are O(1) on average, but can degrade to O(K) in the worst case if all K keys hash to the exact same slot.",
+      "spaceComplexity": "O(N + K)",
+      "spaceExplanation": "We allocate N slots for the table array, and K extra nodes for all the keys we store in the lists."
+    },
+    {
+      "type": "heading",
+      "id": "open-addressing",
+      "level": 2,
+      "text": "3. Closed Hashing: Open Addressing"
+    },
+    {
+      "type": "paragraph",
+      "text": "In **Open Addressing**, we do not use linked lists. All keys must be stored directly inside the hash table array. If a slot is taken, we **probe** (search) for another empty slot using a rule. Let's learn the three main probing techniques:"
+    },
+    {
+      "type": "heading",
+      "id": "linear-probing",
+      "level": 3,
+      "text": "3a. Linear Probing"
+    },
+    {
+      "type": "paragraph",
+      "text": "When a collision occurs at index `H`, we look at the next slot: `H+1, H+2, H+3...` sequentially, wrapping around to index `0` if we reach the end of the array."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Formula**: `Hash(x, i) = (Hash(x) + i) % N` where `Hash(x) = x % N` is the primary hash function to find the initial starting index, and `i = 0, 1, 2...` represents the probing step."
+    },
+    {
+      "type": "drawing",
+      "id": "linear-probing-simulation"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pros**: Very simple to implement. It is also fast because the computer can read adjacent slots (slots right next to each other) much faster, similar to reading consecutive pages in a book."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Cons**: **Primary Clustering**. 'Clustering' means elements gather or clump together in one local area, forming a long chain of filled slots. Once a cluster forms, new keys that hash to this area must scan past the entire block sequentially, making insertions slower and slower."
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(1)",
+      "timeExplanation": "O(1) average time for Insert, Search, and Delete. Worst case is O(N) when the table is nearly full and we have to scan the entire array sequentially.",
+      "spaceComplexity": "O(N)",
+      "spaceExplanation": "No extra pointer allocations. All elements are stored directly inside the array."
+    },
+    {
+      "type": "heading",
+      "id": "quadratic-probing",
+      "level": 3,
+      "text": "3b. Quadratic Probing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why do we switch to **Quadratic Probing**? We saw that Linear Probing creates large clumps of filled slots (Primary Clusters) which slow us down. To solve this, we use quadratic steps. Instead of checking adjacent slots sequentially (like +1, +2, +3), we square the steps: `H + 1²`, `H + 2²`, `H + 3²`... (i.e. jumps of 1, 4, 9...). This allows us to jump completely over consecutive clusters!"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Formula**: `Hash(x, i) = (Hash(x) + i²) % N` where `Hash(x) = x % N` is the primary hash function to find the initial starting index, and `i = 0, 1, 2...` represents the probing step."
+    },
+    {
+      "type": "drawing",
+      "id": "quadratic-probing-simulation"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pros**: Solves primary clustering by skipping slots."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Cons**: **Secondary Clustering**. If two keys hash to the same initial index, they will probe the exact same sequence of quadratic slots. Also, it might fail to find an empty slot even if the table isn't full (unless size is a prime number)."
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(1)",
+      "timeExplanation": "O(1) average time for operations. Worst case is O(N) if we get stuck in cycles (because the table size N is not prime) or scan the entire table.",
+      "spaceComplexity": "O(N)",
+      "spaceExplanation": "No extra pointer allocations. All elements are stored inside the array."
+    },
+    {
+      "type": "heading",
+      "id": "double-hashing",
+      "level": 3,
+      "text": "3c. Double Hashing"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why do we switch to **Double Hashing**? Quadratic Probing successfully jumps over clusters, but it introduces a new problem: **Secondary Clustering**. If two different keys happen to start at the exact same slot, they will still follow the exact same jump sequence (+1, +4, +9...). To solve this, we use a second hash function `Hash₂(x)` to calculate the step size. Because this step size depends on the key itself, different keys starting at the same slot will jump using completely different step paths, distributing them uniformly!"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Formula**: `Hash(x, i) = (Hash₁(x) + i * Hash₂(x)) % N` where:"
+    },
+    {
+      "type": "paragraph",
+      "text": "  1. `Hash₁(x) = x % N` is the primary hash function used to find the initial starting index."
+    },
+    {
+      "type": "paragraph",
+      "text": "  2. `Hash₂(x) = P - (x % P)` is the secondary hash function used to calculate the jump step size (where `P` is a prime number smaller than `N`, such as `7` in our simulation)."
+    },
+    {
+      "type": "drawing",
+      "id": "double-hashing-simulation"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Pros**: Completely eliminates both primary and secondary clustering."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Cons**: Requires more calculation steps because we compute two hash functions instead of one."
+    },
+    {
+      "type": "complexity_card",
+      "timeComplexity": "O(1)",
+      "timeExplanation": "O(1) average time. Worst case is O(N) if we experience cycles (due to step size not being coprime to N) or the table is nearly full.",
+      "spaceComplexity": "O(N)",
+      "spaceExplanation": "No extra pointer allocations. All elements are stored inside the array."
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Why did key 58 fail to insert in the simulation? To ensure that the search path can visit every single slot in the table, the **step size** and the **table size N** must be **coprime** (they shouldn't share any common factors except 1). Since N = 10 and step size = 5 (sharing a factor of 5), the search got stuck in a cycle. In practice, we solve this completely by choosing a **prime number** (like 11 or 13) for our table size N, which guarantees that any step size will be coprime to N!"
+    },
+    {
+      "type": "heading",
+      "id": "common-mistakes",
+      "level": 2,
+      "text": "4. Common Mistakes"
+    },
+    {
+      "type": "callout",
+      "style": "warning",
+      "text": "Bad Second Hash: When using Double Hashing, your second hash function must NEVER return 0. If it returns 0, the step size becomes 0, and your program will get stuck checking the exact same slot in an infinite loop!"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the primary drawback of Linear Probing in Open Addressing?",
+      "options": [
+        "It uses extra memory for pointers.",
+        "Primary Clustering, where keys group in consecutive blocks.",
+        "It cannot handle keys that are prime numbers.",
+        "It degrades the best-case time complexity to O(N)."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "Which probing technique completely eliminates both primary and secondary clustering?",
+      "options": [
+        "Linear Probing",
+        "Quadratic Probing",
+        "Double Hashing",
+        "Chaining"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What happens if a second hash function in Double Hashing returns a value of 0?",
+      "options": [
+        "The element is successfully stored at slot 0.",
+        "The step size becomes 0, causing an infinite loop during probing.",
+        "The hash table automatically doubles its capacity.",
+        "It is treated as Chaining."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "To wrap up: We resolve collisions using Chaining (linked lists) or Open Addressing (probing). Probing methods include Linear Probing (sequential), Quadratic Probing (quadratic steps), and Double Hashing (two hash functions). Each has trade-offs in complexity, speed, and cache performance. Excellent job finishing this lesson!"
+    }
+  ]
+}

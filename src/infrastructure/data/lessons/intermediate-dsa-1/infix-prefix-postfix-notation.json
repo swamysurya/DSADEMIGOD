@@ -1,0 +1,144 @@
+{
+  "id": "infix-prefix-postfix-notation",
+  "title": "Lesson 6: Infix, Prefix, and Postfix Notation",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "min-stack",
+  "prevLessonId": "next-greater-element",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Today, we will explore mathematical expressions and how compilers parse them: **Infix, Prefix, and Postfix notations**. Let's learn it step-by-step!"
+    },
+    {
+      "type": "heading",
+      "id": "expression-notations",
+      "level": 2,
+      "text": "1. What are these Notations?"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Infix**: The operator is *between* the operands (e.g. `A + B`). This is how humans write math."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Prefix (Polish)**: The operator is *before* the operands (e.g. `+ A B`)."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Postfix (Reverse Polish)**: The operator is *after* the operands (e.g. `A B +`). This is how compilers evaluate math, since it doesn't require parentheses to define order of operations!"
+    },
+    {
+      "type": "heading",
+      "id": "why-do-we-need-it",
+      "level": 2,
+      "text": "2. Why Do We Need It?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Compilers cannot easily resolve order of operations and parentheses in Infix expressions on-the-fly. Translating them to Postfix makes evaluation a simple, linear stack sweep without parentheses checking."
+    },
+    {
+      "type": "heading",
+      "id": "conversion-rules",
+      "level": 2,
+      "text": "3. Infix to Postfix Conversion Logic"
+    },
+    {
+      "type": "paragraph",
+      "text": "We scan the Infix string from left to right:"
+    },
+    {
+      "type": "paragraph",
+      "text": "· If token is an **operand** (letter/number), append it directly to output."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If token is `'('`, push it onto stack."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If token is `')'`, pop from stack and append to output until `'('` is encountered. Pop `'('`."
+    },
+    {
+      "type": "paragraph",
+      "text": "· If token is an **operator**, pop operators of higher or equal priority from stack to output, then push the current operator."
+    },
+    {
+      "type": "heading",
+      "id": "visual-drawing",
+      "level": 2,
+      "text": "4. Visual Drawing: Expression Parsing"
+    },
+    {
+      "type": "drawing",
+      "id": "expression-notation-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-implementation",
+      "level": 2,
+      "text": "5. C++ Code Implementation"
+    },
+    {
+      "type": "paragraph",
+      "text": "Here is the C++ code to convert Infix to Postfix:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n#include <stack>\n#include <string>\n\nint prec(char c) {\n    if (c == '^') return 3;\n    if (c == '*' || c == '/') return 2;\n    if (c == '+' || c == '-') return 1;\n    return -1;\n}\n\nstd::string infixToPostfix(std::string s) {\n    std::stack<char> st;\n    std::string result = \"\";\n    for (char c : s) {\n        if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {\n            result += c;\n        } else if (c == '(') {\n            st.push('(');\n        } else if (c == ')') {\n            while (!st.empty() && st.top() != '(') {\n                result += st.top();\n                st.pop();\n            }\n            if (!st.empty()) st.pop();\n        } else {\n            while (!st.empty() && prec(st.top()) >= prec(c)) {\n                result += st.top();\n                st.pop();\n            }\n            st.push(c);\n        }\n    }\n    while (!st.empty()) {\n        result += st.top();\n        st.pop();\n    }\n    return result;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "complexities",
+      "level": 2,
+      "text": "6. Complexity Analysis"
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Time Complexity**: $O(N)$ because each character is processed, pushed, and popped at most once."
+    },
+    {
+      "type": "paragraph",
+      "text": "· **Space Complexity**: $O(N)$ for the operator stack."
+    },
+    {
+      "type": "heading",
+      "id": "practice-questions",
+      "level": 2,
+      "text": "7. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the Postfix notation for the Infix expression: A + B * C?",
+      "options": [
+        "A B C * +",
+        "A B + C *",
+        "+ A * B C",
+        "A B * C +"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "mcq",
+      "question": "Why is Postfix preferred by computer systems for expression evaluation?",
+      "options": [
+        "It takes up less disk space.",
+        "It eliminates the need for parentheses and complex order-of-operation parsing rules.",
+        "It only works with numbers.",
+        "It runs twice as fast as linear systems."
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "8. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "We compared Infix, Prefix, and Postfix notations and implemented a stack converter. In our final stack lesson, we will solve four classic stack challenge problems!"
+    }
+  ]
+}

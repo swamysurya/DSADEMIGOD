@@ -1,0 +1,96 @@
+{
+  "id": "intro-to-tree",
+  "title": "Introduction to Trees",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "tree-traversals",
+  "prevLessonId": "largest-rectangle-in-histogram",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the Trees & BST module. So far, we have studied linear data structures like Arrays, Linked Lists, Stacks, and Queues where elements follow each other in a straight line. Today, we will learn about **Trees**—our first non-linear, hierarchical data structure. Let's start with the basics!"
+    },
+    {
+      "type": "heading",
+      "id": "why-trees",
+      "level": 2,
+      "text": "1. Why Do We Need Trees?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Linear structures are great for simple lists, but they fail to represent hierarchical relationships. For example, a company organization chart or a computer file system cannot be naturally represented in a single line. A Tree represents parent-child relationships beautifully and allows us to search and organize information very efficiently!"
+    },
+    {
+      "type": "heading",
+      "id": "tree-analogy",
+      "level": 2,
+      "text": "2. Real-World Analogy: Family Trees & Company Charts"
+    },
+    {
+      "type": "paragraph",
+      "text": "Think of a tree like a company organization chart: at the very top is the CEO. The CEO has vice presidents (VPs) reporting to them. Each VP has managers, and each manager has employees. In programming, each role/box in this chart is called a **Node**, and the reporting lines are called **Edges**."
+    },
+    {
+      "type": "heading",
+      "id": "terminology",
+      "level": 2,
+      "text": "3. Tree Terminology Explained"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's define the key words in simple English:\n· **Node**: A container storing a value and pointers to its children.\n· **Root**: The topmost node of the tree (like the CEO). A tree has exactly one root.\n· **Leaf**: A node with no children (like employees at the bottom of the chart).\n· **Edge**: The link connecting one node to another (parent-child pointer).\n· **Parent & Child**: If node A points to node B, A is the parent of B, and B is the child of A.\n· **Height**: The number of edges on the longest path from a node to a leaf.\n· **Subtree**: A small tree inside our main tree, starting from any node down to its leaves."
+    },
+    {
+      "type": "heading",
+      "id": "tree-node-code",
+      "level": 2,
+      "text": "4. Coding a Binary Tree Node"
+    },
+    {
+      "type": "paragraph",
+      "text": "In a **Binary Tree**, each node can have at most **two children** (usually named `left` and `right`). Let's look at the C++ code to define this node structure:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "#include <iostream>\n\nstruct Node {\n    int data;\n    Node* left;\n    Node* right;\n\n    Node(int val) {\n        data = val;\n        left = nullptr;\n        right = nullptr;\n    }\n};"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the topmost node of a tree called?",
+      "options": [
+        "Leaf node",
+        "Root node",
+        "Subtree node",
+        "Edge node"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "What is a node with no children called?",
+      "options": [
+        "Root node",
+        "Parent node",
+        "Leaf node",
+        "Internal node"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: Trees are hierarchical structures consisting of nodes and edges. A Binary Tree restricts each node to a maximum of two children. Leaf nodes are at the bottom with no children, and the single root node is at the top. Next, we will learn how to traverse/visit every node in a tree!"
+    }
+  ]
+}

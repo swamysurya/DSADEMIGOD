@@ -1,0 +1,167 @@
+{
+  "id": "introduction-to-avl-trees",
+  "title": "Introduction to AVL Trees",
+  "subjectId": "intermediate-dsa-1",
+  "nextLessonId": "avl-rotations-and-intuition",
+  "prevLessonId": "merge-two-bsts",
+  "content": [
+    {
+      "type": "paragraph",
+      "text": "Hello! Welcome to the world of self-balancing trees. In our previous chapter, we studied Binary Trees and Binary Search Trees (BSTs). We learned how to traverse nodes, find their height, and search for values by comparing keys. Today, we'll build on that knowledge to see how we can keep our search time optimal, no matter how the elements are inserted!"
+    },
+    {
+      "type": "heading",
+      "id": "recap-bst",
+      "level": 2,
+      "text": "1. Recap: Binary Search Tree (BST)"
+    },
+    {
+      "type": "paragraph",
+      "text": "To recap, a Binary Search Tree (BST) is a node-based structure where every node follows a strict sorting property: the left subtree contains values smaller than the node, and the right subtree contains values larger than the node."
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's take a concrete example. When we insert the sequence of values `30, 20, 10, 50, 40, 60` one by one into a BST, here is how the tree looks:"
+    },
+    {
+      "type": "drawing",
+      "id": "bst-search-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "As you can see from the interactive tracer above, searching in a BST is extremely intuitive: **Compare → decide direction → move**. With each decision, we can discard entire subtrees, keeping searches incredibly fast when the tree is well-balanced."
+    },
+    {
+      "type": "heading",
+      "id": "bst-performance-limitations",
+      "level": 2,
+      "text": "2. Performance Limitations of BST"
+    },
+    {
+      "type": "paragraph",
+      "text": "Since searching relies on traversing from the root down to the target node, the search time is directly proportional to the **height (H)** of the tree. Thus, the general time complexity is **O(H)**."
+    },
+    {
+      "type": "paragraph",
+      "text": "But here is the main performance limitation: **the height (H) of a BST is not under control, so the search complexity is not fixed**. It ranges between the following bounds (where N is the total number of nodes in the tree):"
+    },
+    {
+      "type": "paragraph",
+      "text": "$$O(log N) ≤ Height (H) ≤ O(N)$$"
+    },
+    {
+      "type": "paragraph",
+      "text": "Why does it range so widely? Because the height of a BST depends entirely on the **insertion sequence order** of the elements:\n· **Best/Average Case**: If elements are inserted in a mixed order, the tree is balanced, keeping the height $H \\approx \\log N$. Search takes **O(log N)** time.\n· **Worst Case**: If elements are inserted in sorted order, the tree becomes skewed into a straight line, meaning the height $H$ grows to equal $N$ ($H = N$). Search degrades to **O(N)** time!"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's see how the order of sequence we insert elements affects search times by comparing two different insertion paths for the same keys:"
+    },
+    {
+      "type": "drawing",
+      "id": "bst-height-drawing"
+    },
+    {
+      "type": "paragraph",
+      "text": "If we insert values in a sorted order like `60, 50, 40, 30, 20`, the tree becomes a skewed line. Searching for a value at the bottom requires scanning almost every node, taking **O(N)** time! The beautiful efficiency of a tree is completely lost, turning it back into a slow linear search."
+    },
+    {
+      "type": "heading",
+      "id": "what-is-avl",
+      "level": 2,
+      "text": "3. The Solution: What is an AVL Tree?"
+    },
+    {
+      "type": "paragraph",
+      "text": "To solve this problem, we need a tree that automatically keeps its height under control. That is exactly what an **AVL Tree** does! Named after its inventors (Adelson-Velsky and Landis), an AVL tree is a **Height-Balanced Binary Search Tree**."
+    },
+    {
+      "type": "drawing",
+      "id": "avl-inventors-card"
+    },
+    {
+      "type": "paragraph",
+      "text": "To maintain this balance, every node in an AVL tree keeps track of a metric called the **Balance Factor (BF)**. The formula is:"
+    },
+    {
+      "type": "paragraph",
+      "text": "**Balance Factor = Height(Left Subtree) - Height(Right Subtree)**"
+    },
+    {
+      "type": "paragraph",
+      "text": "To keep the tree height-balanced, every single node in a valid AVL tree must follow the **Balance Rule** by keeping track of its Balance Factor. Let's look at the interactive visualizer below to see how the Balance Factor value tells us which side is taller, and whether a node is balanced:"
+    },
+    {
+      "type": "callout",
+      "style": "important",
+      "text": "Allowed Balance Factors: In a valid AVL tree, the only allowed Balance Factors for any node are -1, 0, or +1."
+    },
+    {
+      "type": "drawing",
+      "id": "avl-balance-factor-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "unbalanced-three-nodes-header",
+      "level": 2,
+      "text": "4. What is an Unbalanced Tree?"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's look at a simple example. Suppose we insert the elements `30, 20, 10` one by one. The tree leans completely to the left, violating the balance rules. To restore order, we must balance it using a rotation (which we will learn step-by-step in the next chapter):"
+    },
+    {
+      "type": "drawing",
+      "id": "unbalanced-three-nodes-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "practice-quiz",
+      "level": 2,
+      "text": "5. Practice Questions"
+    },
+    {
+      "type": "mcq",
+      "question": "What is the worst-case search time complexity in a standard Binary Search Tree (BST) when elements are inserted in sorted order?",
+      "options": [
+        "O(1)",
+        "O(log N)",
+        "O(N)",
+        "O(N log N)"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "type": "mcq",
+      "question": "What are the allowed balance factors for any node in a valid AVL Tree?",
+      "options": [
+        "-2, -1, 0, +1, +2",
+        "-1, 0, +1",
+        "Only 0",
+        "Any integer value"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "type": "mcq",
+      "question": "If a node has a left subtree of height 3 and a right subtree of height 1, what is its Balance Factor, and is it balanced?",
+      "options": [
+        "+2, Unbalanced",
+        "-2, Unbalanced",
+        "+2, Balanced",
+        "0, Balanced"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "type": "heading",
+      "id": "summary-section",
+      "level": 2,
+      "text": "6. Summary"
+    },
+    {
+      "type": "paragraph",
+      "text": "Let's summarize: In a normal BST, searching is fast ($O(\\log N)$) only if the tree is balanced. If we insert sorted data, it becomes skewed like a Linked List, ruining performance ($O(N)$). AVL Trees solve this by enforcing a height-balance rule: the height difference between left and right subtrees (Balance Factor) of every node must be within $[-1, 0, +1]$. If it goes beyond, we must rotate. In our next lesson, we will see how these rotations work!"
+    }
+  ]
+}
