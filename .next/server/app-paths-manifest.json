@@ -1,7 +1,4 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/copy/route": "app/api/copy/route.js",
   "/learn/[subjectId]/[lessonId]/page": "app/learn/[subjectId]/[lessonId]/page.js",
-  "/learn/[subjectId]/page": "app/learn/[subjectId]/page.js",
-  "/page": "app/page.js"
+  "/api/copy/route": "app/api/copy/route.js"
 }

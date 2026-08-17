@@ -1,47 +1,15 @@
 {
   "pages": {
-    "/_not-found/page": [
-      "static/chunks/webpack-616e068a201ad621.js",
-      "static/chunks/fd9d1056-6922f449a204c2cc.js",
-      "static/chunks/117-c86a41b869f6b521.js",
-      "static/chunks/main-app-69d7a6ba261bb952.js",
-      "static/chunks/app/_not-found/page-98467b0ee1cfb9b0.js"
+    "/learn/[subjectId]/[lessonId]/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/learn/[subjectId]/[lessonId]/page.js"
     ],
     "/layout": [
-      "static/chunks/webpack-616e068a201ad621.js",
-      "static/chunks/fd9d1056-6922f449a204c2cc.js",
-      "static/chunks/117-c86a41b869f6b521.js",
-      "static/chunks/main-app-69d7a6ba261bb952.js",
-      "static/css/d330e4c6cace91b0.css",
-      "static/chunks/app/layout-d4612757c8b4f58c.js"
-    ],
-    "/learn/[subjectId]/[lessonId]/page": [
-      "static/chunks/webpack-616e068a201ad621.js",
-      "static/chunks/fd9d1056-6922f449a204c2cc.js",
-      "static/chunks/117-c86a41b869f6b521.js",
-      "static/chunks/main-app-69d7a6ba261bb952.js",
-      "static/chunks/646-5abdd625c0d16fea.js",
-      "static/chunks/108-69ad336c696dd473.js",
-      "static/chunks/949-87283c36327146f9.js",
-      "static/chunks/app/learn/[subjectId]/[lessonId]/page-5da48a506b7fa3f8.js"
-    ],
-    "/learn/[subjectId]/page": [
-      "static/chunks/webpack-616e068a201ad621.js",
-      "static/chunks/fd9d1056-6922f449a204c2cc.js",
-      "static/chunks/117-c86a41b869f6b521.js",
-      "static/chunks/main-app-69d7a6ba261bb952.js",
-      "static/chunks/646-5abdd625c0d16fea.js",
-      "static/chunks/108-69ad336c696dd473.js",
-      "static/chunks/949-87283c36327146f9.js",
-      "static/chunks/app/learn/[subjectId]/page-dba61088181b033b.js"
-    ],
-    "/page": [
-      "static/chunks/webpack-616e068a201ad621.js",
-      "static/chunks/fd9d1056-6922f449a204c2cc.js",
-      "static/chunks/117-c86a41b869f6b521.js",
-      "static/chunks/main-app-69d7a6ba261bb952.js",
-      "static/chunks/646-5abdd625c0d16fea.js",
-      "static/chunks/app/page-5ec610ca56349bc5.js"
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/css/app/layout.css",
+      "static/chunks/app/layout.js"
     ]
   }
 }

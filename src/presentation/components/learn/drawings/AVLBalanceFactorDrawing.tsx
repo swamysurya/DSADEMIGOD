@@ -19,78 +19,78 @@ const NODES_DATA: NodeBFState[] = [
     val: 50,
     x: 160,
     y: 40,
-    leftHeightText: "Height of Left Subtree (Node 30) = 2",
-    rightHeightText: "Height of Right Subtree (Node 70) = 0",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = 2 - 0 = 2",
-    explanation: "Node 50's left subtree has height 2 and its right subtree has height 0. The difference is 2. Since 2 is outside the allowed range of [-1, 0, +1], Node 50 is UNBALANCED and needs to be balanced!",
+    leftHeightText: "Height of Left Subtree (Node 30) = 3",
+    rightHeightText: "Height of Right Subtree (Node 70) = 1",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 3 - 1 = 2",
+    explanation: "Node 50's left subtree has height 3 and its right subtree has height 1. The difference is 2. Since 2 is outside the allowed range of [-1, 0, +1], Node 50 is UNBALANCED and needs to be balanced!",
     resultBF: 2,
-    resultHeight: 3,
+    resultHeight: 4,
   },
   {
     val: 30,
     x: 100,
     y: 90,
-    leftHeightText: "Height of Left Subtree (Node 20) = 1",
-    rightHeightText: "Height of Right Subtree (Node 40) = 1",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = 1 - 1 = 0",
-    explanation: "Node 30's left subtree has height 1 and its right subtree has height 1. The difference is 0. Since 0 is inside the allowed range, Node 30 is perfectly balanced.",
+    leftHeightText: "Height of Left Subtree (Node 20) = 2",
+    rightHeightText: "Height of Right Subtree (Node 40) = 2",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 2 - 2 = 0",
+    explanation: "Node 30's left subtree has height 2 and its right subtree has height 2. The difference is 0. Since 0 is inside the allowed range, Node 30 is perfectly balanced.",
     resultBF: 0,
-    resultHeight: 2,
+    resultHeight: 3,
   },
   {
     val: 70,
     x: 220,
     y: 90,
-    leftHeightText: "Height of Left Subtree (nullptr) = -1",
-    rightHeightText: "Height of Right Subtree (nullptr) = -1",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = -1 - (-1) = 0",
-    explanation: "Node 70 is a leaf node. Both subtrees are empty (height -1). The difference is 0. Node 70 is perfectly balanced.",
+    leftHeightText: "Height of Left Subtree (nullptr) = 0",
+    rightHeightText: "Height of Right Subtree (nullptr) = 0",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 0 - 0 = 0",
+    explanation: "Node 70 is a leaf node. Both subtrees are empty (height 0). The difference is 0. Node 70 is perfectly balanced.",
     resultBF: 0,
-    resultHeight: 0,
+    resultHeight: 1,
   },
   {
     val: 20,
     x: 60,
     y: 140,
-    leftHeightText: "Height of Left Subtree (Node 10) = 0",
-    rightHeightText: "Height of Right Subtree (nullptr) = -1",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = 0 - (-1) = 1",
-    explanation: "Node 20 has a leaf node 10 on the left (height 0) and no child on the right (height -1). The difference is +1. Since 1 is inside the allowed range, Node 20 is balanced.",
+    leftHeightText: "Height of Left Subtree (Node 10) = 1",
+    rightHeightText: "Height of Right Subtree (nullptr) = 0",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 1 - 0 = 1",
+    explanation: "Node 20 has a leaf node 10 on the left (height 1) and no child on the right (height 0). The difference is +1. Since 1 is inside the allowed range, Node 20 is balanced.",
     resultBF: 1,
-    resultHeight: 1,
+    resultHeight: 2,
   },
   {
     val: 40,
     x: 140,
     y: 140,
-    leftHeightText: "Height of Left Subtree (nullptr) = -1",
-    rightHeightText: "Height of Right Subtree (Node 45) = 0",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = -1 - 0 = -1",
-    explanation: "Node 40 has no child on the left (height -1) and a leaf node 45 on the right (height 0). The difference is -1. Since -1 is inside the allowed range, Node 40 is balanced.",
+    leftHeightText: "Height of Left Subtree (nullptr) = 0",
+    rightHeightText: "Height of Right Subtree (Node 45) = 1",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 0 - 1 = -1",
+    explanation: "Node 40 has no child on the left (height 0) and a leaf node 45 on the right (height 1). The difference is -1. Since -1 is inside the allowed range, Node 40 is balanced.",
     resultBF: -1,
-    resultHeight: 1,
+    resultHeight: 2,
   },
   {
     val: 10,
     x: 30,
     y: 190,
-    leftHeightText: "Height of Left Subtree (nullptr) = -1",
-    rightHeightText: "Height of Right Subtree (nullptr) = -1",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = -1 - (-1) = 0",
-    explanation: "Node 10 is a leaf node. Both subtrees are empty (height -1). The difference is 0. Node 10 is perfectly balanced.",
+    leftHeightText: "Height of Left Subtree (nullptr) = 0",
+    rightHeightText: "Height of Right Subtree (nullptr) = 0",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 0 - 0 = 0",
+    explanation: "Node 10 is a leaf node. Both subtrees are empty (height 0). The difference is 0. Node 10 is perfectly balanced.",
     resultBF: 0,
-    resultHeight: 0,
+    resultHeight: 1,
   },
   {
     val: 45,
     x: 170,
     y: 190,
-    leftHeightText: "Height of Left Subtree (nullptr) = -1",
-    rightHeightText: "Height of Right Subtree (nullptr) = -1",
-    calculation: "BF = Height(Left) - Height(Right)\nBF = -1 - (-1) = 0",
-    explanation: "Node 45 is a leaf node. Both subtrees are empty (height -1). The difference is 0. Node 45 is perfectly balanced.",
+    leftHeightText: "Height of Left Subtree (nullptr) = 0",
+    rightHeightText: "Height of Right Subtree (nullptr) = 0",
+    calculation: "BF = Height(Left) - Height(Right)\nBF = 0 - 0 = 0",
+    explanation: "Node 45 is a leaf node. Both subtrees are empty (height 0). The difference is 0. Node 45 is perfectly balanced.",
     resultBF: 0,
-    resultHeight: 0,
+    resultHeight: 1,
   },
 ];
 
@@ -201,25 +201,25 @@ export default function AVLBalanceFactorDrawing() {
                 let anchor: "start" | "end" | "middle" | "inherit" | undefined = "middle";
 
                 if (n.val === 50) {
-                  equation = "BF = 2 - 0 = 2 (Unbalanced!)";
+                  equation = "BF = 3 - 1 = 2 (Unbalanced!)";
                   labelY = n.y - 20;
                 } else if (n.val === 30) {
-                  equation = "BF = 1 - 1 = 0";
+                  equation = "BF = 2 - 2 = 0";
                   labelY = n.y - 18;
                 } else if (n.val === 70) {
-                  equation = "BF = -1 - (-1) = 0";
+                  equation = "BF = 0 - 0 = 0";
                   labelY = n.y - 18;
                 } else if (n.val === 20) {
-                  equation = "BF = 0 - (-1) = 1";
+                  equation = "BF = 1 - 0 = 1";
                   labelY = n.y - 18;
                 } else if (n.val === 40) {
-                  equation = "BF = -1 - 0 = -1";
+                  equation = "BF = 0 - 1 = -1";
                   labelY = n.y - 18;
                 } else if (n.val === 10) {
-                  equation = "BF = -1 - (-1) = 0";
+                  equation = "BF = 0 - 0 = 0";
                   labelY = n.y + 28;
                 } else if (n.val === 45) {
-                  equation = "BF = -1 - (-1) = 0";
+                  equation = "BF = 0 - 0 = 0";
                   labelY = n.y + 28;
                 }
 
@@ -363,12 +363,12 @@ export default function AVLBalanceFactorDrawing() {
                   <text x="30" y="149" textAnchor="middle" style={{ fill: "#FFFFFF" }}>D</text>
 
                   {/* Subtree Height annotations */}
-                  <text x="25" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#D97706" }}>Left Subtree Height (LH) = 1</text>
-                  <text x="200" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#666666" }}>Right Height (RH) = 0</text>
+                  <text x="25" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#D97706" }}>Left Subtree Height (LH) = 2</text>
+                  <text x="200" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#666666" }}>Right Height (RH) = 1</text>
                   
                   {/* Root equation */}
                   <text x="130" y="18" textAnchor="middle" style={{ fontFamily: "'Caveat', cursive", fontSize: "13px", fill: "#D97706", fontWeight: "bold" }}>
-                    BF = LH - RH = 1 - 0 = +1
+                    BF = LH - RH = 2 - 1 = +1
                   </text>
                 </svg>
               )}
@@ -390,12 +390,12 @@ export default function AVLBalanceFactorDrawing() {
                   <text x="190" y="114" textAnchor="middle" style={{ fill: "#FFFFFF" }}>C</text>
 
                   {/* Subtree Height annotations */}
-                  <text x="25" y="70" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#2E7D32" }}>Left Subtree Height (LH) = 0</text>
-                  <text x="200" y="70" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#2E7D32" }}>Right Height (RH) = 0</text>
+                  <text x="25" y="70" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#2E7D32" }}>Left Subtree Height (LH) = 1</text>
+                  <text x="200" y="70" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#2E7D32" }}>Right Height (RH) = 1</text>
                   
                   {/* Root equation */}
                   <text x="130" y="25" textAnchor="middle" style={{ fontFamily: "'Caveat', cursive", fontSize: "13px", fill: "#2E7D32", fontWeight: "bold" }}>
-                    BF = LH - RH = 0 - 0 = 0
+                    BF = LH - RH = 1 - 1 = 0
                   </text>
                 </svg>
               )}
@@ -420,12 +420,12 @@ export default function AVLBalanceFactorDrawing() {
                   <text x="230" y="149" textAnchor="middle" style={{ fill: "#FFFFFF" }}>D</text>
 
                   {/* Subtree Height annotations */}
-                  <text x="25" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#666666" }}>Left Subtree Height (LH) = 0</text>
-                  <text x="200" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#C0392B" }}>Right Height (RH) = 1</text>
+                  <text x="25" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#666666" }}>Left Subtree Height (LH) = 1</text>
+                  <text x="200" y="60" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px", fill: "#C0392B" }}>Right Height (RH) = 2</text>
                   
                   {/* Root equation */}
                   <text x="130" y="18" textAnchor="middle" style={{ fontFamily: "'Caveat', cursive", fontSize: "13px", fill: "#C0392B", fontWeight: "bold" }}>
-                    BF = LH - RH = 0 - 1 = -1
+                    BF = LH - RH = 1 - 2 = -1
                   </text>
                 </svg>
               )}
@@ -458,7 +458,7 @@ export default function AVLBalanceFactorDrawing() {
                     Symmetric Balance (BF = 0)
                   </h5>
                   <p className="text-secondary-foreground leading-relaxed text-[13px]">
-                    Both subtrees have the exact same height (0) since B and C are both leaf nodes. 
+                    Both subtrees have the exact same height (1) since B and C are both leaf nodes. 
                   </p>
                   <div className="bg-[#2E7D32]/5 border-l-2 border-[#2E7D32] p-2.5 rounded-sm">
                     <span className="text-[10px] uppercase font-bold text-[#2E7D32] tracking-wider block mb-1">

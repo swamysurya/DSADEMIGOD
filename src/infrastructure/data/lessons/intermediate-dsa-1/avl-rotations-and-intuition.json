@@ -7,7 +7,7 @@
   "content": [
     {
       "type": "paragraph",
-      "text": "Hello! Welcome back. In the previous lesson, we learned that when a node's Balance Factor becomes $+2$ or $-2$, the tree is unbalanced. Today, we are going to learn how to fix this using **rotations**. We will look at the physical intuition behind rotations and see how we can restore balance in a few simple steps!"
+      "text": "Hello! Welcome back. In the previous lesson, we learned that when a node's Balance Factor becomes +2 or -2, the tree is unbalanced. Today, we are going to learn how to fix this using **rotations**. We will look at the physical intuition behind rotations and see how we can restore balance in a few simple steps!"
     },
     {
       "type": "heading",
@@ -21,7 +21,7 @@
     },
     {
       "type": "paragraph",
-      "text": "When an imbalance occurs, we look at the node that became unbalanced (let's call it $A$), its child in the direction of the imbalance ($B$), and its grandchild ($C$). Everything else in the tree is treated as independent subtrees that we simply reconnect. This simplifies our work immensely!"
+      "text": "When an imbalance occurs, we look at the node that became unbalanced (let's call it **A**), its child in the direction of the imbalance (**B**), and its grandchild (**C**). Everything else in the tree is treated as independent subtrees that we simply reconnect. This simplifies our work immensely!"
     },
     {
       "type": "heading",
@@ -35,42 +35,56 @@
     },
     {
       "type": "drawing",
+      "id": "avl-nail-thread-drawing"
+    },
+    {
+      "type": "heading",
+      "id": "cpp-node-structure-height",
+      "level": 2,
+      "text": "3. C++ Node Structure & Height Helper"
+    },
+    {
+      "type": "paragraph",
+      "text": "Before we look at the rotation code, let's understand how a node is structured in an AVL tree. Each node stores a `height` property along with left and right child pointers. We also need a helper function `getHeightOfNode()` that returns `0` if a node is `nullptr`. This avoids having to write null checks everywhere:"
+    },
+    {
+      "type": "code",
+      "language": "cpp",
+      "code": "class Node {\npublic:\n    int data;\n    Node* left;\n    Node* right;\n    int height; // Stores the height of the subtree rooted at this node\n    \n    Node(int value) {\n        data = value;\n        left = nullptr;\n        right = nullptr;\n        height = 1; // New nodes are leaves (height = 1)\n    }\n};\n\n// Safe helper function to get height of a node (nullptr safe)\nint getHeightOfNode(Node* node) {\n    if (node == nullptr) return 0;\n    return node->height;\n}"
+    },
+    {
+      "type": "heading",
+      "id": "rotation-simulator-header",
+      "level": 2,
+      "text": "4. Interactive Rotation Simulator"
+    },
+    {
+      "type": "paragraph",
+      "text": "Now that we have the node structure and physical intuition, let's look at the step-by-step visual transitions and the corresponding C++ code for each of the four rotation cases. Click through the steps to see how pointers swap and heights are updated:"
+    },
+    {
+      "type": "drawing",
       "id": "avl-rotations-drawing"
     },
     {
       "type": "heading",
       "id": "four-imbalance-cases",
       "level": 2,
-      "text": "3. The Four Imbalance Cases"
+      "text": "5. The Four Imbalance Cases"
     },
     {
       "type": "paragraph",
-      "text": "The names of the imbalances tell us the path from the unbalanced ancestor node to the newly inserted node. Here is a decision flow to help you easily identify which case you are dealing with:"
+      "text": "When a node becomes unbalanced (+2 or -2), we can identify which of the four imbalance cases has occurred by checking the Balance Factor of its child. Follow the decision flow below to identify the unbalanced tree shape and choose the correct rotation:"
     },
     {
       "type": "drawing",
       "id": "avl-imbalance-flowchart-drawing"
     },
-
-    {
-      "type": "heading",
-      "id": "double-rotation-shortcut",
-      "level": 3,
-      "text": "Teacher's Shortcut for Double Rotations"
-    },
-    {
-      "type": "paragraph",
-      "text": "Instead of executing two separate rotations in your head for LR or RL, use this shortcut: Look at the three nodes involved in the zig-zag. **Bring the lowest node (the middle value) directly to the top, and let the other two nodes hang on its left and right!**"
-    },
-    {
-      "type": "paragraph",
-      "text": "For example, in an LR zig-zag of nodes `30` (top), `10` (left child), and `20` (grandchild), the middle value is `20`. Pull `20` to the root, make `10` its left child, and make `30` its right child. It works every single time!"
-    },
     {
       "type": "heading",
       "id": "rotation-summary-table",
       "level": 2,
-      "text": "4. Rotation Summary Table"
+      "text": "6. Rotation Summary Table"
     },
     {
       "type": "paragraph",
@@ -88,23 +102,9 @@
     },
     {
       "type": "heading",
-      "id": "subtree-reconnection",
-      "level": 2,
-      "text": "5. Reconnecting Subtrees"
-    },
-    {
-      "type": "paragraph",
-      "text": "When rotating nodes that have other subtrees underneath, we must preserve the Binary Search Tree properties: **all nodes to the left must remain smaller, and all nodes to the right must remain larger**."
-    },
-    {
-      "type": "paragraph",
-      "text": "Let's take a Right Rotation around node $Y$ with left child $X$:\n1. $X$ becomes the new root.\n2. $Y$ becomes $X$'s right child.\n3. What happens to $X$'s original right child (let's call it $T2$)? Since $T2$ is larger than $X$ but smaller than $Y$, it becomes $Y$'s new left child! This transition is clean and maintains the BST ordering perfectly."
-    },
-    {
-      "type": "heading",
       "id": "practice-quiz",
       "level": 2,
-      "text": "6. Practice Questions"
+      "text": "7. Practice Questions"
     },
     {
       "type": "mcq",
@@ -130,12 +130,12 @@
     },
     {
       "type": "mcq",
-      "question": "When performing a Right Rotation around Y (with left child X), what happens to X's right subtree T2?",
+      "question": "When performing a Right Rotation around A (with left child B), what happens to B's right subtree B_R?",
       "options": [
         "It is deleted from the tree.",
-        "It becomes Y's new left subtree.",
-        "It becomes X's new left subtree.",
-        "It becomes Y's new right subtree."
+        "It becomes A's new left subtree.",
+        "It becomes B's new left subtree.",
+        "It becomes A's new right subtree."
       ],
       "correctAnswerIndex": 1
     },
@@ -143,7 +143,7 @@
       "type": "heading",
       "id": "summary-section",
       "level": 2,
-      "text": "7. Summary"
+      "text": "8. Summary"
     },
     {
       "type": "paragraph",

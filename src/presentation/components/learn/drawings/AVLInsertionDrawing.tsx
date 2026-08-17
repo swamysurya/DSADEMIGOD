@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, RefreshCw } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { RotateCcw, ChevronLeft, ChevronRight, Maximize2, Minimize2, Settings } from "lucide-react";
 
 interface TreeNode {
   val: number;
@@ -25,363 +25,598 @@ interface StepData {
   explanation: string;
   nodes: TreeNode[];
   connections: TreeConnection[];
+  highlightedLines: number[];
 }
-
-const STEPS: StepData[] = [
-  {
-    title: "Step 1: Insert 40",
-    description: "First insertion is straightforward. 40 becomes the root node.",
-    explanation: "Since there is only one node, the height of both subtrees is 0. Balance Factor = 0 - 0 = 0. The tree is balanced.",
-    nodes: [{ val: 40, x: 150, y: 45, bf: "0" }],
-    connections: [],
-  },
-  {
-    title: "Step 2: Insert 20",
-    description: "20 is less than 40, so it goes to the left child of 40.",
-    explanation: "Balance Factor of 40 = Height(Left) - Height(Right) = 1 - 0 = +1. 20 is a leaf, so its BF is 0. The tree remains balanced.",
-    nodes: [
-      { val: 40, x: 150, y: 45, bf: "+1" },
-      { val: 20, x: 90, y: 100, bf: "0" },
-    ],
-    connections: [{ fromX: 150, fromY: 45, toX: 90, toY: 100 }],
-  },
-  {
-    title: "Step 3a: Insert 10 (Imbalance detected!)",
-    description: "10 goes to the left of 20. But this makes the tree heavy on the left.",
-    explanation: "Going upward, node 40's Left Height is 2, Right Height is 0. Balance Factor of 40 = 2 - 0 = +2! Since 40 has BF = +2 and the insertion path was Left-Left (LL), we must perform a Right Rotation around 40.",
-    nodes: [
-      { val: 40, x: 150, y: 45, bf: "+2", isUnbalanced: true },
-      { val: 20, x: 90, y: 100, bf: "+1" },
-      { val: 10, x: 40, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 90, toY: 100 },
-      { fromX: 90, fromY: 100, toX: 40, toY: 155 },
-    ],
-  },
-  {
-    title: "Step 3b: Right Rotation around 40",
-    description: "We rotate the tree to the right around the unbalanced node 40. Node 20 becomes the new root.",
-    explanation: "Node 20 rises to the root, pushing 40 down to its right child, while 10 remains 20's left child. All balance factors reset to 0. Beautifully balanced!",
-    nodes: [
-      { val: 20, x: 150, y: 45, bf: "0" },
-      { val: 10, x: 90, y: 100, bf: "0" },
-      { val: 40, x: 210, y: 100, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 90, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 210, toY: 100 },
-    ],
-  },
-  {
-    title: "Step 4: Insert 25",
-    description: "25 is compared to root 20 (go right), then 40 (go left). It becomes the left child of 40.",
-    explanation: "We update balance factors going upward: 40 becomes +1, 20 becomes -1. All nodes are within the allowed [-1, 0, +1] range. The tree is balanced.",
-    nodes: [
-      { val: 20, x: 150, y: 45, bf: "-1" },
-      { val: 10, x: 90, y: 100, bf: "0" },
-      { val: 40, x: 210, y: 100, bf: "+1" },
-      { val: 25, x: 170, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 90, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 210, toY: 100 },
-      { fromX: 210, fromY: 100, toX: 170, toY: 155 },
-    ],
-  },
-  {
-    title: "Step 5a: Insert 30 (Imbalance detected!)",
-    description: "30 is compared to 20 (right), 40 (left), 25 (right). It is inserted to the right of 25.",
-    explanation: "Let's check balance factors: 25 is -1, 40's Left Height is 2 (nodes 25,30) and Right Height is 0. BF of 40 = +2! The path from unbalanced node 40 to inserted node 30 is Left-Right (LR). We must do an LR Double Rotation.",
-    nodes: [
-      { val: 20, x: 120, y: 45, bf: "-2" },
-      { val: 10, x: 70, y: 100, bf: "0" },
-      { val: 40, x: 180, y: 100, bf: "+2", isUnbalanced: true },
-      { val: 25, x: 145, y: 155, bf: "-1" },
-      { val: 30, x: 165, y: 210, bf: "0" },
-    ],
-    connections: [
-      { fromX: 120, fromY: 45, toX: 70, toY: 100 },
-      { fromX: 120, fromY: 45, toX: 180, toY: 100 },
-      { fromX: 180, fromY: 100, toX: 145, toY: 155 },
-      { fromX: 145, fromY: 155, toX: 165, toY: 210 },
-    ],
-  },
-  {
-    title: "Step 5b: LR Double Rotation around 40",
-    description: "We rotate Left around 25, then Right around 40. Conceptually, the middle node 30 is pulled directly to the top of this subtree.",
-    explanation: "30 becomes the root of this right subtree, with 25 on its left and 40 on its right. The main root 20's right child is now 30. Balance is restored!",
-    nodes: [
-      { val: 20, x: 120, y: 45, bf: "-1" },
-      { val: 10, x: 70, y: 100, bf: "0" },
-      { val: 30, x: 180, y: 100, bf: "0" },
-      { val: 25, x: 145, y: 155, bf: "0" },
-      { val: 40, x: 215, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 120, fromY: 45, toX: 70, toY: 100 },
-      { fromX: 120, fromY: 45, toX: 180, toY: 100 },
-      { fromX: 180, fromY: 100, toX: 145, toY: 155 },
-      { fromX: 180, fromY: 100, toX: 215, toY: 155 },
-    ],
-  },
-  {
-    title: "Step 6a: Insert 22 (Root unbalanced!)",
-    description: "22 goes: right of 20, left of 30, left of 25. It is inserted as 25's left child.",
-    explanation: "Let's check BFs going up: 25 is +1, 30 is +1, but root 20's Left Height is 1 (node 10) and Right Height is 3 (nodes 30,25,22). BF of 20 = 1 - 3 = -2! Path from 20 is Right-Left (RL). We need an RL Double Rotation.",
-    nodes: [
-      { val: 20, x: 120, y: 45, bf: "-2", isUnbalanced: true },
-      { val: 10, x: 70, y: 100, bf: "0" },
-      { val: 30, x: 180, y: 100, bf: "+1" },
-      { val: 25, x: 145, y: 155, bf: "+1" },
-      { val: 22, x: 120, y: 210, bf: "0" },
-      { val: 40, x: 215, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 120, fromY: 45, toX: 70, toY: 100 },
-      { fromX: 120, fromY: 45, toX: 180, toY: 100 },
-      { fromX: 180, fromY: 100, toX: 145, toY: 155 },
-      { fromX: 180, fromY: 100, toX: 215, toY: 155 },
-      { fromX: 145, fromY: 155, toX: 120, toY: 210 },
-    ],
-  },
-  {
-    title: "Step 6b: RL Double Rotation around 20",
-    description: "First rotate Right around 30, then rotate Left around root 20. The middle node 25 becomes the new root of the entire tree.",
-    explanation: "25 rises to the top root. 20 becomes 25's left child, and 30 becomes 25's right child. 22 (originally 25's left child) is reconnected to 20's right side, preserving BST order. All nodes are balanced!",
-    nodes: [
-      { val: 25, x: 150, y: 45, bf: "0" },
-      { val: 20, x: 95, y: 100, bf: "0" },
-      { val: 10, x: 50, y: 155, bf: "0" },
-      { val: 22, x: 120, y: 155, bf: "0" },
-      { val: 30, x: 205, y: 100, bf: "-1" },
-      { val: 40, x: 245, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 95, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 205, toY: 100 },
-      { fromX: 95, fromY: 100, toX: 50, toY: 155 },
-      { fromX: 95, fromY: 100, toX: 120, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 245, toY: 155 },
-    ],
-  },
-  {
-    title: "Step 7a: Insert 50 (Imbalance at 30)",
-    description: "50 is compared to 25 (right), 30 (right), 40 (right). It is inserted to the right of 40.",
-    explanation: "Let's update BFs: 40 is -1, but 30's Left Height is 0 and Right Height is 2. BF of 30 = 0 - 2 = -2! The path from 30 to 50 is Right-Right (RR). We do a Left Rotation around 30.",
-    nodes: [
-      { val: 25, x: 150, y: 45, bf: "-1" },
-      { val: 20, x: 95, y: 100, bf: "0" },
-      { val: 10, x: 50, y: 155, bf: "0" },
-      { val: 22, x: 120, y: 155, bf: "0" },
-      { val: 30, x: 205, y: 100, bf: "-2", isUnbalanced: true },
-      { val: 40, x: 245, y: 155, bf: "-1" },
-      { val: 50, x: 275, y: 210, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 95, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 205, toY: 100 },
-      { fromX: 95, fromY: 100, toX: 50, toY: 155 },
-      { fromX: 95, fromY: 100, toX: 120, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 245, toY: 155 },
-      { fromX: 245, fromY: 155, toX: 275, toY: 210 },
-    ],
-  },
-  {
-    title: "Step 7b: Left Rotation around 30",
-    description: "We rotate Left around 30. 40 rises to replace 30, and 30 becomes 40's left child.",
-    explanation: "40 becomes 25's right child, with 30 on its left and 50 on its right. All balance factors become balanced. Perfect!",
-    nodes: [
-      { val: 25, x: 150, y: 45, bf: "0" },
-      { val: 20, x: 95, y: 100, bf: "0" },
-      { val: 10, x: 50, y: 155, bf: "0" },
-      { val: 22, x: 120, y: 155, bf: "0" },
-      { val: 40, x: 205, y: 100, bf: "0" },
-      { val: 30, x: 175, y: 155, bf: "0" },
-      { val: 50, x: 235, y: 155, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 95, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 205, toY: 100 },
-      { fromX: 95, fromY: 100, toX: 50, toY: 155 },
-      { fromX: 95, fromY: 100, toX: 120, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 175, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 235, toY: 155 },
-    ],
-  },
-  {
-    title: "Step 8: Insert 42 (Final balanced tree)",
-    description: "42 is compared to 25 (right), 40 (right), 50 (left). It is inserted as the left child of 50.",
-    explanation: "Checking balance factors going up: 50 becomes +1, 40 becomes -1, 25 becomes -1. All nodes remain balanced! The final height of the tree is 3, storing 8 keys. Contrast this with the skewed BST height of 8!",
-    nodes: [
-      { val: 25, x: 150, y: 45, bf: "-1" },
-      { val: 20, x: 95, y: 100, bf: "0" },
-      { val: 10, x: 50, y: 155, bf: "0" },
-      { val: 22, x: 120, y: 155, bf: "0" },
-      { val: 40, x: 205, y: 100, bf: "-1" },
-      { val: 30, x: 175, y: 155, bf: "0" },
-      { val: 50, x: 235, y: 155, bf: "+1" },
-      { val: 42, x: 215, y: 210, bf: "0" },
-    ],
-    connections: [
-      { fromX: 150, fromY: 45, toX: 95, toY: 100 },
-      { fromX: 150, fromY: 45, toX: 205, toY: 100 },
-      { fromX: 95, fromY: 100, toX: 50, toY: 155 },
-      { fromX: 95, fromY: 100, toX: 120, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 175, toY: 155 },
-      { fromX: 205, fromY: 100, toX: 235, toY: 155 },
-      { fromX: 235, fromY: 155, toX: 215, toY: 210 },
-    ],
-  },
-];
 
 export default function AVLInsertionDrawing() {
   const [currentStep, setCurrentStep] = useState(0);
+  const [isMaximized, setIsMaximized] = useState(false);
 
-  const next = () => {
-    if (currentStep < STEPS.length - 1) {
+  // Prevent background scroll when maximized modal is open
+  useEffect(() => {
+    if (isMaximized) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMaximized]);
+
+  // C++ AVL Insertion code block showing helper definitions as collapsed stubs
+  const insertionCode = [
+    "// Helper Definitions (declared helper functions)",
+    "class Node { ... };",
+    "int getHeightOfNode(Node* node) { ... }",
+    "int getBalanceOfNode(Node* node) { ... }",
+    "Node* LLRoation(Node* y) { ... }",
+    "Node* RRrotation(Node* y) { ... }",
+    "Node* LRrotation(Node* root) { ... }",
+    "Node* RLrotation(Node* root) { ... }",
+    "",
+    "// AVL Insertion Function",
+    "Node* insert(Node* node, int value) {",
+    "    if (node == nullptr) return new Node(value);",
+    "    ",
+    "    if (value < node->data)",
+    "        node->left = insert(node->left, value);",
+    "    else if (value > node->data)",
+    "        node->right = insert(node->right, value);",
+    "    else",
+    "        return node;",
+    "        ",
+    "    node->height = 1 + max(getHeightOfNode(node->left), getHeightOfNode(node->right));",
+    "    int balance = getBalanceOfNode(node);",
+    "    ",
+    "    if (balance > 1 && value < node->left->data)",
+    "        return LLRoation(node);",
+    "    if (balance < -1 && value > node->right->data)",
+    "        return RRrotation(node);",
+    "    if (balance > 1 && value > node->left->data)",
+    "        return LRrotation(node);",
+    "    if (balance < -1 && value < node->right->data)",
+    "        return RLrotation(node);",
+    "        ",
+    "    return node;",
+    "}"
+  ];
+
+  const stepsData: StepData[] = [
+    {
+      title: "Step 1: Insert 40",
+      description: "First insertion is straightforward. Node 40 is created as the root.",
+      explanation: "Since the tree is empty, we hit the base case and allocate a new leaf Node 40. Balance Factor is 0.",
+      nodes: [{ val: 40, x: 160, y: 45, bf: "0" }],
+      connections: [],
+      highlightedLines: [11, 12]
+    },
+    {
+      title: "Step 2: Insert 20",
+      description: "20 is less than 40, so it is recursively inserted as the left child of 40.",
+      explanation: "Standard BST recursion goes left. After insertion, we backtrack to 40, update its height to 2, and find BF = 1 - 0 = +1. No rotation needed.",
+      nodes: [
+        { val: 40, x: 160, y: 45, bf: "+1" },
+        { val: 20, x: 100, y: 105, bf: "0" },
+      ],
+      connections: [{ fromX: 160, fromY: 45, toX: 100, toY: 105 }],
+      highlightedLines: [14, 15, 21, 22]
+    },
+    {
+      title: "Step 3: Insert 10 (Imbalance Detected)",
+      description: "10 goes to the left of 20. This creates a Left-Left line under 40, triggering an imbalance.",
+      explanation: "Backtracking to 40, its Left Height is 2 and Right Height is 0. BF of 40 = +2. Since the path is Left-Left, we detect the LL Case.",
+      nodes: [
+        { val: 40, x: 180, y: 45, bf: "+2", isUnbalanced: true },
+        { val: 20, x: 120, y: 105, bf: "+1" },
+        { val: 10, x: 60, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 180, fromY: 45, toX: 120, toY: 105 },
+        { fromX: 120, fromY: 105, toX: 60, toY: 165 },
+      ],
+      highlightedLines: [22, 24]
+    },
+    {
+      title: "Step 4: Right Rotation around 40",
+      description: "We execute LLRoation around unbalanced Node 40. Node 20 becomes the new root.",
+      explanation: "LLRoation(40) is called. Node 20 is pulled to the root, pushing 40 down to its right. Balance factor resets to 0.",
+      nodes: [
+        { val: 20, x: 160, y: 45, bf: "0" },
+        { val: 10, x: 100, y: 105, bf: "0" },
+        { val: 40, x: 220, y: 105, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+      ],
+      highlightedLines: [24, 25]
+    },
+    {
+      title: "Step 5: Insert 25",
+      description: "25 is compared to 20 (goes right) and 40 (goes left). It becomes the left child of 40.",
+      explanation: "BST insertion places 25 under 40. Backtracking updates heights: 40's BF becomes +1, root 20's BF becomes -1. All balances are safe.",
+      nodes: [
+        { val: 20, x: 160, y: 45, bf: "-1" },
+        { val: 10, x: 100, y: 105, bf: "0" },
+        { val: 40, x: 220, y: 105, bf: "+1" },
+        { val: 25, x: 180, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+        { fromX: 220, fromY: 105, toX: 180, toY: 165 },
+      ],
+      highlightedLines: [16, 17, 21, 22]
+    },
+    {
+      title: "Step 6: Insert 30 (Imbalance Detected)",
+      description: "30 is inserted as 25's right child. This triggers a Left-Right (LR) imbalance at Node 40.",
+      explanation: "Backtracking to 40, its Left Height is 2 and Right Height is 0. BF of 40 is +2. Path is Left-Right, so we detect the LR Case.",
+      nodes: [
+        { val: 20, x: 130, y: 45, bf: "-2" },
+        { val: 10, x: 70, y: 105, bf: "0" },
+        { val: 40, x: 190, y: 105, bf: "+2", isUnbalanced: true },
+        { val: 25, x: 150, y: 165, bf: "-1" },
+        { val: 30, x: 170, y: 225, bf: "0" },
+      ],
+      connections: [
+        { fromX: 130, fromY: 45, toX: 70, toY: 105 },
+        { fromX: 130, fromY: 45, toX: 190, toY: 105 },
+        { fromX: 190, fromY: 105, toX: 150, toY: 165 },
+        { fromX: 150, fromY: 165, toX: 170, toY: 225 },
+      ],
+      highlightedLines: [22, 28]
+    },
+    {
+      title: "Step 7: LR Rotation - Left Rotate Child",
+      description: "We execute the child rotation phase: root->left = RRrotation(root->left);",
+      explanation: "Node 25 (left child of 40) is rotated left around Node 30. Node 30 becomes the new left child of 40, converting the zig-zag into a straight LL case.",
+      nodes: [
+        { val: 20, x: 130, y: 45, bf: "-2" },
+        { val: 10, x: 70, y: 105, bf: "0" },
+        { val: 40, x: 190, y: 105, bf: "+2", isUnbalanced: true },
+        { val: 30, x: 150, y: 165, bf: "+1" },
+        { val: 25, x: 130, y: 225, bf: "0" },
+      ],
+      connections: [
+        { fromX: 130, fromY: 45, toX: 70, toY: 105 },
+        { fromX: 130, fromY: 45, toX: 190, toY: 105 },
+        { fromX: 190, fromY: 105, toX: 150, toY: 165 },
+        { fromX: 150, fromY: 165, toX: 130, toY: 225 },
+      ],
+      highlightedLines: [28]
+    },
+    {
+      title: "Step 8: LR Rotation - Right Rotate Parent",
+      description: "We execute the parent rotation phase: root = LLRoation(root);",
+      explanation: "Node 40 is rotated right around Node 30. Node 30 becomes the root of this right subtree, resolving the imbalance completely.",
+      nodes: [
+        { val: 20, x: 130, y: 45, bf: "-1" },
+        { val: 10, x: 70, y: 105, bf: "0" },
+        { val: 30, x: 190, y: 105, bf: "0" },
+        { val: 25, x: 150, y: 165, bf: "0" },
+        { val: 40, x: 230, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 130, fromY: 45, toX: 70, toY: 105 },
+        { fromX: 130, fromY: 45, toX: 190, toY: 105 },
+        { fromX: 190, fromY: 105, toX: 150, toY: 165 },
+        { fromX: 190, fromY: 105, toX: 230, toY: 165 },
+      ],
+      highlightedLines: [29]
+    },
+    {
+      title: "Step 9: Insert 22 (Imbalance Detected)",
+      description: "22 goes under 25. Backtracking up to root Node 20, its Balance Factor becomes -2, triggering an RL imbalance.",
+      explanation: "Root 20 has Left Height 1 and Right Height 3. BF is -2. The path is Right-Left, indicating the RL double rotation case.",
+      nodes: [
+        { val: 20, x: 130, y: 45, bf: "-2", isUnbalanced: true },
+        { val: 10, x: 70, y: 105, bf: "0" },
+        { val: 30, x: 190, y: 105, bf: "+1" },
+        { val: 25, x: 150, y: 165, bf: "+1" },
+        { val: 22, x: 120, y: 225, bf: "0" },
+        { val: 40, x: 230, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 130, fromY: 45, toX: 70, toY: 105 },
+        { fromX: 130, fromY: 45, toX: 190, toY: 105 },
+        { fromX: 190, fromY: 105, toX: 150, toY: 165 },
+        { fromX: 190, fromY: 105, toX: 230, toY: 165 },
+        { fromX: 150, fromY: 165, toX: 120, toY: 225 },
+      ],
+      highlightedLines: [22, 30]
+    },
+    {
+      title: "Step 10: RL Rotation - Right Rotate Child",
+      description: "We execute the child rotation phase: root->right = LLRoation(root->right);",
+      explanation: "Node 30 (right child of root 20) is rotated right around Node 25. Node 25 becomes the new right child of 20, creating a straight RR path.",
+      nodes: [
+        { val: 20, x: 130, y: 45, bf: "-2", isUnbalanced: true },
+        { val: 10, x: 70, y: 105, bf: "0" },
+        { val: 25, x: 190, y: 105, bf: "-1" },
+        { val: 22, x: 150, y: 165, bf: "0" },
+        { val: 30, x: 230, y: 165, bf: "-1" },
+        { val: 40, x: 260, y: 225, bf: "0" },
+      ],
+      connections: [
+        { fromX: 130, fromY: 45, toX: 70, toY: 105 },
+        { fromX: 130, fromY: 45, toX: 190, toY: 105 },
+        { fromX: 190, fromY: 105, toX: 150, toY: 165 },
+        { fromX: 190, fromY: 105, toX: 230, toY: 165 },
+        { fromX: 230, fromY: 165, toX: 260, toY: 225 },
+      ],
+      highlightedLines: [30]
+    },
+    {
+      title: "Step 11: RL Rotation - Left Rotate Parent",
+      description: "We execute the parent rotation phase: root = RRrotation(root);",
+      explanation: "Node 20 is rotated left around Node 25. Node 25 rises to become the root of the entire tree. Node 22 is reconnected to 20's right.",
+      nodes: [
+        { val: 25, x: 160, y: 45, bf: "0" },
+        { val: 20, x: 100, y: 105, bf: "0" },
+        { val: 10, x: 50, y: 165, bf: "0" },
+        { val: 22, x: 130, y: 165, bf: "0" },
+        { val: 30, x: 220, y: 105, bf: "-1" },
+        { val: 40, x: 260, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+        { fromX: 100, fromY: 105, toX: 50, toY: 165 },
+        { fromX: 100, fromY: 105, toX: 130, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 260, toY: 165 },
+      ],
+      highlightedLines: [31]
+    },
+    {
+      title: "Step 12: Insert 50 (Imbalance Detected)",
+      description: "50 is inserted as 40's right child. Backtracking up to Node 30, its BF becomes -2, triggering an RR imbalance.",
+      explanation: "Node 30's Left Height is 0 and Right Height is 2. BF is -2. The path is Right-Right, indicating a single Left Rotation.",
+      nodes: [
+        { val: 25, x: 160, y: 45, bf: "-1" },
+        { val: 20, x: 100, y: 105, bf: "0" },
+        { val: 10, x: 50, y: 165, bf: "0" },
+        { val: 22, x: 130, y: 165, bf: "0" },
+        { val: 30, x: 220, y: 105, bf: "-2", isUnbalanced: true },
+        { val: 40, x: 260, y: 165, bf: "-1" },
+        { val: 50, x: 290, y: 225, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+        { fromX: 100, fromY: 105, toX: 50, toY: 165 },
+        { fromX: 100, fromY: 105, toX: 130, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 260, toY: 165 },
+        { fromX: 260, fromY: 165, toX: 290, toY: 225 },
+      ],
+      highlightedLines: [22, 26]
+    },
+    {
+      title: "Step 13: Left Rotation around 30",
+      description: "We execute: return RRrotation(node); around Node 30.",
+      explanation: "Node 30 is rotated left around Node 40. Node 40 becomes the new right child of root 25, restoring full balance.",
+      nodes: [
+        { val: 25, x: 160, y: 45, bf: "0" },
+        { val: 20, x: 100, y: 105, bf: "0" },
+        { val: 10, x: 50, y: 165, bf: "0" },
+        { val: 22, x: 130, y: 165, bf: "0" },
+        { val: 40, x: 220, y: 105, bf: "0" },
+        { val: 30, x: 190, y: 165, bf: "0" },
+        { val: 50, x: 250, y: 165, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+        { fromX: 100, fromY: 105, toX: 50, toY: 165 },
+        { fromX: 100, fromY: 105, toX: 130, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 190, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 250, toY: 165 },
+      ],
+      highlightedLines: [26, 27]
+    },
+    {
+      title: "Step 14: Insert 42 (Final balanced tree)",
+      description: "42 is compared to 25 (right), 40 (right), 50 (left), and inserted as 50's left child.",
+      explanation: "All balance factors remain stable after backtracking updates. The tree maintains a height of 3 for 8 keys.",
+      nodes: [
+        { val: 25, x: 160, y: 45, bf: "-1" },
+        { val: 20, x: 100, y: 105, bf: "0" },
+        { val: 10, x: 50, y: 165, bf: "0" },
+        { val: 22, x: 130, y: 165, bf: "0" },
+        { val: 40, x: 220, y: 105, bf: "-1" },
+        { val: 30, x: 190, y: 165, bf: "0" },
+        { val: 50, x: 250, y: 165, bf: "+1" },
+        { val: 42, x: 230, y: 225, bf: "0" },
+      ],
+      connections: [
+        { fromX: 160, fromY: 45, toX: 100, toY: 105 },
+        { fromX: 160, fromY: 45, toX: 220, toY: 105 },
+        { fromX: 100, fromY: 105, toX: 50, toY: 165 },
+        { fromX: 100, fromY: 105, toX: 130, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 190, toY: 165 },
+        { fromX: 220, fromY: 105, toX: 250, toY: 165 },
+        { fromX: 250, fromY: 165, toX: 230, toY: 225 },
+      ],
+      highlightedLines: [33, 34]
+    }
+  ];
+
+  const stepData = stepsData[currentStep];
+
+  const handleNext = () => {
+    if (currentStep < stepsData.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
 
-  const prev = () => {
+  const handlePrev = () => {
     if (currentStep > 0) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  const reset = () => {
+  const handleReset = () => {
     setCurrentStep(0);
   };
 
-  const step = STEPS[currentStep];
-
-  return (
-    <div className="w-full my-6 select-none flex flex-col items-center">
-      <div className="w-full max-w-3xl border border-border bg-card p-5 rounded-sm space-y-4">
+  const visualizerContent = (
+    <div className="w-full flex flex-col gap-4 font-serif flex-1 min-h-0">
+      {/* 1. Simulation Toolbar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#DDD7CC]/50 pb-3 select-none">
+        <div>
+          <h4 className="text-xs font-extrabold text-[#232323] uppercase tracking-wide">
+            AVL Tree Construction Simulator
+          </h4>
+          <p className="text-xs text-[#666666]" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px" }}>
+            "Step-by-step trace of inserting keys: 40, 20, 10, 25, 30, 22, 50, 42."
+          </p>
+        </div>
         
-        {/* Header and Controller */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-border/60 pb-3">
-          <div>
-            <h4 className="text-sm font-extrabold text-foreground uppercase tracking-wide">
-              AVL Tree Dynamic Construction
-            </h4>
-            <span className="text-[10px] font-mono text-secondary-foreground uppercase tracking-wider">
-              Inserting: 40, 20, 10, 25, 30, 22, 50, 42
-            </span>
-          </div>
+        {/* Controls Toolbar */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsMaximized(!isMaximized)}
+            className="p-1.5 border border-[#DDD7CC] rounded-sm text-[10px] font-bold bg-white text-[#666666] hover:bg-[#F4F1EA] cursor-pointer"
+            title={isMaximized ? "Exit Fullscreen" : "Enter Fullscreen"}
+          >
+            {isMaximized ? <Minimize2 className="w-3.5 h-3.5" /> : <Maximize2 className="w-3.5 h-3.5" />}
+          </button>
 
-          <div className="flex items-center gap-1">
-            <button
-              onClick={prev}
-              disabled={currentStep === 0}
-              className="p-1 border border-border rounded-sm hover:bg-secondary/20 disabled:opacity-40"
-            >
-              <ChevronLeft size={16} />
-            </button>
-            <span className="text-xs font-mono px-2 font-bold min-w-[70px] text-center">
-              Step {currentStep + 1} / {STEPS.length}
-            </span>
-            <button
-              onClick={next}
-              disabled={currentStep === STEPS.length - 1}
-              className="p-1 border border-border rounded-sm hover:bg-secondary/20 disabled:opacity-40"
-            >
-              <ChevronRight size={16} />
-            </button>
-            <button
-              onClick={reset}
-              className="p-1 ml-1 border border-border rounded-sm hover:bg-secondary/20"
-              title="Restart construction"
-            >
-              <RefreshCw size={14} />
-            </button>
-          </div>
+          <button
+            onClick={handleReset}
+            disabled={currentStep === 0}
+            className={`p-1.5 border border-[#DDD7CC] rounded-sm text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 cursor-pointer transition-colors ${
+              currentStep === 0
+                ? "opacity-40 cursor-not-allowed"
+                : "bg-white text-[#666666] hover:bg-[#F4F1EA]"
+            }`}
+            title="Reset Simulation"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+          </button>
+
+          <button
+            onClick={handlePrev}
+            disabled={currentStep === 0}
+            className={`px-2.5 py-1.5 border border-[#DDD7CC] rounded-sm text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 cursor-pointer transition-colors ${
+              currentStep === 0
+                ? "opacity-40 cursor-not-allowed"
+                : "bg-white text-[#232323] hover:bg-[#F4F1EA]"
+            }`}
+          >
+            <ChevronLeft className="w-3.5 h-3.5" />
+            Prev
+          </button>
+
+          <button
+            onClick={handleNext}
+            disabled={currentStep === stepsData.length - 1}
+            className={`px-2.5 py-1.5 border border-[#3F51B5] rounded-sm text-[10px] font-bold uppercase tracking-wide flex items-center gap-1 cursor-pointer transition-colors ${
+              currentStep === stepsData.length - 1
+                ? "opacity-40 cursor-not-allowed"
+                : "bg-[#3F51B5] text-white hover:bg-[#3F51B5]/90"
+            }`}
+          >
+            Next
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+
+          <span className="text-[10px] font-mono font-bold bg-[#F4F1EA] px-2 py-1 border border-[#DDD7CC] rounded-sm text-[#666666] shrink-0">
+            {currentStep + 1} / {stepsData.length}
+          </span>
+        </div>
+      </div>
+
+      {/* 2. Main Simulation Layout Grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch flex-1 min-h-0">
+        
+        {/* Left Column: C++ Source Code (spanning 5/12) */}
+        <div className="lg:col-span-5 flex flex-col h-full min-h-0 bg-[#FCFBF8] border border-[#DDD7CC] rounded-sm p-4 space-y-2">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#666666] block font-serif">
+            C++ Insertion Logic
+          </span>
+          <pre className="text-[9px] font-mono bg-[#fafafa] p-3 rounded-sm overflow-auto leading-relaxed border border-[#DDD7CC]/50 text-left select-all flex-1 min-h-0">
+            {insertionCode.map((line, lIdx) => {
+              const isHighlighted = stepData.highlightedLines.includes(lIdx + 1);
+              return (
+                <div
+                  key={lIdx}
+                  className={`px-1.5 rounded-sm min-h-[1.1rem] ${
+                    isHighlighted
+                      ? "bg-[#3F51B5]/15 text-[#3F51B5] font-bold border-l-2 border-[#3F51B5]"
+                      : "text-[#4A4A4A]"
+                  }`}
+                >
+                  {line}
+                </div>
+              );
+            })}
+          </pre>
         </div>
 
-        {/* Content Body */}
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 items-start">
+        {/* Right Column: Visualizer Canvas + Explanation Panel (spanning 7/12) */}
+        <div className="lg:col-span-7 flex flex-col justify-between gap-4 h-full min-h-0">
           
-          {/* Explanation Text */}
-          <div className="md:col-span-2 space-y-3 font-sans text-xs">
-            <div className="border-l-2 border-primary pl-2.5">
-              <h5 className="font-extrabold text-foreground uppercase tracking-wider text-[11px]">
-                {step.title}
-              </h5>
-              <p className="text-secondary-foreground leading-relaxed mt-1">
-                {step.description}
-              </p>
-            </div>
-            
-            <div className="bg-secondary/5 border border-dashed border-border p-3 rounded-sm leading-relaxed" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px" }}>
-              <span className="font-bold text-foreground block mb-1">Teacher's Explanation:</span>
-              "{step.explanation}"
-            </div>
-          </div>
+          <div className="flex flex-col sm:flex-row gap-4 items-stretch w-full flex-1 min-h-0">
+            {/* SVG Tree Canvas Panel */}
+            <div className="flex flex-col flex-1 border border-[#DDD7CC] bg-[#F4F1EA]/10 p-4 rounded-sm items-center justify-start relative min-h-[260px]">
+              <div className="w-full flex justify-between items-center mb-2 select-none">
+                <span className="text-[11px] font-bold text-[#3F51B5] uppercase tracking-wider font-mono">
+                  {stepData.title}
+                </span>
+                <span className="text-[10px] text-[#666666] font-mono">
+                  Step {currentStep + 1} of {stepsData.length}
+                </span>
+              </div>
 
-          {/* SVG Tree Visualization */}
-          <div className="md:col-span-3 border border-border rounded-sm bg-secondary/5 flex items-center justify-center p-3 relative min-h-[260px]">
-            <svg width="320" height="250" className="overflow-visible font-mono text-[10px] font-bold">
-              {/* Lines / Connections */}
-              {step.connections.map((c, idx) => (
-                <line
-                  key={idx}
-                  x1={c.fromX}
-                  y1={c.fromY}
-                  x2={c.toX}
-                  y2={c.toY}
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeDasharray={c.dashed ? "3,3" : undefined}
-                  className="text-border"
-                />
-              ))}
+              <svg width="320" height="250" className="overflow-visible font-mono text-[10px] font-bold">
+                {/* Backdrop grids */}
+                <line x1="0" y1="45" x2="320" y2="45" stroke="#DDD7CC" strokeWidth="0.5" strokeDasharray="3,3" />
+                <line x1="0" y1="105" x2="320" y2="105" stroke="#DDD7CC" strokeWidth="0.5" strokeDasharray="3,3" />
+                <line x1="0" y1="165" x2="320" y2="165" stroke="#DDD7CC" strokeWidth="0.5" strokeDasharray="3,3" />
+                <line x1="0" y1="225" x2="320" y2="225" stroke="#DDD7CC" strokeWidth="0.5" strokeDasharray="3,3" />
 
-              {/* Nodes */}
-              {step.nodes.map((n) => {
-                let fill = "#3F51B5"; // Balanced blue
-                if (n.isUnbalanced) {
-                  fill = "#C0392B"; // Unbalanced red
-                }
+                {/* Connections */}
+                {stepData.connections.map((c, idx) => (
+                  <line
+                    key={idx}
+                    x1={c.fromX}
+                    y1={c.fromY}
+                    x2={c.toX}
+                    y2={c.toY}
+                    stroke="#3F51B5"
+                    strokeWidth={c.dashed ? 1.5 : 2.5}
+                    strokeDasharray={c.dashed ? "3,3" : undefined}
+                  />
+                ))}
 
-                return (
-                  <g key={n.val}>
+                {/* Node Circles */}
+                {stepData.nodes.map((node) => (
+                  <g key={node.val}>
                     <circle
-                      cx={n.x}
-                      cy={n.y}
+                      cx={node.x}
+                      cy={node.y}
                       r="14"
-                      style={{ fill: fill, stroke: fill }}
+                      fill={node.isUnbalanced ? "#C0392B" : "#3F51B5"}
+                      stroke={node.isUnbalanced ? "#C0392B" : "#3F51B5"}
                       strokeWidth="1.5"
                     />
                     <text
-                      x={n.x}
-                      y={n.y + 4}
+                      x={node.x}
+                      y={node.y + 4}
                       textAnchor="middle"
-                      style={{ fill: "#FFFFFF" }}
-                      className="font-mono font-bold"
+                      fill="#FFFFFF"
+                      className="font-mono font-bold text-[10px]"
                     >
-                      {n.val}
+                      {node.val}
                     </text>
-                    {n.bf !== undefined && (
+                    {/* Handwritten Balance Factor Annotation next to node */}
+                    {node.bf !== undefined && (
                       <text
-                        x={n.x}
-                        y={n.y - 18}
-                        textAnchor="middle"
-                        fill="currentColor"
-                        className="text-[9px] text-secondary-foreground font-medium"
+                        x={node.x + 18}
+                        y={node.y - 4}
+                        style={{ fontFamily: "'Caveat', cursive", fill: "#666666", fontSize: "12px", fontWeight: "bold" }}
                       >
-                        BF: {n.bf}
+                        BF={node.bf}
                       </text>
                     )}
                   </g>
-                );
-              })}
-            </svg>
+                ))}
+              </svg>
+            </div>
+
+            {/* Step Explanation Card (spanning 40% width on row) */}
+            <div className="bg-[#FCFBF8] border border-[#DDD7CC] rounded-sm p-4 space-y-2 sm:w-[40%] flex flex-col justify-start">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#666666] block font-serif">
+                Step Description
+              </span>
+              <p className="text-[12px] text-[#232323] leading-relaxed whitespace-pre-line font-mono font-bold bg-[#F4F1EA]/30 p-2.5 border border-[#DDD7CC]/50 rounded-sm select-none">
+                {stepData.description}
+              </p>
+              <div className="bg-secondary/5 border border-dashed border-[#DDD7CC] p-3 rounded-sm leading-relaxed mt-2" style={{ fontFamily: "'Caveat', cursive", fontSize: "14px" }}>
+                <span className="font-bold text-[#232323] block mb-1">Teacher's Explanation:</span>
+                "{stepData.explanation}"
+              </div>
+            </div>
+
           </div>
 
         </div>
 
       </div>
+
+    </div>
+  );
+
+  return (
+    <div className="w-full my-4 select-none flex flex-col items-center">
+      {isMaximized ? (
+        <>
+          {/* Backdrop overlay */}
+          <div 
+            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-sm cursor-zoom-out"
+            onClick={() => setIsMaximized(false)}
+          />
+
+          {/* Maximized Modal Container */}
+          <div 
+            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 w-[calc(100%-2rem)] lg:w-[80vw] lg:max-w-none h-[calc(100vh-2rem)] lg:h-[85vh] border border-[#DDD7CC] bg-[#FCFBF8] shadow-2xl rounded-sm p-4 md:p-6 flex flex-col gap-4 overflow-hidden"
+          >
+            {visualizerContent}
+          </div>
+        </>
+      ) : (
+        /* Inline Preview State matching standard SimulationEngine structure */
+        <div className="w-full border border-[#DDD7CC] bg-[#FCFBF8] p-4 md:p-5 rounded-sm shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:border-[#3F51B5]/30">
+          <div className="grid grid-cols-1 md:grid-cols-10 gap-6 items-stretch">
+            {/* Left Column: C++ Source Code Panel (spanning 6/10) */}
+            <div className="md:col-span-6 flex flex-col h-[220px] min-h-0 bg-[#FCFBF8] border border-[#DDD7CC]/50 rounded-sm p-3 overflow-hidden text-left">
+              <span className="text-[9px] font-bold uppercase tracking-wider text-[#666666] block font-serif mb-1">
+                C++ AVL Insertion Code
+              </span>
+              <pre className="text-[9px] font-mono bg-[#fafafa] p-2 border border-[#DDD7CC]/30 rounded-sm overflow-auto leading-relaxed text-left flex-1 select-all">
+                {insertionCode.slice(9).map((line, idx) => (
+                  <div key={idx} className="text-[#4A4A4A]">{line}</div>
+                ))}
+              </pre>
+            </div>
+
+            {/* Right Column: Engine description & launch trigger (spanning 4/10) */}
+            <div className="md:col-span-4 flex flex-col justify-between h-[220px] bg-[#F4F1EA]/30 rounded border border-[#DDD7CC]/40 p-4 text-center">
+              <div className="flex flex-col items-center">
+                {/* Center Spinning Gears */}
+                <div className="flex items-center justify-center mb-3">
+                  <div className="relative flex items-center justify-center w-8 h-8">
+                    <Settings className="w-7 h-7 text-[#3F51B5] animate-[spin_6s_linear_infinite]" />
+                  </div>
+                  <div className="relative flex items-center justify-center w-5 h-5 -mt-3.5 -ml-1.5">
+                    <Settings className="w-4.5 h-4.5 text-[#3F51B5]/75 animate-[spin_4s_linear_infinite_reverse]" />
+                  </div>
+                </div>
+
+                <h5 className="font-serif font-black text-xs md:text-sm text-[#232323] uppercase tracking-wider mb-2">
+                  Insertion Simulator
+                </h5>
+                <p className="text-[11px] md:text-xs text-[#666666] leading-relaxed font-serif max-w-[240px]">
+                  Trace standard BST insertion combined with AVL backtracking balancing rules. 
+                  Observe LL, RR, LR, and RL rotations trigger dynamically.
+                </p>
+              </div>
+
+              <div>
+                <button
+                  onClick={() => setIsMaximized(true)}
+                  className="group/btn flex items-center justify-center gap-2 w-full px-5 py-2.5 bg-[#3F51B5] text-white font-mono text-[11px] uppercase tracking-wider font-bold shadow hover:bg-[#3F51B5]/90 transition-all outline-none cursor-pointer rounded-sm"
+                >
+                  <span>Launch Simulator</span>
+                  <span className="text-[9px] transition-transform duration-200 group-hover/btn:translate-x-0.5">▶</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

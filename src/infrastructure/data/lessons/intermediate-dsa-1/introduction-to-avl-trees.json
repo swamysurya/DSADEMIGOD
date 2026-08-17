@@ -51,7 +51,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Why does it range so widely? Because the height of a BST depends entirely on the **insertion sequence order** of the elements:\n· **Best/Average Case**: If elements are inserted in a mixed order, the tree is balanced, keeping the height $H \\approx \\log N$. Search takes **O(log N)** time.\n· **Worst Case**: If elements are inserted in sorted order, the tree becomes skewed into a straight line, meaning the height $H$ grows to equal $N$ ($H = N$). Search degrades to **O(N)** time!"
+      "text": "Why does it range so widely? Because the height of a BST depends entirely on the **insertion sequence order** of the elements:\n· **Best/Average Case**: If elements are inserted in a mixed order, the tree is balanced, keeping the height **H ≈ log N**. Search takes **O(log N)** time.\n· **Worst Case**: If elements are inserted in sorted order, the tree becomes skewed into a straight line, meaning the height **H** grows to equal **N** (**H = N**). Search degrades to **O(N)** time!"
     },
     {
       "type": "paragraph",
@@ -108,7 +108,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Let's look at a simple example. Suppose we insert the elements `30, 20, 10` one by one. The tree leans completely to the left, violating the balance rules. To restore order, we must balance it using a rotation (which we will learn step-by-step in the next chapter):"
+      "text": "Suppose we have a Binary Search Tree with the elements `30, 20, 40, 10, 25`. When we insert a new element `5`, it is placed at the bottom-left under `10`. This makes Node `30` unbalanced because its left subtree now has height 3, while its right subtree only has height 1 (a difference of 2!). To restore height balance, we must restructure the tree using a rotation (which we will learn step-by-step in the next chapter):"
     },
     {
       "type": "drawing",
@@ -161,7 +161,7 @@
     },
     {
       "type": "paragraph",
-      "text": "Let's summarize: In a normal BST, searching is fast ($O(\\log N)$) only if the tree is balanced. If we insert sorted data, it becomes skewed like a Linked List, ruining performance ($O(N)$). AVL Trees solve this by enforcing a height-balance rule: the height difference between left and right subtrees (Balance Factor) of every node must be within $[-1, 0, +1]$. If it goes beyond, we must rotate. In our next lesson, we will see how these rotations work!"
+      "text": "Let's summarize: In a normal BST, searching is fast (**O(log N)**) only if the tree is balanced. If we insert sorted data, it becomes skewed like a Linked List, ruining performance (**O(N)**). AVL Trees solve this by enforcing a height-balance rule: the height difference between left and right subtrees (Balance Factor) of every node must be within **[-1, 0, +1]**. If it goes beyond, we must rotate. In our next lesson, we will see how these rotations work!"
     }
   ]
 }

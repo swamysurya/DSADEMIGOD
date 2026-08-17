@@ -29,7 +29,7 @@ export default function AVLInventorsCard() {
             <div className="w-full aspect-[4/3] border border-[#DDD7CC] bg-[#F4F1EA] overflow-hidden rounded-sm shadow-sm relative flex items-center justify-center">
               {!velskyError ? (
                 <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Adelson-Velsky-G.Moscow-1980.jpg" 
+                  src="/images/setup/adelsonvelsky.png" 
                   alt="Georgy Adelson-Velsky" 
                   referrerPolicy="no-referrer"
                   onError={() => setVelskyError(true)}
@@ -65,7 +65,7 @@ export default function AVLInventorsCard() {
             <div className="w-full aspect-[4/3] border border-[#DDD7CC] bg-[#F4F1EA] overflow-hidden rounded-sm shadow-sm relative flex items-center justify-center">
               {!landisError ? (
                 <img 
-                  src="https://upload.wikimedia.org/wikipedia/commons/2/23/%D0%95%D0%B2%D0%B3%D0%B5%D0%BD%D0%B8%D0%B9_%D0%9C%D0%B8%D1%85%D0%B0%D0%B9%D0%BB%D0%BE%D0%B2%D0%B8%D1%87_%D0%9B%D0%B0%D0%BD%D0%B4%D0%B8%D1%81.jpeg" 
+                  src="/images/setup/lendis.png" 
                   alt="Evgenii Landis" 
                   referrerPolicy="no-referrer"
                   onError={() => setLandisError(true)}

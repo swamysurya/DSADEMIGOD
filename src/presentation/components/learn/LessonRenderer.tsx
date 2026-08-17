@@ -73,6 +73,7 @@ import BSTSearchDrawing from "./drawings/BSTSearchDrawing";
 import AVLInventorsCard from "./drawings/AVLInventorsCard";
 import AVLBalanceFactorDrawing from "./drawings/AVLBalanceFactorDrawing";
 import AVLRotationsDrawing from "./drawings/AVLRotationsDrawing";
+import AVLNailThreadAnalogy from "./drawings/AVLNailThreadAnalogy";
 import AVLInsertionDrawing from "./drawings/AVLInsertionDrawing";
 import UnbalancedThreeNodesDrawing from "./drawings/UnbalancedThreeNodesDrawing";
 import AVLImbalanceFlowchartDrawing from "./drawings/AVLImbalanceFlowchartDrawing";
@@ -422,6 +423,9 @@ function renderBlock(block: ContentBlock) {
       }
       if (block.id === "avl-rotations-drawing") {
         return <AVLRotationsDrawing />;
+      }
+      if (block.id === "avl-nail-thread-drawing") {
+        return <AVLNailThreadAnalogy />;
       }
       if (block.id === "avl-insertion-drawing") {
         return <AVLInsertionDrawing />;
