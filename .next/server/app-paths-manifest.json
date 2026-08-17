@@ -1,4 +1,0 @@
-{
-  "/learn/[subjectId]/[lessonId]/page": "app/learn/[subjectId]/[lessonId]/page.js",
-  "/api/copy/route": "app/api/copy/route.js"
-}
